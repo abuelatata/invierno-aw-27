@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Pedidos Invierno — Abuela Tata AW26-27</title>
+<meta name="theme-color" content="#2b2b2b"/>
+<style>
+:root{--bg:#f6f2ee;--card:#fff;--txt:#1f1f1f;--muted:#6b6b6b;--bd:#e7ded6;--dark:#2b2b2b;--danger:#b42318;--shadow:0 10px 28px rgba(31,31,31,.06);}
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;}
+body{margin:0;background:var(--bg);color:var(--txt);}
+header{position:sticky;top:0;z-index:10;background:rgba(246,242,238,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd);padding:14px 16px;display:flex;justify-content:space-between;gap:10px;}
+h1{margin:0;font-size:18px;}
+.small{font-size:12px;color:var(--muted);margin-top:3px;}
+.badge{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--bd);background:#fff;color:var(--dark);height:fit-content;}
+main{max-width:920px;margin:0 auto;padding:14px;display:flex;flex-direction:column;gap:12px;}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:var(--shadow);}
+.card h2{margin:0 0 10px;font-size:15px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+label{display:flex;flex-direction:column;gap:6px;font-size:13px;}
+input,select{padding:11px 12px;border-radius:12px;border:1px solid var(--bd);background:#fff;font-size:14px;outline:none;}
+input:focus,select:focus{border-color:#cdbfb3;box-shadow:0 0 0 4px rgba(205,191,179,.25);}
+.btn{padding:10px 12px;border-radius:12px;border:1px solid var(--dark);background:var(--dark);color:#fff;font-weight:650;font-size:14px;}
+.btn.secondary{background:#fff;color:var(--dark);}
+.btn.danger{background:var(--danger);border-color:var(--danger);}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.lines{display:flex;flex-direction:column;gap:10px;}
+.line{border:1px solid var(--bd);border-radius:16px;padding:12px;}
+.lineTop{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.lineTitle{font-weight:800;font-size:13px;}
+.lineGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.lineGrid .full{grid-column:1/-1;}
+.subline{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px dashed var(--bd);}
+.totalBar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px;border-radius:16px;border:1px solid var(--bd);background:#fbf7f3;margin-top:10px;}
+.total{font-size:18px;font-weight:900;}
+.muted{color:var(--muted);font-size:12px;margin:6px 0 0;}
+.footerActions{display:flex;gap:10px;flex-wrap:wrap;}
+
+@media (max-width:720px){.grid{grid-template-columns:1fr;}.lineGrid{grid-template-columns:1fr;}}
+
+/* Modal */
+#modalBg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;z-index:50;}
+#modal{position:fixed;left:50%;top:6%;transform:translateX(-50%);width:min(920px,94vw);max-height:88vh;background:#fff;border:1px solid var(--bd);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.18);display:none;z-index:60;overflow:hidden;}
+#modal header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--bd);backdrop-filter:none;padding:12px 14px;}
+#modal h3{margin:0;font-size:15px;}
+#modal .content{padding:12px 14px;}
+#search{width:100%;}
+.list{margin-top:10px;border:1px solid var(--bd);border-radius:14px;overflow:auto;max-height:62vh;}
+.item{padding:10px 12px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;gap:10px;}
+.item:last-child{border-bottom:none;}
+.item b{font-size:13px;}
+.item span{font-size:12px;color:var(--muted);}
+.item button{white-space:nowrap;}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Pedidos Invierno — Abuela Tata</h1>
+    <div class="small">AW26-27 · 71 referencias</div>
+  </div>
+  <div class="badge">B2B</div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="row">
+      <h2>Datos del cliente</h2>
+      <button class="btn secondary" type="button" onclick="openCatalog()">📚 Catálogo</button>
+    </div>
+    <div class="grid">
+      <label>Cliente<input id="cliente" placeholder="Nombre tienda"></label>
+      <label>Población<input id="poblacion" placeholder="Ciudad"></label>
+      <label>Contacto<input id="contacto" placeholder="Persona / WhatsApp"></label>
+      <label>Fecha<input id="fecha" type="date"></label>
+    </div>
+    <p class="muted">Si el iPhone no te deja usar sugerencias, usa el botón <b>Catálogo</b> y selecciona el artículo.</p>
+  </section>
+
+  <section class="card">
+    <div class="row">
+      <h2>Pedido</h2>
+      <button class="btn" type="button" onclick="addLine()">＋ Añadir línea</button>
+    </div>
+    <div id="lines" class="lines"></div>
+
+    <div class="totalBar">
+      <div>
+        <div class="muted" id="linesCount">0 líneas</div>
+        <div class="muted">Total pedido</div>
+      </div>
+      <div class="total" id="total">0,00 €</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Acciones</h2>
+    <div class="footerActions">
+      <button class="btn secondary" type="button" onclick="exportCSV()">📄 Exportar CSV</button>
+      <button class="btn" type="button" onclick="sendWA()">💬 Enviar WhatsApp</button>
+      <button class="btn danger" type="button" onclick="resetAll()">🗑️ Borrar todo</button>
+    </div>
+    <p class="muted">Consejo iPhone: abre este archivo en Safari (Compartir → Abrir en Safari) para que funcione perfecto.</p>
+  </section>
+</main>
+
+<div id="modalBg" onclick="closeCatalog()"></div>
+<div id="modal" role="dialog" aria-modal="true">
+  <header>
+    <div class="row">
+      <h3>Catálogo AW26-27</h3>
+      <button class="btn secondary" type="button" onclick="closeCatalog()">Cerrar</button>
+    </div>
+    <input id="search" placeholder="Buscar por referencia o descripción (ej: 1299, COAT, HEADBAND)">
+  </header>
+  <div class="content">
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<script>
+document.getElementById("fecha").valueAsDate = new Date();
+const TARIFA = [{"ref": "0899426", "desc": "HEADBAND", "price": 9.25}, {"ref": "1299426", "desc": "BABY DRESS SET", "price": 53.8}, {"ref": "1399426", "desc": "BABY DRESS SET(NO BONNET)", "price": 49.95}, {"ref": "2599426", "desc": "DRESS", "price": 50.65}, {"ref": "4399426", "desc": "BOY SET", "price": 31.75}, {"ref": "0899427", "desc": "HEADBAND", "price": 9.25}, {"ref": "1299427", "desc": "BABY DRESS SET", "price": 40.65}, {"ref": "1399427", "desc": "BABY DRESS SET(NO BONNET)", "price": 34.5}, {"ref": "2599427", "desc": "DRESS", "price": 38.85}, {"ref": "4399427", "desc": "BOY SET", "price": 33.35}, {"ref": "43099427", "desc": "BOY SET", "price": 33.35}, {"ref": "0899428", "desc": "HEADBAND", "price": 9.25}, {"ref": "1199428", "desc": "ROMPER", "price": 20.25}, {"ref": "1299428", "desc": "BABY DRESS SET", "price": 53.35}, {"ref": "1399428", "desc": "BABY DRESS SET(NO BONNET)", "price": 50.75}, {"ref": "2599428", "desc": "DRESS", "price": 51.7}, {"ref": "1299429", "desc": "BABY DRESS SET", "price": 47.15}, {"ref": "1399429", "desc": "BABY DRESS SET(NO BONNET)", "price": 44.85}, {"ref": "2599429", "desc": "DRESS", "price": 51.7}, {"ref": "0899430", "desc": "HEADBAND", "price": 9.25}, {"ref": "1299430", "desc": "BABY DRESS SET", "price": 39.7}, {"ref": "1399430", "desc": "BABY DRESS SET(NO BONNET)", "price": 36.95}, {"ref": "2599430", "desc": "DRESS", "price": 38.5}, {"ref": "4399430", "desc": "BOY SET", "price": 31.35}, {"ref": "0899431", "desc": "HEADBAND", "price": 9.25}, {"ref": "1299431", "desc": "BABY DRESS SET", "price": 40.45}, {"ref": "1399431", "desc": "BABY DRESS SET(NO BONNET)", "price": 37.95}, {"ref": "2599431", "desc": "DRESS", "price": 39.8}, {"ref": "3099431", "desc": "BABY BOY SET", "price": 24.65}, {"ref": "0809432", "desc": "HEADBAND", "price": 9.25}, {"ref": "1209432", "desc": "BABY DRESS SET", "price": 39.15}, {"ref": "1309432", "desc": "BABY DRESS SET(NO BONNET)", "price": 36.95}, {"ref": "2509432", "desc": "DRESS", "price": 38.95}, {"ref": "4309432", "desc": "BOY SET", "price": 29.75}, {"ref": "0899432", "desc": "HEADBAND", "price": 9.25}, {"ref": "1299432", "desc": "BABY DRESS SET", "price": 41.95}, {"ref": "1399432", "desc": "BABY DRESS SET(NO BONNET)", "price": 39.25}, {"ref": "2599432", "desc": "DRESS", "price": 41.65}, {"ref": "4399432", "desc": "BOY SET", "price": 30.75}, {"ref": "0899433", "desc": "HEADBAND", "price": 9.25}, {"ref": "1299433", "desc": "BABY DRESS SET", "price": 46.75}, {"ref": "1399433", "desc": "BABY DRESS SET(NO BONNET)", "price": 45.25}, {"ref": "2599433", "desc": "DRESS", "price": 49.25}, {"ref": "0899434", "desc": "HEADBAND", "price": 9.25}, {"ref": "1199434", "desc": "ROMPER", "price": 22.65}, {"ref": "1299434", "desc": "BABY DRESS SET", "price": 44.45}, {"ref": "1399434", "desc": "BABY DRESS SET(NO BONNET)", "price": 39.15}, {"ref": "2599434", "desc": "DRESS", "price": 37.7}, {"ref": "0805435", "desc": "HEADBAND", "price": 9.25}, {"ref": "1205435", "desc": "BABY DRESS SET", "price": 41.5}, {"ref": "1305435", "desc": "BABY DRESS SET(NO BONNET)", "price": 39.35}, {"ref": "2505435", "desc": "DRESS", "price": 43.1}, {"ref": "0899435", "desc": "HEADBAND", "price": 9.25}, {"ref": "1208435", "desc": "BABY DRESS SET", "price": 41.5}, {"ref": "1308435", "desc": "BABY DRESS SET(NO BONNET)", "price": 39.35}, {"ref": "2508435", "desc": "DRESS", "price": 43.1}, {"ref": "220257", "desc": "RED COAT", "price": 40.75}, {"ref": "220357", "desc": "NAVY COAT", "price": 40.75}, {"ref": "220657", "desc": "CAMEL COAT", "price": 40.75}, {"ref": "220158", "desc": "PINK COAT", "price": 37.65}, {"ref": "220258", "desc": "RED COAT", "price": 37.65}, {"ref": "220358", "desc": "NAVY COAT", "price": 37.65}, {"ref": "220658", "desc": "CAMEL COAT", "price": 37.65}, {"ref": "220159", "desc": "PINK COAT", "price": 39.35}, {"ref": "220259", "desc": "RED COAT", "price": 39.35}, {"ref": "220359", "desc": "NAVY COAT", "price": 39.35}, {"ref": "220659", "desc": "CAMEL COAT", "price": 39.35}, {"ref": "220160", "desc": "PINK COAT", "price": 37.75}, {"ref": "220260", "desc": "RED COAT", "price": 37.75}, {"ref": "220360", "desc": "NAVY COAT", "price": 37.75}, {"ref": "220660", "desc": "CAMEL COAT", "price": 37.75}];
+
+const TALLAS = ["3M","6M","9M","12M","18M","2Y","3Y","4Y","5Y","6Y","8Y","10Y","12Y","14Y","16Y"];
+let activeLine = null;
+
+function euro(n){ return (Number(n||0)).toFixed(2).replace(".", ",") + " €"; }
+
+function addLine(prefill=null){
+  const lines = document.getElementById("lines");
+  const idx = lines.children.length + 1;
+  const div = document.createElement("div");
+  div.className = "line";
+  div.innerHTML = `
+    <div class="lineTop">
+      <div class="lineTitle">Línea ${idx}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn secondary" type="button" onclick="activeLine=this.closest('.line'); openCatalog();">📚 Elegir</button>
+        <button class="btn secondary" type="button" onclick="this.closest('.line').remove(); calc(); renumber();">🗑️</button>
+      </div>
+    </div>
+    <div class="lineGrid">
+      <label class="full">Referencia
+        <input class="ref" placeholder="Ej: 1299426" inputmode="numeric" autocomplete="off">
+      </label>
+      <label class="full">Descripción
+        <input class="desc" placeholder="Se rellena al elegir o poner referencia">
+      </label>
+      <label>Precio (€)
+        <input type="number" step="0.01" class="price" placeholder="0,00" inputmode="decimal">
+      </label>
+      <label>Talla
+        <select class="size">${TALLAS.map(s=>`<option>${s}</option>`).join("")}</select>
+      </label>
+      <label>Cantidad
+        <input type="number" class="qty" value="0" min="0" step="1" inputmode="numeric">
+      </label>
+    </div>
+    <div class="subline">
+      <div class="muted">Subtotal</div>
+      <div class="subtotal sub">0,00 €</div>
+    </div>
+  `;
+  lines.appendChild(div);
+
+  const ref = div.querySelector(".ref");
+  const desc = div.querySelector(".desc");
+  const price = div.querySelector(".price");
+  const qty = div.querySelector(".qty");
+
+  // Permite buscar escribiendo referencia y autocompletar al salir del campo
+  ref.addEventListener("change", () => {
+    const v = (ref.value||"").trim();
+    const item = TARIFA.find(x=>x.ref===v);
+    if(item) {
+      desc.value = item.desc;
+      price.value = item.price;
+    }
+    calc();
+  });
+
+  [desc, price, qty, div.querySelector(".size")].forEach(el => el.addEventListener("input", calc));
+
+  if(prefill) {
+    ref.value = prefill.ref;
+    desc.value = prefill.desc;
+    price.value = prefill.price;
+  }
+
+  calc();
+  setTimeout(()=>ref.focus(), 30);
+}
+
+function renumber(){ document.querySelectorAll(".lineTitle").forEach((el,i)=>el.textContent=`Línea ${i+1}`); }
+
+function calc(){
+  let total=0; let count=0;
+  document.querySelectorAll(".line").forEach(div=>{
+    const p=parseFloat(div.querySelector(".price").value||"0");
+    const q=parseInt(div.querySelector(".qty").value||"0",10);
+    const sub=(p||0)*(q||0);
+    div.querySelector(".sub").textContent=euro(sub);
+    total+=sub;
+
+    const r=(div.querySelector(".ref").value||"").trim();
+    const d=(div.querySelector(".desc").value||"").trim();
+    if(r||d||q>0) count++;
+  });
+  document.getElementById("total").textContent=euro(total);
+  document.getElementById("linesCount").textContent=`${count} líneas`;
+}
+
+function resetAll(){
+  if(!confirm("¿Borrar el pedido completo?")) return;
+  document.getElementById("lines").innerHTML="";
+  calc();
+  addLine();
+}
+
+function exportCSV(){
+  const rows=[["cliente","poblacion","contacto","fecha","ref","desc","talla","cantidad","precio"]];
+  const c=(document.getElementById("cliente").value||"").trim();
+  const pob=(document.getElementById("poblacion").value||"").trim();
+  const con=(document.getElementById("contacto").value||"").trim();
+  const f=(document.getElementById("fecha").value||"").trim();
+
+  document.querySelectorAll(".line").forEach(div=>{
+    rows.push([
+      c,pob,con,f,
+      (div.querySelector(".ref").value||"").trim(),
+      (div.querySelector(".desc").value||"").trim(),
+      div.querySelector(".size").value||"",
+      div.querySelector(".qty").value||"0",
+      div.querySelector(".price").value||"0"
+    ]);
+  });
+
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="pedido_invierno_AW26-27.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function sendWA(){
+  const c=(document.getElementById("cliente").value||"").trim();
+  const pob=(document.getElementById("poblacion").value||"").trim();
+  const con=(document.getElementById("contacto").value||"").trim();
+  const f=(document.getElementById("fecha").value||"").trim();
+  let text=`PEDIDO INVIERNO — ABUELA TATA (AW26-27)\nCliente: ${c}\nPoblación: ${pob}\nContacto: ${con}\nFecha: ${f}\n\n`;
+
+  document.querySelectorAll(".line").forEach(div=>{
+    const ref=(div.querySelector(".ref").value||"").trim();
+    const desc=(div.querySelector(".desc").value||"").trim();
+    const size=div.querySelector(".size").value;
+    const qty=div.querySelector(".qty").value;
+    const price=div.querySelector(".price").value;
+    if(ref||desc||(qty && qty!=="0")) {
+      text+=`- ${ref} | ${desc} | ${size} x${qty} | ${euro((parseFloat(price||0))*(parseInt(qty||0)))}\n`;
+    }
+  });
+  text+=`\nTOTAL: ${document.getElementById("total").textContent}\n`;
+  window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank");
+}
+
+/* Catalog modal */
+function openCatalog() {
+  document.getElementById("modalBg").style.display="block";
+  document.getElementById("modal").style.display="block";
+  renderList(document.getElementById("search").value||"");
+  setTimeout(()=>document.getElementById("search").focus(), 50);
+}
+function closeCatalog() {
+  document.getElementById("modalBg").style.display="none";
+  document.getElementById("modal").style.display="none";
+}
+document.getElementById("search").addEventListener("input", e=>renderList(e.target.value||""));
+
+function renderList(q) {
+  q=(q||"").trim().toLowerCase();
+  const list=document.getElementById("list");
+  list.innerHTML="";
+  const filtered = TARIFA.filter(x => !q || x.ref.includes(q) || x.desc.toLowerCase().includes(q));
+  filtered.slice(0,500).forEach(x=>{
+    const row=document.createElement("div");
+    row.className="item";
+    row.innerHTML = `
+      <div>
+        <b>${x.ref}</b><br/>
+        <span>${x.desc} · ${euro(x.price)}</span>
+      </div>
+      <button class="btn secondary" type="button">Añadir</button>
+    `;
+    row.querySelector("button").addEventListener("click", ()=>{
+      if(activeLine) {
+        activeLine.querySelector(".ref").value=x.ref;
+        activeLine.querySelector(".desc").value=x.desc;
+        activeLine.querySelector(".price").value=x.price;
+        activeLine=null;
+        calc();
+      } else {
+        addLine(x);
+      }
+      closeCatalog();
+    });
+    list.appendChild(row);
+  });
+}
+
+// start
+addLine();
+</script>
+</body>
+</html>
