@@ -653,6 +653,34 @@ function init(){
   qs("#refInput").addEventListener("keydown", (e)=>{ if(e.key==="Enter") addProduct(); });
   load();
 }
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziHf6L4QnzrLD54NA6-5kTccEJSq6SCEWOZ_aSO5BLiwcasR7MjBQ8_hWEBdcMcagrtA/exec";
+
+async function sendEmail() {
+  if (!validateClient()) return;
+
+  const order = buildOrder();
+  const mail = buildEmail();
+
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        order: order,
+        subject: mail.subject,
+        body: mail.body
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    const result = await response.text();
+    alert("Pedido enviado correctamente ✅");
+  } catch (error) {
+    alert("Error al enviar el pedido ❌");
+    console.error(error);
+  }
+}  
 init();
 </script>
 </body>
