@@ -671,7 +671,7 @@ async function sendEmail() {
         toClient: document.querySelector("#email").value.trim()
       }),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "text/plain;charset=utf-8"
       }
     });
 
