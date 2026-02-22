@@ -653,7 +653,7 @@ function init(){
   qs("#refInput").addEventListener("keydown", (e)=>{ if(e.key==="Enter") addProduct(); });
   load();
 }
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziHf6L4QnzrLD54NA6-5kTccEJSq6SCEWOZ_aSO5BLiwcasR7MjBQ8_hWEBdcMcagrtA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzFUjuzNZfSjB-dhddq1HmAYx_SvP3xyEKYRlO7f_N_qeS3v4a26P9BYxzf5L07Fx3JJQ/exec";
 
 async function sendEmail() {
   if (!validateClient()) return;
@@ -667,7 +667,8 @@ async function sendEmail() {
       body: JSON.stringify({
         order: order,
         subject: mail.subject,
-        body: mail.body
+        body: mail.body,
+        toClient: document.querySelector("#email").value.trim()
       }),
       headers: {
         "Content-Type": "application/json"
