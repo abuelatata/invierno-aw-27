@@ -532,13 +532,74 @@ function closeEmail(){
   qs("#emailBg").style.display="none";
   qs("#emailModal").style.display="none";
 }
-function sendEmail(){
-  if(!validateClient()) return;
-  const mail=buildEmail();
-  const href = "mailto:" + encodeURIComponent(TO_EMAIL) +
-    "?subject=" + encodeURIComponent(mail.subject) +
-    "&body=" + encodeURIComponent(mail.body);
-  window.location.href = href;
+function sendEmail() {
+
+  const clientEmail = document.querySelector("#email")?.value?.trim();
+  if (!clientEmail) {
+    alert("Por favor, escribe tu email antes de enviar el pedido.");
+    return;
+  }
+
+  const shopName = document.querySelector("#shopName")?.value || "";
+  const fiscalName = document.querySelector("#fiscalName")?.value || "";
+  const taxId = document.querySelector("#taxId")?.value || "";
+  const phone = document.querySelector("#phone")?.value || "";
+  const address = document.querySelector("#address")?.value || "";
+  const city = document.querySelector("#city")?.value || "";
+  const zip = document.querySelector("#zip")?.value || "";
+  const province = document.querySelector("#province")?.value || "";
+  const notes = document.querySelector("#notes")?.value || "";
+
+  const today = new Date().toLocaleDateString("es-ES");
+
+  let orderLines = [];
+
+  document.querySelectorAll(".product-card").forEach(card => {
+    const ref = card.dataset.ref || card.id || "";
+    card.querySelectorAll(".sline").forEach(row => {
+      const size = row.querySelector("b")?.textContent;
+      const qty = row.querySelector("span")?.textContent;
+      if (size && qty && Number(qty) > 0) {
+        orderLines.push(`${ref} - ${size}: ${qty}`);
+      }
+    });
+  });
+
+  if (orderLines.length === 0) {
+    alert("No hay cantidades en el pedido.");
+    return;
+  }
+
+  const subject = `Pedido Invierno AW26/27 - ${shopName}`;
+  
+  const body = `
+PEDIDO INVIERNO AW26/27
+Fecha: ${today}
+
+DATOS CLIENTE
+Nombre fiscal: ${fiscalName}
+NIF/CIF: ${taxId}
+Nombre tienda: ${shopName}
+Email: ${clientEmail}
+Teléfono: ${phone}
+Dirección: ${address}
+CP: ${zip}
+Ciudad: ${city}
+Provincia: ${province}
+
+PEDIDO:
+${orderLines.join("\n")}
+
+Notas:
+${notes}
+
+All the best,
+Abuela Tata
+`;
+
+  const mailtoLink = `mailto:info@abuelatata.com?cc=${encodeURIComponent(clientEmail)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  window.location.href = mailtoLink;
 }
 
 function openZoom(ref, url){
