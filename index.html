@@ -4,146 +4,63 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pedidos Invierno AW26/27 — Abuela Tata</title>
-
 <style>
 :root{
-  --bg:#f5f2ee;
-  --card:#ffffff;
-  --line:#e8e2db;
-  --ink:#1f1f1f;
-  --muted:#777;
-  --accent:#1f1f1f;
-  --accent2:#ffffff;
-  --radius:18px;
-  --shadow: 0 12px 34px rgba(0,0,0,.06);
+  --bg:#f5f2ee;--card:#ffffff;--line:#e8e2db;--ink:#1f1f1f;--muted:#777;
+  --accent:#1f1f1f;--radius:18px;--shadow:0 12px 34px rgba(0,0,0,.06);
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  background:linear-gradient(180deg,var(--bg),#fff);
-  color:var(--ink);
-}
+body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,var(--bg),#fff);color:var(--ink);}
 .wrap{max-width:1180px;margin:0 auto;padding:22px}
 .brand{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:14px}
 .brand h1{margin:0;font-size:28px;letter-spacing:.3px}
 .brand .sub{margin:0;color:var(--muted);font-size:13px}
 .logoRow{display:flex;align-items:center;gap:12px}
-.logo{
-  width:44px;height:44px;border-radius:12px;
-  border:1px solid var(--line);
-  background:#fff;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-}
+.logo{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .logo img{width:100%;height:100%;object-fit:contain;display:block}
-.pill{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:8px 12px;border-radius:999px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.85);
-  font-size:12px;color:var(--muted);
-}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.85);font-size:12px;color:var(--muted)}
 
-.section{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:16px;
-  margin-bottom:14px;
-  box-shadow:var(--shadow);
-}
-
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 @media(max-width:980px){.grid3{grid-template-columns:1fr 1fr}}
-@media(max-width:820px){.grid2,.grid3{grid-template-columns:1fr}}
+@media(max-width:820px){.grid3{grid-template-columns:1fr}}
 
 label{display:block;font-size:12px;color:var(--muted);margin:6px 0 6px}
-input,textarea{
-  width:100%;
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:#fff;
-  outline:none;
-}
+input,textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:none}
 textarea{min-height:90px;resize:vertical}
-
 .small{font-size:12px;color:var(--muted)}
 .hint{font-size:12px;color:var(--muted);margin-top:8px}
 
 .addbar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
 .addbar input{flex:1;min-width:240px}
 
-.products{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-top:12px;
-}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
 @media(max-width:1000px){.products{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.products{grid-template-columns:1fr}}
 
-.card{
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  overflow:hidden;
-  background:#fff;
-}
-.cardTop{
-  position:relative;
-  background:#faf7f3;
-  aspect-ratio: 4 / 5;
-}
-.cardTop img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  cursor:pointer;
-  transition: transform .25s ease;
-}
+.card{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.cardTop{position:relative;background:#faf7f3;aspect-ratio:4/5}
+.cardTop img{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer;transition:transform .25s ease}
 .cardTop img:hover{transform:scale(1.02)}
-.badge{
-  position:absolute;
-  left:12px;top:12px;
-  background:rgba(255,255,255,.92);
-  border:1px solid var(--line);
-  padding:6px 10px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:12px;
-}
+.badge{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.92);border:1px solid var(--line);
+  padding:6px 10px;border-radius:999px;font-weight:900;font-size:12px}
 .cardBody{padding:12px}
-.meta{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.meta{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .meta .title{font-weight:900}
+.priceRow{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:10px}
+.priceRow .p{font-weight:900}
+.priceRow .subt{font-weight:900}
 
-.sizes{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-  margin-top:10px;
-}
+.sizes{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
 @media(min-width:520px){.sizes{grid-template-columns:repeat(3,1fr)}}
-.sizeBox{
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:8px 10px;
-  display:flex;justify-content:space-between;align-items:center;gap:8px;
-}
+.sizeBox{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .sizeBox .s{font-weight:900;font-size:12px}
 .stepper{display:flex;align-items:center;gap:6px}
-.stepper button{
-  width:30px;height:30px;border-radius:10px;
-  border:1px solid var(--line);
-  background:#fff;color:#222;font-weight:900;cursor:pointer;
-}
+.stepper button{width:30px;height:30px;border-radius:10px;border:1px solid var(--line);background:#fff;color:#222;font-weight:900;cursor:pointer}
 .stepper button:hover{background:#f7f5f2}
-.stepper input{
-  width:44px;text-align:center;padding:6px 8px;border-radius:10px;margin:0;
-  border:1px solid var(--line);
-}
+.stepper input{width:44px;text-align:center;padding:6px 8px;border-radius:10px;margin:0;border:1px solid var(--line)}
 
 .tableWrap{overflow:auto}
 table{width:100%;border-collapse:collapse}
@@ -151,59 +68,26 @@ th,td{padding:10px 8px;border-bottom:1px solid #f0ede8;vertical-align:top}
 th{font-size:12px;color:var(--muted);text-align:left}
 td.right{text-align:right}
 
-.modal{
-  position:fixed;inset:0;background:rgba(0,0,0,.62);
-  display:none;align-items:center;justify-content:center;padding:20px;z-index:9999;
-}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999}
 .modal.open{display:flex}
-.modalInner{
-  max-width:920px;width:100%;background:#fff;border-radius:18px;overflow:hidden;
-}
+.modalInner{max-width:920px;width:100%;background:#fff;border-radius:18px;overflow:hidden}
 .modalInner img{width:100%;height:auto;display:block}
-.modalClose{
-  position:fixed;top:16px;right:16px;
-  background:#fff;border:1px solid var(--line);border-radius:999px;
-  padding:10px 12px;cursor:pointer;font-weight:900;
-}
+.modalClose{position:fixed;top:16px;right:16px;background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:10px 12px;cursor:pointer;font-weight:900}
 
-/* Botones BONITOS */
 .actions{display:flex;flex-wrap:wrap;gap:10px}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  padding:11px 14px;
-  border-radius:14px;
-  border:1px solid var(--accent);
-  background:var(--accent);
-  color:var(--accent2);
-  cursor:pointer;
-  font-weight:900;
-  letter-spacing:.2px;
-  box-shadow:0 10px 20px rgba(0,0,0,.12);
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:11px 14px;border-radius:14px;border:1px solid var(--accent);
+  background:var(--accent);color:#fff;cursor:pointer;font-weight:900;letter-spacing:.2px;box-shadow:0 10px 20px rgba(0,0,0,.12);
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease}
 .btn:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(0,0,0,.14)}
 .btn:active{transform:translateY(0px);box-shadow:0 10px 20px rgba(0,0,0,.12)}
-
-.btn.secondary{
-  background:#fff;color:var(--accent);
-  box-shadow:none;
-}
+.btn.secondary{background:#fff;color:var(--accent);box-shadow:none}
 .btn.secondary:hover{background:#f7f5f2;box-shadow:none}
-.btn.danger{
-  background:#2b2b2b;
-}
 .btn .ic{font-size:16px;line-height:0}
 
-/* Barra fija */
 .stickyBar{position:sticky;bottom:10px;z-index:50}
-.stickyInner{
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:rgba(255,255,255,.92);
-  padding:10px;
-  display:flex;gap:10px;justify-content:space-between;align-items:center;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
+.stickyInner{border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.92);padding:10px;display:flex;gap:10px;
+  justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.08)}
 .stickyInner .left{display:flex;gap:10px;align-items:center}
 .stickyInner .tot{font-weight:900}
 @media(max-width:720px){
@@ -221,7 +105,6 @@ td.right{text-align:right}
   <div class="brand">
     <div class="logoRow">
       <div class="logo" title="Logo">
-        <!-- Pon tu logo en images/logo.png -->
         <img src="images/logo.png" alt="Abuela Tata" onerror="this.style.display='none'">
       </div>
       <div>
@@ -259,7 +142,7 @@ td.right{text-align:right}
     <div class="addbar">
       <div style="flex:1">
         <label>Referencia</label>
-        <input id="refInput" placeholder="Escribe la referencia y pulsa Enter (ej: 12..., 25..., 43..., 22...)" />
+        <input id="refInput" placeholder="Escribe la referencia y pulsa Enter (ej: 1299426)" />
       </div>
       <button class="btn secondary" type="button" id="btnAdd"><span class="ic">➕</span>Añadir</button>
     </div>
@@ -275,8 +158,11 @@ td.right{text-align:right}
         <thead>
           <tr>
             <th>Referencia</th>
+            <th>Modelo</th>
             <th>Tallas</th>
-            <th class="right">Total uds</th>
+            <th class="right">Uds</th>
+            <th class="right">€/ud</th>
+            <th class="right">Subtotal</th>
           </tr>
         </thead>
         <tbody id="summaryBody"></tbody>
@@ -287,7 +173,7 @@ td.right{text-align:right}
   <div class="stickyBar">
     <div class="stickyInner">
       <div class="left">
-        <div class="tot" id="grandTotal">Total unidades: 0</div>
+        <div class="tot" id="grandTotal">Total: 0 uds · 0,00 €</div>
         <div class="small" id="draftStatus"></div>
       </div>
       <div class="actions">
@@ -302,7 +188,6 @@ td.right{text-align:right}
 
 </div>
 
-<!-- Modal imagen -->
 <div id="imgModal" class="modal" aria-hidden="true">
   <div class="modalClose" id="modalClose">X</div>
   <div class="modalInner">
@@ -316,10 +201,14 @@ td.right{text-align:right}
   const STORAGE_KEY = "pedidoInvierno_AW26_27";
   const PLACEHOLDER = "images/placeholder.jpg";
 
-  // tallas por prefijo según lo que me diste
+  // --- TARIFA (desde tu Excel) ---
+  const TARIFA = {"899426":{"desc":"DIADEMA","price":9.25},"1299426":{"desc":"JESUSITO CON CAPOTA","price":53.8},"1399426":{"desc":"JESUSITO SIN CAPOTA","price":49.95},"2599426":{"desc":"VESTIDO","price":50.65},"4399426":{"desc":"CONJUNTO DE NIÑO","price":31.75},"899427":{"desc":"DIADEMA","price":9.25},"1299427":{"desc":"JESUSITO CON CAPOTA","price":40.65},"1399427":{"desc":"JESUSITO SIN CAPOTA","price":34.5},"2599427":{"desc":"VESTIDO","price":38.85},"4399427":{"desc":"CONJUNTO DE NIÑO","price":33.35},"43099427":{"desc":"CONJUNTO DE NIÑO","price":33.35},"899428":{"desc":"DIADEMA","price":9.25},"1199428":{"desc":"PELELE","price":20.25},"1299428":{"desc":"JESUSITO CON CAPOTA","price":53.35},"1399428":{"desc":"JESUSITO SIN CAPOTA","price":50.75},"2599428":{"desc":"VESTIDO","price":51.7},"1299429":{"desc":"JESUSITO CON CAPOTA","price":47.15},"1399429":{"desc":"JESUSITO SIN CAPOTA","price":44.85},"2599429":{"desc":"VESTIDO","price":51.7},"899430":{"desc":"DIADEMA","price":9.25},"1299430":{"desc":"JESUSITO CON CAPOTA","price":39.7},"1399430":{"desc":"JESUSITO SIN CAPOTA","price":36.95},"2599430":{"desc":"VESTIDO","price":38.5},"4399430":{"desc":"CONJUNTO DE NIÑO","price":31.35},"899431":{"desc":"DIADEMA","price":9.25},"1299431":{"desc":"JESUSITO CON CAPOTA","price":40.45},"1399431":{"desc":"JESUSITO SIN CAPOTA","price":37.95},"2599431":{"desc":"VESTIDO","price":39.8},"3099431":{"desc":"CONJUNTO DE NIÑO","price":24.65},"809432":{"desc":"DIADEMA","price":9.25},"1209432":{"desc":"JESUSITO CON CAPOTA","price":39.15},"1309432":{"desc":"JESUSITO SIN CAPOTA","price":36.95},"2509432":{"desc":"VESTIDO","price":38.95},"4309432":{"desc":"CONJUNTO DE NIÑO","price":29.75},"899432":{"desc":"DIADEMA","price":9.25},"1299432":{"desc":"JESUSITO CON CAPOTA","price":41.95},"1399432":{"desc":"JESUSITO SIN CAPOTA","price":39.25},"2599432":{"desc":"VESTIDO","price":41.65},"4399432":{"desc":"CONJUNTO DE NIÑO","price":30.75},"899433":{"desc":"DIADEMA","price":9.25},"1299433":{"desc":"JESUSITO CON CAPOTA","price":46.75},"1399433":{"desc":"JESUSITO SIN CAPOTA","price":45.25},"2599433":{"desc":"VESTIDO","price":49.25},"899434":{"desc":"DIADEMA","price":9.25},"1199434":{"desc":"PELELE","price":22.65},"1299434":{"desc":"JESUSITO CON CAPOTA","price":44.45},"1399434":{"desc":"JESUSITO SIN CAPOTA","price":39.15},"2599434":{"desc":"VESTIDO","price":37.7},"805435":{"desc":"DIADEMA","price":9.25},"1205435":{"desc":"JESUSITO CON CAPOTA","price":41.5},"1305435":{"desc":"JESUSITO SIN CAPOTA","price":39.35},"2505435":{"desc":"VESTIDO","price":43.1},"899435":{"desc":"DIADEMA","price":9.25},"1208435":{"desc":"JESUSITO CON CAPOTA","price":41.5},"1308435":{"desc":"JESUSITO SIN CAPOTA","price":39.35},"2508435":{"desc":"VESTIDO","price":43.1},"220257":{"desc":"ABRIGO ROJO","price":40.75},"220357":{"desc":"ABRIGO AZUL MARINO","price":40.75},"220657":{"desc":"ABRIGO CAMEL","price":40.75},"220158":{"desc":"ABRIGO ROSA","price":37.65},"220258":{"desc":"ABRIGO ROJO","price":37.65},"220358":{"desc":"ABRIGO AZUL MARINO","price":37.65},"220658":{"desc":"ABRIGO CAMEL","price":37.65},"220159":{"desc":"ABRIGO ROSA","price":39.35},"220259":{"desc":"ABRIGO ROJO","price":39.35},"220359":{"desc":"ABRIGO AZUL MARINO","price":39.35},"220659":{"desc":"ABRIGO CAMEL","price":39.35},"220160":{"desc":"ABRIGO ROSA","price":37.75},"220260":{"desc":"ABRIGO ROJO","price":37.75},"220360":{"desc":"ABRIGO AZUL MARINO","price":37.75},"220660":{"desc":"ABRIGO CAMEL","price":37.75}};
+
+  // Tallas por prefijo
   const SIZE_MAP = {
     baby: ["3M","6M","9M","12M","18M","2A","3A","4A"],                 // 11,12,13
-    kid:  ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"]      // 22,25,43
+    kid:  ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"],     // 22,25,43
+    acc:  ["U"]                                                        // diademas y accesorios
   };
 
   const el = (id) => document.getElementById(id);
@@ -327,12 +216,17 @@ td.right{text-align:right}
   function todayES(){ return new Date().toLocaleDateString("es-ES"); }
   el("todayPill").textContent = "Fecha del pedido: " + todayES();
 
+  function euro(n){
+    const v = Number(n||0);
+    return v.toFixed(2).replace(".", ",") + " €";
+  }
+
   function getSizesByRef(ref){
     ref = (ref||"").trim();
+    if(ref.startsWith("89")) return SIZE_MAP.acc;
     if(ref.startsWith("12") || ref.startsWith("13") || ref.startsWith("11")) return SIZE_MAP.baby;
     if(ref.startsWith("25") || ref.startsWith("43") || ref.startsWith("22")) return SIZE_MAP.kid;
-    // 24 u otros: de momento kid
-    return SIZE_MAP.kid;
+    return SIZE_MAP.kid; // 24 u otros: de momento kid
   }
 
   function imagePathForRef(ref){ return `images/${ref}.jpg`; }
@@ -353,9 +247,17 @@ td.right{text-align:right}
     ref = (ref||"").trim();
     if(!ref) return;
 
-    // evitar duplicados
+    if(!TARIFA[ref]){
+      alert("Esa referencia no está en la tarifa: " + ref);
+      return;
+    }
+
     const exists = Array.from(document.querySelectorAll(".card")).some(c => c.dataset.ref === ref);
     if(exists) return;
+
+    const item = TARIFA[ref];
+    const price = Number(item.price||0);
+    const desc = item.desc || "";
 
     const sizes = getSizesByRef(ref);
     const imgSrc = imagePathForRef(ref);
@@ -372,11 +274,17 @@ td.right{text-align:right}
       <div class="cardBody">
         <div class="meta">
           <div>
-            <div class="title">Modelo ${ref}</div>
-            <div class="small">Tallas: ${sizes.join(", ")}</div>
+            <div class="title">${desc}</div>
+            <div class="small">Ref: <b>${ref}</b></div>
           </div>
           <button class="btn secondary" type="button"><span class="ic">🗑️</span>Quitar</button>
         </div>
+
+        <div class="priceRow">
+          <div class="small">Precio/ud: <span class="p">${euro(price)}</span></div>
+          <div class="small">Subtotal: <span class="subt subtotal">0,00 €</span></div>
+        </div>
+
         <div class="sizes"></div>
       </div>
     `;
@@ -406,7 +314,6 @@ td.right{text-align:right}
       sizesDiv.appendChild(box);
     });
 
-    // stepper handlers
     card.querySelectorAll(".inc").forEach(btn => {
       btn.addEventListener("click", ()=>{
         const input = btn.parentElement.querySelector("input[data-size]");
@@ -440,11 +347,16 @@ td.right{text-align:right}
 
   function recalcSummary(){
     const rows = [];
-    let grandTotal = 0;
+    let grandUnits = 0;
+    let grandEuros = 0;
 
     document.querySelectorAll(".card").forEach(card => {
       const ref = card.dataset.ref || "";
-      let refTotal = 0;
+      const item = TARIFA[ref] || {};
+      const desc = item.desc || "";
+      const price = Number(item.price||0);
+
+      let units = 0;
       const qtyBySize = {};
 
       card.querySelectorAll("input[data-size]").forEach(inp => {
@@ -452,16 +364,20 @@ td.right{text-align:right}
         const qty = Number(inp.value || "0");
         if(qty > 0){
           qtyBySize[size] = qty;
-          refTotal += qty;
+          units += qty;
         }
       });
 
-      if(refTotal > 0){
-        grandTotal += refTotal;
-        const sizesText = Object.entries(qtyBySize)
-          .map(([s,q]) => `${s}: ${q}`)
-          .join(" · ");
-        rows.push({ref, sizesText, refTotal});
+      const subtotal = units * price;
+
+      const subEl = card.querySelector(".subtotal");
+      if(subEl) subEl.textContent = euro(subtotal);
+
+      if(units > 0){
+        grandUnits += units;
+        grandEuros += subtotal;
+        const sizesText = Object.entries(qtyBySize).map(([s,q]) => `${s}:${q}`).join(" · ");
+        rows.push({ref, desc, sizesText, units, price, subtotal});
       }
     });
 
@@ -471,13 +387,16 @@ td.right{text-align:right}
     body.innerHTML = rows.length ? rows.map(r => `
       <tr>
         <td style="font-weight:900">${r.ref}</td>
+        <td>${r.desc}</td>
         <td>${r.sizesText}</td>
-        <td class="right" style="font-weight:900">${r.refTotal}</td>
+        <td class="right" style="font-weight:900">${r.units}</td>
+        <td class="right">${euro(r.price)}</td>
+        <td class="right" style="font-weight:900">${euro(r.subtotal)}</td>
       </tr>
-    `).join("") : `<tr><td colspan="3" class="small" style="padding:12px">Aún no hay cantidades.</td></tr>`;
+    `).join("") : `<tr><td colspan="6" class="small" style="padding:12px">Aún no hay cantidades.</td></tr>`;
 
     totals.textContent = `Líneas con cantidades: ${rows.length}`;
-    el("grandTotal").textContent = `Total unidades: ${grandTotal}`;
+    el("grandTotal").textContent = `Total: ${grandUnits} uds · ${euro(grandEuros)}`;
   }
 
   function buildOrderText(){
@@ -495,12 +414,24 @@ td.right{text-align:right}
       notes: el("notes").value.trim(),
     };
 
+    let grandUnits = 0;
+    let grandEuros = 0;
+
     let lines = [];
     document.querySelectorAll(".card").forEach(c => {
       const ref = c.dataset.ref;
+      const item = TARIFA[ref] || {};
+      const desc = item.desc || "";
+      const price = Number(item.price||0);
+
       c.querySelectorAll("input[data-size]").forEach(inp => {
         const qty = Number(inp.value || "0");
-        if(qty > 0) lines.push(`${ref} — ${inp.dataset.size}: ${qty}`);
+        if(qty > 0){
+          const subtotal = qty * price;
+          grandUnits += qty;
+          grandEuros += subtotal;
+          lines.push(`${ref} — ${desc} — ${inp.dataset.size}: ${qty}  |  ${euro(price)}  =>  ${euro(subtotal)}`);
+        }
       });
     });
 
@@ -519,7 +450,10 @@ CP / Ciudad: ${client.zip} ${client.city}
 Provincia: ${client.province}
 
 PEDIDO:
-${lines.length ? lines.join("\\n") : "(Sin líneas de pedido. Añade cantidades.)"}
+${lines.length ? lines.join("\n") : "(Sin líneas de pedido. Añade cantidades.)"}
+
+TOTAL:
+${grandUnits} uds · ${euro(grandEuros)}
 
 Notas:
 ${client.notes || "-"}
@@ -594,14 +528,14 @@ Abuela Tata
 
   function saveDraftSilent(){
     try{
-      localStorage.setItem("pedidoInvierno_AW26_27", JSON.stringify(buildDraftPayload()));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(buildDraftPayload()));
       el("draftStatus").textContent = "Borrador guardado";
     }catch(e){}
   }
   function saveDraft(){ saveDraftSilent(); alert("Borrador guardado ✅"); }
 
   function loadDraft(){
-    const raw = localStorage.getItem("pedidoInvierno_AW26_27");
+    const raw = localStorage.getItem(STORAGE_KEY);
     if(!raw){ alert("No hay borrador guardado."); return; }
     const data = JSON.parse(raw);
 
@@ -641,12 +575,11 @@ Abuela Tata
     if(!confirm("¿Borrar todo el pedido?")) return;
     ["fiscalName","taxId","shopName","contactPerson","email","phone","address","zip","city","province","notes"].forEach(id => el(id).value = "");
     el("products").innerHTML = "";
-    localStorage.removeItem("pedidoInvierno_AW26_27");
+    localStorage.removeItem(STORAGE_KEY);
     recalcSummary();
     el("draftStatus").textContent = "";
   }
 
-  // Add reference handlers
   function addFromInput(){
     const ref = el("refInput").value.trim();
     addProduct(ref);
@@ -655,19 +588,16 @@ Abuela Tata
   el("btnAdd").addEventListener("click", addFromInput);
   el("refInput").addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefault(); addFromInput(); } });
 
-  // Autosave client inputs
   ["fiscalName","taxId","shopName","contactPerson","email","phone","address","zip","city","province","notes"].forEach(id=>{
     el(id).addEventListener("input", saveDraftSilent);
   });
 
-  // Buttons
   el("btnEmail").addEventListener("click", sendByEmail);
   el("btnPdf").addEventListener("click", saveAsPDF);
   el("btnSave").addEventListener("click", saveDraft);
   el("btnLoad").addEventListener("click", loadDraft);
   el("btnClear").addEventListener("click", clearAll);
 
-  // init
   recalcSummary();
 })();
 </script>
