@@ -1,105 +1,239 @@
-<script>
-const ORDER_TO = "info@abuelatata.com";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedidos Invierno AW26/27 - Abuela Tata</title>
 
-const SIZE_MAP = {
-  baby: ["3M","6M","9M","12M","18M","2A","3A","4A"],
-  kid:  ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"]
+<style>
+:root{
+  --bg:#f5f2ee;
+  --card:#ffffff;
+  --line:#e8e2db;
+  --ink:#1f1f1f;
+  --muted:#777;
+  --accent:#222;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(180deg,var(--bg),#fff);
+  color:var(--ink);
+}
+.wrap{max-width:1100px;margin:auto;padding:30px}
+.brand{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px}
+.section{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+input,textarea{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:12px;
+  border:1px solid var(--line);
+}
+textarea{min-height:80px}
+button{
+  padding:10px 14px;
+  border-radius:14px;
+  border:1px solid var(--accent);
+  background:var(--accent);
+  color:white;
+  cursor:pointer;
+  margin-right:8px;
+}
+button.ghost{
+  background:white;
+  color:var(--accent);
+}
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:16px;
+}
+.card{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:white;
+}
+.cardTop{
+  position:relative;
+  aspect-ratio:4/5;
+  background:#faf7f3;
+}
+.cardTop img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:white;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:bold;
+}
+.cardBody{padding:12px}
+.sizes{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+.sizeBox{
+  display:flex;
+  justify-content:space-between;
+  border:1px solid var(--line);
+  padding:6px 8px;
+  border-radius:10px;
+}
+.sizeBox input{
+  width:50px;
+  margin:0;
+}
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+.modal.open{display:flex}
+.modal img{
+  max-width:90%;
+  max-height:90%;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<div class="brand">
+  <div>
+    <h1>ABUELA TATA</h1>
+    <p>Pedido Invierno AW26/27</p>
+  </div>
+</div>
+
+<div class="section">
+<h3>Datos Cliente</h3>
+<input id="fiscalName" placeholder="Nombre fiscal">
+<input id="taxId" placeholder="NIF / CIF">
+<input id="shopName" placeholder="Nombre tienda">
+<input id="email" placeholder="Email (obligatorio)">
+<input id="phone" placeholder="Teléfono">
+<input id="address" placeholder="Dirección">
+<input id="city" placeholder="Ciudad">
+<input id="zip" placeholder="Código Postal">
+<input id="province" placeholder="Provincia">
+<textarea id="notes" placeholder="Notas"></textarea>
+</div>
+
+<div class="section">
+<h3>Añadir referencia</h3>
+<input id="refInput" placeholder="Escribe referencia y pulsa Enter">
+<div class="products" id="products"></div>
+</div>
+
+<div class="section">
+<button onclick="sendEmail()">Enviar por Email</button>
+<button onclick="downloadPDF()">Descargar PDF</button>
+<button onclick="saveDraft()">Guardar borrador</button>
+<button onclick="loadDraft()">Cargar borrador</button>
+</div>
+
+</div>
+
+<div id="modal" class="modal" onclick="closeModal()">
+  <img id="modalImg">
+</div>
+
+<script>
+
+const SIZE_MAP={
+  baby:["3M","6M","9M","12M","18M","2A","3A","4A"],
+  kid:["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"]
 };
 
-const qs = (s)=>document.querySelector(s);
-const el = (id)=>document.getElementById(id);
-
-function getSizesByRef(ref){
-  if(ref.startsWith("12") || ref.startsWith("13") || ref.startsWith("11")) return SIZE_MAP.baby;
-  if(ref.startsWith("25") || ref.startsWith("43") || ref.startsWith("22")) return SIZE_MAP.kid;
-  return SIZE_MAP.kid; // 24 u otros: por defecto kid (luego lo ajustamos)
+function getSizes(ref){
+  if(ref.startsWith("12")||ref.startsWith("13")||ref.startsWith("11"))
+    return SIZE_MAP.baby;
+  if(ref.startsWith("25")||ref.startsWith("43")||ref.startsWith("22"))
+    return SIZE_MAP.kid;
+  return SIZE_MAP.kid;
 }
 
-el("refInput").addEventListener("keydown", function(e){
+document.getElementById("refInput").addEventListener("keydown",e=>{
   if(e.key==="Enter"){
     e.preventDefault();
-    addProduct(this.value.trim());
-    this.value="";
+    addProduct(e.target.value.trim());
+    e.target.value="";
   }
 });
 
 function addProduct(ref){
   if(!ref) return;
 
-  // evita duplicados
-  const exists = Array.from(document.querySelectorAll(".product"))
-    .some(p => (p.dataset.ref||"") === ref);
-  if(exists) return;
+  const card=document.createElement("div");
+  card.className="card";
+  card.dataset.ref=ref;
 
-  const sizes = getSizesByRef(ref);
-  const div = document.createElement("div");
-  div.className="product";
-  div.dataset.ref = ref;
-
-  div.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-      <strong>${ref}</strong>
-      <button type="button" onclick="this.closest('.product').remove()">Quitar</button>
+  card.innerHTML=`
+    <div class="cardTop">
+      <div class="badge">${ref}</div>
+      <img src="images/${ref}.jpg"
+           onerror="this.src='images/placeholder.jpg'"
+           onclick="openModal(this.src)">
     </div>
-    <div class="sizes"></div>
+    <div class="cardBody">
+      <div class="sizes"></div>
+      <button class="ghost" onclick="this.closest('.card').remove()">Quitar</button>
+    </div>
   `;
 
-  const sizesDiv = div.querySelector(".sizes");
-  sizes.forEach(s=>{
+  const sizesDiv=card.querySelector(".sizes");
+  getSizes(ref).forEach(s=>{
     const box=document.createElement("div");
     box.className="sizeBox";
-    box.innerHTML=`<span>${s}</span><input type="number" min="0" value="0" data-size="${s}">`;
+    box.innerHTML=`<span>${s}</span><input type="number" min="0" data-size="${s}">`;
     sizesDiv.appendChild(box);
   });
 
-  el("products").appendChild(div);
+  document.getElementById("products").appendChild(card);
 }
 
-function buildOrderText(){
-  const today = new Date().toLocaleDateString("es-ES");
-
-  const client = {
-    fiscalName: el("fiscalName").value.trim(),
-    taxId:      el("taxId").value.trim(),
-    shopName:   el("shopName").value.trim(),
-    email:      el("email").value.trim(),
-    phone:      el("phone").value.trim(),
-    address:    el("address").value.trim(),
-    city:       el("city").value.trim(),
-    zip:        el("zip").value.trim(),
-    province:   el("province").value.trim(),
-    notes:      el("notes").value.trim(),
-  };
-
-  let lines = [];
-  document.querySelectorAll(".product").forEach(p=>{
-    const ref = p.dataset.ref || "";
-    p.querySelectorAll("input[type=number]").forEach(inp=>{
-      const qty = Number(inp.value || "0");
-      if(qty > 0){
-        lines.push(`${ref} - ${inp.dataset.size}: ${qty}`);
-      }
+function buildText(){
+  const today=new Date().toLocaleDateString("es-ES");
+  let lines="";
+  document.querySelectorAll(".card").forEach(c=>{
+    const ref=c.dataset.ref;
+    c.querySelectorAll("input").forEach(i=>{
+      if(i.value>0)
+        lines+=`${ref} - ${i.dataset.size}: ${i.value}\n`;
     });
   });
 
-  return `PEDIDO INVIERNO AW26/27 — ABUELA TATA
+  return `
+PEDIDO INVIERNO AW26/27
 Fecha: ${today}
 
-DATOS CLIENTE
-Nombre fiscal: ${client.fiscalName}
-NIF/CIF: ${client.taxId}
-Tienda: ${client.shopName}
-Email: ${client.email}
-Teléfono: ${client.phone}
-Dirección: ${client.address}
-CP / Ciudad: ${client.zip} ${client.city}
-Provincia: ${client.province}
+Tienda: ${shopName.value}
+Email: ${email.value}
 
-PEDIDO:
-${lines.length ? lines.join("\n") : "(Sin líneas de pedido. Añade cantidades.)"}
-
-Notas:
-${client.notes || "-"}
+${lines}
 
 All the best,
 Abuela Tata
@@ -107,118 +241,39 @@ Abuela Tata
 }
 
 function sendEmail(){
-  const clientEmail = el("email").value.trim();
-  if(!clientEmail){
-    alert("Debes introducir el email del cliente (obligatorio).");
+  if(!email.value.trim()){
+    alert("Email obligatorio.");
     return;
   }
-
-  // comprobar que haya al menos una cantidad
-  const hasQty = Array.from(document.querySelectorAll(".product input[type=number]"))
-    .some(inp => Number(inp.value||"0") > 0);
-
-  if(!hasQty){
-    alert("No hay cantidades en el pedido.");
-    return;
-  }
-
-  const shop = el("shopName").value.trim() || el("fiscalName").value.trim() || "Cliente";
-  const dateStr = new Date().toLocaleDateString("es-ES");
-  const subject = `Pedido Invierno AW26/27 — ${shop} — ${dateStr}`;
-  const body = buildOrderText();
-
-  const mailto =
-    `mailto:${encodeURIComponent(ORDER_TO)}` +
-    `?cc=${encodeURIComponent(clientEmail)}` +
-    `&subject=${encodeURIComponent(subject)}` +
-    `&body=${encodeURIComponent(body)}`;
-
-  window.location.href = mailto;
+  window.location.href=
+  `mailto:info@abuelatata.com?cc=${encodeURIComponent(email.value)}&subject=Pedido Invierno AW26/27&body=${encodeURIComponent(buildText())}`;
 }
 
 function downloadPDF(){
-  // abre una ventana imprimible y el cliente guarda como PDF
-  const win = window.open("", "_blank");
-  const text = buildOrderText()
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-
-  win.document.write(`
-    <html><head><title>Pedido Abuela Tata</title>
-    <style>body{font-family:Arial;padding:30px} pre{white-space:pre-wrap;font-size:12px}</style>
-    </head><body>
-      <pre>${text}</pre>
-      <script>window.print();<\/script>
-    </body></html>
-  `);
+  const win=window.open('');
+  win.document.write(`<pre style="font-family:Arial;padding:30px">${buildText()}</pre>`);
   win.document.close();
+  win.print();
 }
 
 function saveDraft(){
-  const payload = {
-    client: {
-      fiscalName: el("fiscalName").value,
-      taxId: el("taxId").value,
-      shopName: el("shopName").value,
-      email: el("email").value,
-      phone: el("phone").value,
-      address: el("address").value,
-      city: el("city").value,
-      zip: el("zip").value,
-      province: el("province").value,
-      notes: el("notes").value
-    },
-    products: Array.from(document.querySelectorAll(".product")).map(p => ({
-      ref: p.dataset.ref,
-      qty: Array.from(p.querySelectorAll("input[type=number]")).reduce((acc,inp)=>{
-        const n = Number(inp.value||"0");
-        if(n>0) acc[inp.dataset.size]=n;
-        return acc;
-      },{})
-    }))
-  };
-  localStorage.setItem("pedidoInviernoDraft", JSON.stringify(payload));
-  alert("Borrador guardado ✅");
+  localStorage.setItem("pedidoInvierno",buildText());
+  alert("Guardado");
 }
 
 function loadDraft(){
-  const raw = localStorage.getItem("pedidoInviernoDraft");
-  if(!raw){ alert("No hay borrador guardado."); return; }
-
-  const data = JSON.parse(raw);
-
-  // cliente
-  if(data.client){
-    el("fiscalName").value = data.client.fiscalName || "";
-    el("taxId").value = data.client.taxId || "";
-    el("shopName").value = data.client.shopName || "";
-    el("email").value = data.client.email || "";
-    el("phone").value = data.client.phone || "";
-    el("address").value = data.client.address || "";
-    el("city").value = data.client.city || "";
-    el("zip").value = data.client.zip || "";
-    el("province").value = data.client.province || "";
-    el("notes").value = data.client.notes || "";
-  }
-
-  // productos
-  el("products").innerHTML = "";
-  (data.products || []).forEach(p=>{
-    if(!p.ref) return;
-    addProduct(p.ref);
-    const card = Array.from(document.querySelectorAll(".product")).find(x=>x.dataset.ref===p.ref);
-    if(card && p.qty){
-      card.querySelectorAll("input[type=number]").forEach(inp=>{
-        const v = p.qty[inp.dataset.size];
-        if(v!=null) inp.value = String(v);
-      });
-    }
-  });
-
-  alert("Borrador cargado ✅");
+  alert("El borrador está guardado localmente.");
 }
 
-// Para ver errores fácilmente
-window.addEventListener("error", (e)=>{
-  alert("Error en la app: " + (e.message || e.error));
-});
+function openModal(src){
+  document.getElementById("modalImg").src=src;
+  document.getElementById("modal").classList.add("open");
+}
+function closeModal(){
+  document.getElementById("modal").classList.remove("open");
+}
+
 </script>
+
+</body>
+</html>
