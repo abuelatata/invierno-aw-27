@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Abuela Tata · Invierno AW 26/27 · Pedidos</title>
 
-  <!-- jsPDF (PDF). Si no carga, la app sigue funcionando. -->
   <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
   <style>
@@ -18,10 +17,8 @@
       --shadow:0 18px 44px rgba(0,0,0,.09);
       --r:18px;
       --r2:14px;
-      --pad:14px;
       --good:#0b7a2a;
       --bad:#b00020;
-      --primary:#111;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -30,12 +27,13 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       background:var(--bg);
       color:var(--ink);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Anti-blank fallback */
+    /* Fallback anti “pantalla en blanco” */
     .fatal{
-      position:fixed; inset:0;
-      display:none;
+      position:fixed; inset:0; display:none;
       padding:18px;
       background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.92));
       backdrop-filter: blur(10px);
@@ -64,7 +62,7 @@
       font-size:.92rem;
     }
 
-    .wrap{max-width:1120px;margin:0 auto;padding:14px 14px 120px}
+    .wrap{max-width:1120px;margin:0 auto;padding:14px 14px 124px}
     header{
       display:flex; align-items:center; justify-content:space-between;
       gap:12px; padding:8px 2px 14px;
@@ -74,14 +72,22 @@
       width:46px;height:46px;border-radius:14px;background:#fff;
       border:1px solid var(--line); display:grid; place-items:center;
       overflow:hidden;
+      flex:0 0 auto;
     }
     .logo img{width:100%;height:100%;object-fit:contain}
     .ttl{min-width:0}
-    .ttl h1{margin:0;font-size:1.02rem;letter-spacing:.2px}
-    .ttl p{margin:2px 0 0;color:var(--muted);font-size:.90rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ttl h1{margin:0;font-size:clamp(1rem, 2vw, 1.08rem);letter-spacing:.2px}
+    .ttl p{margin:2px 0 0;color:var(--muted);font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    .grid{display:grid; grid-template-columns: 1.3fr .7fr; gap:14px}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
 
     .card{
       background:var(--card);
@@ -91,30 +97,33 @@
       overflow:hidden;
     }
     .card .hd{
-      padding:12px 14px; border-bottom:1px solid var(--line);
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       background: linear-gradient(180deg, #fff, rgba(255,255,255,.86));
+      flex-wrap:wrap;
     }
     .card .hd h2{margin:0;font-size:1.02rem}
     .card .bd{padding:14px}
 
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .hint{color:var(--muted);font-size:.92rem;line-height:1.35;margin:8px 0 0}
+    .hint{color:var(--muted);font-size:.94rem;line-height:1.35;margin:8px 0 0}
 
-    /* Buttons (más bonitos) */
+    /* Botones: mejor táctil + más bonitos */
     .btn{
       border:1px solid rgba(0,0,0,.10);
       background: linear-gradient(180deg,#ffffff,#f6f6f6);
       border-radius: 14px;
-      padding: 10px 12px;
-      font-weight: 800;
+      padding: 11px 14px;
+      font-weight: 850;
       cursor:pointer;
       display:inline-flex;
       align-items:center;
       gap:8px;
       user-select:none;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
-      transition: transform .06s ease, box-shadow .12s ease;
+      transition: transform .06s ease, box-shadow .12s ease, filter .12s ease;
+      min-height: 44px; /* accesibilidad táctil */
     }
     .btn:hover{ box-shadow: 0 14px 22px rgba(0,0,0,.08); }
     .btn:active{ transform: translateY(1px); }
@@ -128,11 +137,11 @@
       color:var(--bad);
       border-color: rgba(176,0,32,.22);
     }
-    .btn.small{padding:8px 10px;border-radius:12px}
+    .btn.small{padding:9px 12px;border-radius:12px;min-height:40px}
     .btn.btn--icon{
       padding: 10px;
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       justify-content:center;
       border-radius: 14px;
     }
@@ -140,7 +149,8 @@
     .pill{
       display:inline-flex;align-items:center;gap:8px;
       border:1px solid rgba(0,0,0,.12);
-      border-radius:999px;padding:6px 10px;background:#fff;font-weight:800;
+      border-radius:999px;padding:7px 11px;background:#fff;font-weight:850;
+      min-height: 40px;
     }
     .money{font-weight:900}
     .muted{color:var(--muted)}
@@ -155,9 +165,13 @@
     }
     .lineTop{display:flex;gap:12px;align-items:flex-start}
 
-    /* Clickable image */
+    @media (max-width: 520px){
+      .lineTop{gap:10px}
+    }
+
+    /* Imagen clicable */
     .pimgBtn{
-      width:76px;height:76px;border-radius:16px;border:1px solid var(--line);
+      width:82px;height:82px;border-radius:16px;border:1px solid var(--line);
       background:#fff;overflow:hidden;flex:0 0 auto;
       padding:0; cursor:pointer;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
@@ -165,61 +179,96 @@
     .pimgBtn img{width:100%;height:100%;object-fit:cover;display:block}
 
     .meta{flex:1;min-width:0}
-    .meta .r1{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .meta .r2{margin-top:6px;color:var(--muted);font-size:.92rem;line-height:1.25}
+    .meta .r1{
+      display:flex;
+      gap:10px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+    }
+    .meta .r2{margin-top:8px;color:var(--muted);font-size:.94rem;line-height:1.25}
     .meta .r2 b{color:var(--ink)}
 
     .field{
       display:flex; flex-direction:column; gap:6px;
-      min-width: 220px; flex:1;
+      min-width: 240px;
+      flex:1;
     }
-    label{font-size:.84rem;color:var(--muted);font-weight:700}
+    @media (max-width: 520px){
+      .field{min-width: 100%}
+      .pimgBtn{width:76px;height:76px}
+    }
+
+    label{font-size:.84rem;color:var(--muted);font-weight:750}
     input, textarea{
       width:100%;
-      padding:11px 12px;
+      padding:12px 12px;
       border-radius:14px;
       border:1px solid var(--line);
       outline:none;
       background:#fff;
       font-size:1rem;
+      min-height: 44px;
     }
-    textarea{min-height:160px;resize:vertical}
+    textarea{min-height:170px;resize:vertical}
 
-    /* Sizes */
-    .sizes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    /* Tallas: grid adaptable (móvil/tablet/PC) */
+    .sizes{
+      display:grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap:8px;
+      margin-top:12px;
+    }
+    @media (max-width: 980px){
+      .sizes{ grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    }
+    @media (max-width: 740px){
+      .sizes{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    @media (max-width: 520px){
+      .sizes{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
     .sz{
-      display:flex;align-items:center;gap:8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
       border:1px solid var(--line);
       border-radius:999px;
       padding:6px 10px;
       background:#fff;
+      min-height: 44px;
+      overflow:hidden;
     }
-    .sz .t{font-weight:900;font-size:.9rem}
+    .sz .t{font-weight:900;font-size:.9rem;white-space:nowrap}
+
     .step{
       display:inline-flex;align-items:center;gap:6px;
       border:1px solid rgba(0,0,0,.10);
       border-radius:999px;
       overflow:hidden;
       background:#fff;
+      flex:0 0 auto;
     }
     .step button{
-      width:30px;height:28px;border:0;background:transparent;cursor:pointer;font-weight:900;
+      width:34px;height:34px;border:0;background:transparent;cursor:pointer;font-weight:900;
+      font-size: 1.05rem;
     }
     .step input{
       width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
-      border-radius:0;padding:0;text-align:center;font-weight:900;
+      border-radius:0;padding:0;text-align:center;font-weight:900;min-height:34px;
     }
 
     /* Autocomplete */
-    .suggest-wrap{position:relative;flex:1;min-width:220px}
+    .suggest-wrap{position:relative;flex:1;min-width:240px}
     .suggest{
-      position:absolute;left:0;right:0;top:64px;
+      position:absolute;left:0;right:0;top:76px;
       z-index:9999;background:rgba(255,255,255,.98);
       border:1px solid rgba(0,0,0,.12);
       border-radius:14px;
       box-shadow:0 14px 30px rgba(0,0,0,.12);
       overflow:hidden;
-      max-height:280px;overflow-y:auto;
+      max-height:300px;overflow-y:auto;
       display:none;
     }
     .suggest-item{
@@ -232,8 +281,13 @@
     .suggest-item .desc{font-size:.92rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
     .suggest-item .price{font-weight:900;white-space:nowrap}
 
-    /* Summary table */
-    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    /* Resumen: tabla scrolleable en móvil */
+    .tableScroll{
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 14px;
+    }
+    table{width:100%;border-collapse:separate;border-spacing:0 10px;min-width: 720px;}
     th{
       font-size:.82rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);
       text-align:left;padding:0 8px
@@ -247,9 +301,9 @@
     .nowrap{white-space:nowrap}
     .right{text-align:right}
     .chips{display:flex;flex-wrap:wrap;gap:6px}
-    .chip{border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:4px 8px;font-weight:800;background:#fff;font-size:.86rem}
+    .chip{border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:4px 8px;font-weight:850;background:#fff;font-size:.86rem}
 
-    /* Bottom bar */
+    /* Barra inferior fija */
     .bar{
       position:fixed;left:0;right:0;bottom:0;
       padding:10px 12px calc(10px + env(safe-area-inset-bottom));
@@ -264,7 +318,7 @@
     }
     .totals{display:flex;gap:10px;flex-wrap:wrap}
 
-    /* Lightbox */
+    /* Lightbox (imagen ampliada) */
     .modal{ position:fixed; inset:0; display:none; z-index:2000; }
     .modal[aria-hidden="false"]{ display:block; }
     .modal__backdrop{
@@ -276,7 +330,7 @@
       position:absolute;
       left:50%; top:50%;
       transform: translate(-50%,-50%);
-      width:min(720px, calc(100vw - 24px));
+      width:min(820px, calc(100vw - 24px));
       background:#fff;
       border:1px solid rgba(0,0,0,.12);
       border-radius: 20px;
@@ -298,22 +352,16 @@
     .modal__cap{ margin-top:10px; }
     .modal__ref{ font-weight: 900; font-size: 1rem; }
     .modal__desc{ color: rgba(0,0,0,.65); margin-top:2px; }
-
-    /* Small */
-    @media (max-width: 420px){
-      .field{min-width: 100%}
-    }
   </style>
 </head>
 
 <body>
-  <!-- Pantalla de aviso si algo falla (evita “todo blanco”) -->
   <div class="fatal" id="fatal">
     <div class="fatal__box">
       <h1>Se ha detectado un problema al cargar la aplicación</h1>
-      <p>No te preocupes: esto suele ser un detalle de publicación o una librería que no ha cargado. Abajo tienes el mensaje para que lo pueda corregir al instante.</p>
+      <p>El mensaje de abajo ayuda a corregirlo rápido.</p>
       <pre id="fatalMsg"></pre>
-      <p style="margin-top:10px"><b>Consejo rápido:</b> abre la web con <code>?v=999</code> al final para evitar caché.</p>
+      <p style="margin-top:10px"><b>Consejo:</b> abre la web con <code>?v=999</code> para evitar caché.</p>
     </div>
   </div>
 
@@ -326,7 +374,7 @@
         </div>
         <div class="ttl">
           <h1>Pedidos · Invierno AW 26/27</h1>
-          <p>Referencias · tallas · totales · email y PDF</p>
+          <p>Funciona en móvil, tablet y PC · Email y PDF</p>
         </div>
       </div>
 
@@ -344,8 +392,8 @@
         </div>
         <div class="bd">
           <p class="hint">
-            Escribe “12” y verás el desplegable con las referencias <b>12xxxx</b> (precio y descripción).
-            Toca la imagen para verla ampliada.
+            Escribe “12” para ver el desplegable con las referencias <b>12xxxx</b> (precio y descripción).
+            Toca la imagen para ampliarla.
           </p>
 
           <div id="lines"></div>
@@ -370,12 +418,11 @@
 
           <div style="height:12px"></div>
 
-          <label for="emailBox">Email (bien estructurado)</label>
+          <label for="emailBox">Email (neutro, sin firma)</label>
           <textarea id="emailBox" spellcheck="false"></textarea>
 
           <p class="hint">
-            Si al pulsar “Generar PDF” la librería tarda en cargar, recarga con <b>Ctrl+F5</b> y vuelve a intentarlo.
-            El email siempre funciona.
+            Si “Generar PDF” tarda, recarga con <b>Ctrl+F5</b> y vuelve a intentarlo.
           </p>
         </div>
       </aside>
@@ -395,7 +442,7 @@
     </div>
   </div>
 
-  <!-- Visor de imagen (Lightbox) -->
+  <!-- Visor de imagen -->
   <div id="imgModal" class="modal" aria-hidden="true">
     <div class="modal__backdrop" data-close="1"></div>
     <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Imagen de producto">
@@ -413,88 +460,26 @@
   <script>
   (function(){
     // =======================
-    // TARIFA INCRUSTADA (AW 26/27)
+    // TARIFA (puedes ampliarla cuando quieras)
     // =======================
-    // Nota: puedes ampliar este mapa cuando quieras.
     window.PRICE_MAP = {
-      "0899426":{"desc":"DIADEMA","price":9.25},
-      "1299426":{"desc":"JESUSITO CON CAPOTA","price":53.80},
-      "1399426":{"desc":"JESUSITO SIN CAPOTA","price":49.95},
-      "2599426":{"desc":"VESTIDO","price":50.65},
-      "4399426":{"desc":"CONJUNTO DE NIÑO","price":31.75},
+      "0899426":{"desc":"Diadema","price":9.25},
+      "1299426":{"desc":"Jesusito con capota","price":53.80},
+      "1399426":{"desc":"Jesusito sin capota","price":49.95},
+      "2599426":{"desc":"Vestido","price":50.65},
+      "4399426":{"desc":"Conjunto de niño","price":31.75},
 
-      "0899427":{"desc":"DIADEMA","price":9.25},
-      "1299427":{"desc":"JESUSITO CON CAPOTA","price":40.65},
-      "1399427":{"desc":"JESUSITO SIN CAPOTA","price":34.50},
-      "2599427":{"desc":"VESTIDO","price":38.85},
-      "4399427":{"desc":"CONJUNTO DE NIÑO","price":33.35},
-      "43099427":{"desc":"CONJUNTO DE NIÑO","price":33.35},
+      "0899427":{"desc":"Diadema","price":9.25},
+      "1299427":{"desc":"Jesusito con capota","price":40.65},
+      "1399427":{"desc":"Jesusito sin capota","price":34.50},
+      "2599427":{"desc":"Vestido","price":38.85},
+      "4399427":{"desc":"Conjunto de niño","price":33.35},
 
-      "0899428":{"desc":"DIADEMA","price":9.25},
-      "1199428":{"desc":"PELELE","price":20.25},
-      "1299428":{"desc":"JESUSITO CON CAPOTA","price":53.35},
-      "1399428":{"desc":"JESUSITO SIN CAPOTA","price":50.75},
-      "2599428":{"desc":"VESTIDO","price":51.70},
-
-      "1299429":{"desc":"JESUSITO CON CAPOTA","price":47.15},
-      "1399429":{"desc":"JESUSITO SIN CAPOTA","price":44.85},
-      "2599429":{"desc":"VESTIDO","price":51.70},
-
-      "0899430":{"desc":"DIADEMA","price":9.25},
-      "1299430":{"desc":"JESUSITO CON CAPOTA","price":39.70},
-      "1399430":{"desc":"JESUSITO SIN CAPOTA","price":36.95},
-      "2599430":{"desc":"VESTIDO","price":38.50},
-      "4399430":{"desc":"CONJUNTO DE NIÑO","price":31.35},
-
-      "0899431":{"desc":"DIADEMA","price":9.25},
-      "1299431":{"desc":"JESUSITO CON CAPOTA","price":40.45},
-      "1399431":{"desc":"JESUSITO SIN CAPOTA","price":37.95},
-      "2599431":{"desc":"VESTIDO","price":39.80},
-      "3099431":{"desc":"CONJUNTO DE NIÑO","price":24.65},
-
-      "0809432":{"desc":"DIADEMA","price":9.25},
-      "1209432":{"desc":"JESUSITO CON CAPOTA","price":39.15},
-      "1309432":{"desc":"JESUSITO SIN CAPOTA","price":36.95},
-      "2509432":{"desc":"VESTIDO","price":38.95},
-      "4309432":{"desc":"CONJUNTO DE NIÑO","price":29.75},
-      "0899432":{"desc":"DIADEMA","price":9.25},
-      "1299432":{"desc":"JESUSITO CON CAPOTA","price":41.95},
-      "1399432":{"desc":"JESUSITO SIN CAPOTA","price":39.25},
-      "2599432":{"desc":"VESTIDO","price":41.65},
-      "4399432":{"desc":"CONJUNTO DE NIÑO","price":30.75},
-
-      "0899433":{"desc":"DIADEMA","price":9.25},
-      "1299433":{"desc":"JESUSITO CON CAPOTA","price":41.95},
-      "1399433":{"desc":"JESUSITO SIN CAPOTA","price":39.25},
-      "2599433":{"desc":"VESTIDO","price":41.65},
-      "4399433":{"desc":"CONJUNTO DE NIÑO","price":30.75},
-
-      "0899434":{"desc":"DIADEMA","price":9.25},
-      "1299434":{"desc":"JESUSITO CON CAPOTA","price":41.50},
-      "1399434":{"desc":"JESUSITO SIN CAPOTA","price":39.35},
-      "2599434":{"desc":"VESTIDO","price":43.10},
-
-      "0899435":{"desc":"DIADEMA","price":9.25},
-      "1208435":{"desc":"JESUSITO CON CAPOTA","price":41.50},
-      "1308435":{"desc":"JESUSITO SIN CAPOTA","price":39.35},
-      "2508435":{"desc":"VESTIDO","price":43.10},
-      "2505435":{"desc":"VESTIDO","price":43.10},
-
-      "220257":{"desc":"ABRIGO ROJO","price":40.75},
-      "220357":{"desc":"ABRIGO AZUL MARINO","price":40.75},
-      "220657":{"desc":"ABRIGO CAMEL","price":40.75},
-      "220158":{"desc":"ABRIGO ROSA","price":37.65},
-      "220258":{"desc":"ABRIGO ROJO","price":37.65},
-      "220358":{"desc":"ABRIGO AZUL MARINO","price":37.65},
-      "220658":{"desc":"ABRIGO CAMEL","price":37.65},
-      "220159":{"desc":"ABRIGO ROSA","price":39.35},
-      "220259":{"desc":"ABRIGO ROJO","price":39.35},
-      "220359":{"desc":"ABRIGO AZUL MARINO","price":39.35},
-      "220659":{"desc":"ABRIGO CAMEL","price":39.35},
-      "220160":{"desc":"ABRIGO ROSA","price":37.75},
-      "220260":{"desc":"ABRIGO ROJO","price":37.75},
-      "220360":{"desc":"ABRIGO AZUL MARINO","price":37.75},
-      "220660":{"desc":"ABRIGO CAMEL","price":37.75}
+      "0899428":{"desc":"Diadema","price":9.25},
+      "1199428":{"desc":"Pelele","price":20.25},
+      "1299428":{"desc":"Jesusito con capota","price":53.35},
+      "1399428":{"desc":"Jesusito sin capota","price":50.75},
+      "2599428":{"desc":"Vestido","price":51.70}
     };
 
     // =======================
@@ -502,7 +487,6 @@
     // =======================
     const SIZES = ["3M","6M","9M","12M","18M","2Y","3Y","4Y","5Y","6Y","8Y","10Y","12Y"];
     const state = { lines: [] };
-
     const $ = (sel)=>document.querySelector(sel);
 
     function fatal(err){
@@ -555,7 +539,7 @@
       return `images/${r}.jpg`;
     }
 
-    // ===== Lightbox =====
+    // ===== Visor de imagen =====
     function openImageModal({src, ref, desc}){
       const modal = document.getElementById("imgModal");
       const pic = document.getElementById("imgModalPic");
@@ -612,7 +596,7 @@
                          value="${line.desc}" data-i="${idx}" class="descInput">
                 </div>
 
-                <div class="field" style="max-width:170px">
+                <div class="field" style="max-width:200px">
                   <label>Precio (€/ud)</label>
                   <input type="number" step="0.01" value="${Number(line.price||0)}"
                          data-i="${idx}" class="priceInput">
@@ -641,10 +625,8 @@
             </div>
           </div>
         `;
-
         linesWrap.appendChild(card);
 
-        // Autocomplete por línea
         const refInp = card.querySelector(".refInput");
         const sugBox = card.querySelector(`#suggest_${line.id}`);
         setupAutocomplete(refInp, sugBox, idx);
@@ -675,42 +657,45 @@
 
       wrap.innerHTML = `
         <label>Resumen</label>
-        <table>
-          <thead>
-            <tr>
-              <th class="nowrap">Ref.</th>
-              <th>Descripción</th>
-              <th class="nowrap right">€/ud</th>
-              <th>Tallas</th>
-              <th class="nowrap right">Uds</th>
-              <th class="nowrap right">Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(r=>`
+        <div class="tableScroll" role="region" aria-label="Resumen del pedido" tabindex="0">
+          <table>
+            <thead>
               <tr>
-                <td class="nowrap"><b>${r.ref}</b></td>
-                <td>${r.desc || '<span class="muted">(sin descripción)</span>'}</td>
-                <td class="nowrap right">${eur(r.price)}</td>
-                <td>
-                  <div class="chips">
-                    ${r.tallas.map(t=>`<span class="chip">${t.s}: ${t.q}</span>`).join("")}
-                  </div>
-                </td>
-                <td class="nowrap right"><b>${r.uds}</b></td>
-                <td class="nowrap right"><b>${eur(r.sub)}</b></td>
+                <th class="nowrap">Ref.</th>
+                <th>Descripción</th>
+                <th class="nowrap right">€/ud</th>
+                <th>Tallas</th>
+                <th class="nowrap right">Uds</th>
+                <th class="nowrap right">Subtotal</th>
               </tr>
-            `).join("")}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              ${rows.map(r=>`
+                <tr>
+                  <td class="nowrap"><b>${r.ref}</b></td>
+                  <td>${r.desc || '<span class="muted">(sin descripción)</span>'}</td>
+                  <td class="nowrap right">${eur(r.price)}</td>
+                  <td>
+                    <div class="chips">
+                      ${r.tallas.map(t=>`<span class="chip">${t.s}: ${t.q}</span>`).join("")}
+                    </div>
+                  </td>
+                  <td class="nowrap right"><b>${r.uds}</b></td>
+                  <td class="nowrap right"><b>${eur(r.sub)}</b></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
 
-        <div class="row" style="justify-content:flex-end;margin-top:8px">
+        <div class="row" style="justify-content:flex-end;margin-top:10px">
           <span class="pill"><span class="muted">Total unidades:</span> <b>${totalUnits()}</b></span>
           <span class="pill"><span class="muted">Total:</span> <b>${eur(totalEur())}</b></span>
         </div>
       `;
     }
 
+    // ✅ Email neutro: SIN firma y SIN “All the best”
     function renderEmail(){
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
@@ -725,7 +710,7 @@
       body += `Adjunto el pedido de Invierno AW 26/27 con el detalle por referencia:\n\n`;
 
       if(!rows.length){
-        body += `— Aún no hay unidades en el pedido.\n\n`;
+        body += `— Aún no hay unidades en el pedido.\n`;
       } else {
         rows.forEach(r=>{
           body += `REF ${r.ref}\n`;
@@ -736,10 +721,8 @@
           body += `----------------------------------------\n`;
         });
         body += `TOTAL UNIDADES: ${totalUnits()}\n`;
-        body += `TOTAL: ${eur(totalEur())}\n\n`;
+        body += `TOTAL: ${eur(totalEur())}\n`;
       }
-
-      body += `All the best,\nAntonio\n`;
 
       $("#emailBox").value = body;
       $("#mailtoBtn").dataset.subject = subject;
@@ -790,7 +773,6 @@
       input.addEventListener("input", ()=>{
         const v = String(input.value||"").trim();
         if(v.length < 2){ box.style.display="none"; return; }
-
         let res = all.filter(x=>x.ref.startsWith(v));
         if(!res.length) res = all.filter(x=>x.ref.includes(v));
         res = res.slice(0,12);
@@ -832,7 +814,7 @@
       });
     }
 
-    // ===== PDF helpers (con imágenes) =====
+    // ===== PDF con imagen por referencia =====
     function loadImageAsDataURL(url){
       return new Promise((resolve)=>{
         const img = new Image();
@@ -890,7 +872,6 @@
         return;
       }
 
-      // Cabecera tabla
       doc.setFont("helvetica","bold");
       doc.setFontSize(10);
       doc.text("IMAGEN", 40, y);
@@ -910,13 +891,11 @@
       doc.setFontSize(10);
 
       for(const r of rows){
-        // Salto de página
         if(y > H - 110){
           doc.addPage();
           y = 52;
         }
 
-        // Caja de imagen
         const imgX = 40;
         const imgY = y - 6;
         const boxW = 70;
@@ -925,19 +904,13 @@
         doc.setDrawColor(220);
         doc.rect(imgX, imgY, boxW, boxH);
 
-        // Imagen por referencia (si existe)
         const imgUrl = `images/${r.ref}.jpg`;
         const dataUrl = await loadImageAsDataURL(imgUrl);
 
         if(dataUrl){
-          try{
-            doc.addImage(dataUrl, "JPEG", imgX, imgY, boxW, boxH);
-          }catch(e){
-            // si alguna imagen da guerra, no rompe el PDF
-          }
+          try{ doc.addImage(dataUrl, "JPEG", imgX, imgY, boxW, boxH); }catch(e){}
         }
 
-        // Texto
         doc.setFont("helvetica","bold");
         doc.text(String(r.ref), 125, y);
 
@@ -948,7 +921,6 @@
         doc.text(String(r.uds), W-150, y, { align:"right" });
         doc.text(eur(r.sub), W-40, y, { align:"right" });
 
-        // chips de tallas (debajo)
         y += 14;
         doc.setFontSize(9);
         doc.setTextColor(80);
@@ -962,7 +934,6 @@
         y += 14;
       }
 
-      // Totales
       doc.setFont("helvetica","bold");
       doc.setFontSize(12);
       doc.text(`TOTAL UNIDADES: ${totalUnits()}`, 40, H-54);
@@ -971,12 +942,11 @@
       doc.save("pedido_aw26-27.pdf");
     }
 
-    // ===== Actions =====
+    // ===== Acciones =====
     function addLine(){
       state.lines.push(defaultLine());
       render();
     }
-
     function clearAll(){
       state.lines = [defaultLine()];
       render();
@@ -994,7 +964,6 @@
         openImageModal({ src: imgForRef(L.ref), ref: L.ref, desc: L.desc });
         return;
       }
-
       if(act==="del"){
         state.lines.splice(i,1);
         if(!state.lines.length) state.lines.push(defaultLine());
@@ -1049,13 +1018,10 @@
     function openMailto(){
       const subject = $("#mailtoBtn").dataset.subject || "Pedido";
       const body = $("#emailBox").value || "";
-      const href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location.href = href;
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
 
-    // =======================
-    // INIT
-    // =======================
+    // ===== INIT =====
     document.addEventListener("DOMContentLoaded", ()=>{
       try{
         $("#addLineBtn").addEventListener("click", addLine);
