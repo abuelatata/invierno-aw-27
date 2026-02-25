@@ -34,7 +34,7 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Fallback anti “pantalla en blanco” */
+    /* Anti pantallazo en blanco */
     .fatal{
       position:fixed; inset:0; display:none;
       padding:18px;
@@ -125,6 +125,7 @@
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
       transition: transform .06s ease, box-shadow .12s ease, filter .12s ease;
       min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn:hover{ box-shadow: 0 14px 22px rgba(0,0,0,.08); }
     .btn:active{ transform: translateY(1px); }
@@ -172,6 +173,7 @@
       background:#fff;overflow:hidden;flex:0 0 auto;
       padding:0; cursor:pointer;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      -webkit-tap-highlight-color: transparent;
     }
     .pimgBtn img{width:100%;height:100%;object-fit:cover;display:block}
 
@@ -225,27 +227,20 @@
     .suggest-item .desc{font-size:.92rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
     .suggest-item .price{font-weight:900;white-space:nowrap}
 
-    /* Plegable de tallas */
-    details.sizesDetails{
+    /* Panel tallas (PLEGABLE ESTABLE) */
+    .sizesPanel{
       margin-top:12px;
       border:1px solid rgba(0,0,0,.08);
       border-radius:16px;
       background:#fff;
       overflow:hidden;
     }
-    details.sizesDetails summary{
-      list-style:none;
-      cursor:pointer;
+    .sizesBar{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
       padding:10px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      user-select:none;
-      font-weight:900;
+      border-bottom:1px solid rgba(0,0,0,.08);
+      background: linear-gradient(180deg, #fff, rgba(255,255,255,.9));
     }
-    details.sizesDetails summary::-webkit-details-marker{display:none}
-    .sumLeft{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .badge{
       display:inline-flex;align-items:center;gap:8px;
       padding:6px 10px;border-radius:999px;
@@ -254,15 +249,15 @@
       color:var(--aquaInk);
       font-weight:900;
       min-height: 34px;
+      white-space:nowrap;
     }
-    .chev{opacity:.7}
+    .sizesBody{padding:12px; display:none;}
+    .sizesPanel.isOpen .sizesBody{display:block;}
 
     .sizes{
       display:grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
       gap:8px;
-      padding:12px;
-      border-top:1px solid rgba(0,0,0,.08);
     }
     @media (max-width: 980px){ .sizes{ grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     @media (max-width: 740px){ .sizes{ grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -289,6 +284,7 @@
     .step button{
       width:34px;height:34px;border:0;background:transparent;cursor:pointer;font-weight:900;
       font-size: 1.05rem;
+      -webkit-tap-highlight-color: transparent;
     }
     .step input{
       width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
@@ -385,7 +381,7 @@
         </div>
         <div class="ttl">
           <h1>Pedidos · Invierno AW 26/27</h1>
-          <p><span id="orderDateLabel"></span> · Funciona en móvil, tablet y PC</p>
+          <p><span id="orderDateLabel"></span> · Móvil / tablet / PC</p>
         </div>
       </div>
 
@@ -404,8 +400,8 @@
         </div>
         <div class="bd">
           <p class="hint">
-            Escribe “12” para ver el desplegable con referencias <b>12xxxx</b>.
-            Las tallas se pueden plegar y desplegar por cada referencia.
+            Escribe “12” (o cualquier inicio) y saldrá el desplegable con referencia, descripción y precio.
+            Toca la imagen para ampliarla. Las tallas se muestran/ocultan por línea.
           </p>
 
           <div id="lines"></div>
@@ -434,7 +430,7 @@
           <textarea id="emailBox" spellcheck="false"></textarea>
 
           <p class="hint">
-            Si “Generar PDF” tarda, recarga con <b>Ctrl+F5</b> y vuelve a intentarlo.
+            Para ver cambios tras un commit, abre la web con <b>?v=123</b> (cambia el número).
           </p>
         </div>
       </aside>
@@ -473,26 +469,80 @@
   <script>
   (function(){
     // =======================
-    // TARIFA (amplía aquí cuando quieras)
+    // TARIFA COMPLETA INV 26-27 (todas las referencias)
     // =======================
     window.PRICE_MAP = {
+      "0805435":{"desc":"Diadema","price":9.25},
+      "0809432":{"desc":"Diadema","price":9.25},
       "0899426":{"desc":"Diadema","price":9.25},
-      "1299426":{"desc":"Jesusito con capota","price":53.80},
-      "1399426":{"desc":"Jesusito sin capota","price":49.95},
-      "2599426":{"desc":"Vestido","price":50.65},
-      "4399426":{"desc":"Conjunto de niño","price":31.75},
-
       "0899427":{"desc":"Diadema","price":9.25},
-      "1299427":{"desc":"Jesusito con capota","price":40.65},
-      "1399427":{"desc":"Jesusito sin capota","price":34.50},
-      "2599427":{"desc":"Vestido","price":38.85},
-      "4399427":{"desc":"Conjunto de niño","price":33.35},
-
       "0899428":{"desc":"Diadema","price":9.25},
+      "0899430":{"desc":"Diadema","price":9.25},
+      "0899431":{"desc":"Diadema","price":9.25},
+      "0899432":{"desc":"Diadema","price":9.25},
+      "0899433":{"desc":"Diadema","price":9.25},
+      "0899434":{"desc":"Diadema","price":9.25},
+      "0899435":{"desc":"Diadema","price":9.25},
       "1199428":{"desc":"Pelele","price":20.25},
+      "1199434":{"desc":"Pelele","price":22.65},
+      "1205435":{"desc":"Jesusito con capota","price":41.50},
+      "1208435":{"desc":"Jesusito con capota","price":41.50},
+      "1209432":{"desc":"Jesusito con capota","price":39.15},
+      "1299426":{"desc":"Jesusito con capota","price":53.80},
+      "1299427":{"desc":"Jesusito con capota","price":40.65},
       "1299428":{"desc":"Jesusito con capota","price":53.35},
+      "1299429":{"desc":"Jesusito con capota","price":47.15},
+      "1299430":{"desc":"Jesusito con capota","price":39.70},
+      "1299431":{"desc":"Jesusito con capota","price":40.45},
+      "1299432":{"desc":"Jesusito con capota","price":41.95},
+      "1299433":{"desc":"Jesusito con capota","price":46.75},
+      "1299434":{"desc":"Jesusito con capota","price":44.45},
+      "1305435":{"desc":"Jesusito sin capota","price":39.35},
+      "1308435":{"desc":"Jesusito sin capota","price":39.35},
+      "1309432":{"desc":"Jesusito sin capota","price":36.95},
+      "1399426":{"desc":"Jesusito sin capota","price":49.95},
+      "1399427":{"desc":"Jesusito sin capota","price":34.50},
       "1399428":{"desc":"Jesusito sin capota","price":50.75},
-      "2599428":{"desc":"Vestido","price":51.70}
+      "1399429":{"desc":"Jesusito sin capota","price":44.85},
+      "1399430":{"desc":"Jesusito sin capota","price":36.95},
+      "1399431":{"desc":"Jesusito sin capota","price":37.95},
+      "1399432":{"desc":"Jesusito sin capota","price":39.25},
+      "1399433":{"desc":"Jesusito sin capota","price":45.25},
+      "1399434":{"desc":"Jesusito sin capota","price":39.15},
+      "220158":{"desc":"Abrigo rosa","price":37.65},
+      "220159":{"desc":"Abrigo rosa","price":39.35},
+      "220160":{"desc":"Abrigo rosa","price":37.75},
+      "220257":{"desc":"Abrigo rojo","price":40.75},
+      "220258":{"desc":"Abrigo rojo","price":37.65},
+      "220259":{"desc":"Abrigo rojo","price":39.35},
+      "220260":{"desc":"Abrigo rojo","price":37.75},
+      "220357":{"desc":"Abrigo azul marino","price":40.75},
+      "220358":{"desc":"Abrigo azul marino","price":37.65},
+      "220359":{"desc":"Abrigo azul marino","price":39.35},
+      "220360":{"desc":"Abrigo azul marino","price":37.75},
+      "220657":{"desc":"Abrigo camel","price":40.75},
+      "220658":{"desc":"Abrigo camel","price":37.65},
+      "220659":{"desc":"Abrigo camel","price":39.35},
+      "220660":{"desc":"Abrigo camel","price":37.75},
+      "2505435":{"desc":"Vestido","price":43.10},
+      "2508435":{"desc":"Vestido","price":43.10},
+      "2509432":{"desc":"Vestido","price":38.95},
+      "2599426":{"desc":"Vestido","price":50.65},
+      "2599427":{"desc":"Vestido","price":38.85},
+      "2599428":{"desc":"Vestido","price":51.70},
+      "2599429":{"desc":"Vestido","price":51.70},
+      "2599430":{"desc":"Vestido","price":38.50},
+      "2599431":{"desc":"Vestido","price":39.80},
+      "2599432":{"desc":"Vestido","price":41.65},
+      "2599433":{"desc":"Vestido","price":49.25},
+      "2599434":{"desc":"Vestido","price":37.70},
+      "3099431":{"desc":"Conjunto de niño","price":24.65},
+      "4309432":{"desc":"Conjunto de niño","price":29.75},
+      "43099427":{"desc":"Conjunto de niño","price":33.35},
+      "4399426":{"desc":"Conjunto de niño","price":31.75},
+      "4399427":{"desc":"Conjunto de niño","price":33.35},
+      "4399430":{"desc":"Conjunto de niño","price":31.35},
+      "4399432":{"desc":"Conjunto de niño","price":30.75}
     };
 
     // =======================
@@ -560,13 +610,9 @@
     // ===== Visor de imagen =====
     function openImageModal({src, ref, desc}){
       const modal = document.getElementById("imgModal");
-      const pic = document.getElementById("imgModalPic");
-      const r = document.getElementById("imgModalRef");
-      const d = document.getElementById("imgModalDesc");
-
-      pic.src = src;
-      r.textContent = ref ? `REF ${ref}` : "";
-      d.textContent = desc || "";
+      document.getElementById("imgModalPic").src = src;
+      document.getElementById("imgModalRef").textContent = ref ? `REF ${ref}` : "";
+      document.getElementById("imgModalDesc").textContent = desc || "";
       modal.setAttribute("aria-hidden","false");
     }
     function closeImageModal(){
@@ -589,9 +635,12 @@
       linesWrap.innerHTML = "";
 
       state.lines.forEach((line, idx)=>{
-        const isOpen = !!state.expanded[line.id];
+        const open = !!state.expanded[line.id];
+
         const card = document.createElement("div");
         card.className = "line";
+        card.dataset.id = line.id;
+
         card.innerHTML = `
           <div class="lineTop">
             <button class="pimgBtn" type="button" data-act="zoom" data-i="${idx}" title="Ver imagen ampliada">
@@ -627,31 +676,33 @@
                 <span class="muted"> · Unidades: ${lineUnits(line)}</span>
               </div>
 
-              <details class="sizesDetails" ${isOpen ? "open" : ""} data-id="${line.id}">
-                <summary data-act="toggleSizes" data-id="${line.id}">
-                  <span class="sumLeft">
-                    <span class="badge">Tallas</span>
-                    <span class="muted">Pulsa para ${isOpen ? "plegar" : "desplegar"}</span>
-                  </span>
-                  <span class="chev">${isOpen ? "▲" : "▼"}</span>
-                </summary>
-                <div class="sizes">
-                  ${SIZES.map(s=>`
-                    <div class="sz">
-                      <span class="t">${s}</span>
-                      <span class="step">
-                        <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
-                        <input value="${n2(line.qty[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
-                        <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
-                      </span>
-                    </div>
-                  `).join("")}
+              <div class="sizesPanel ${open ? "isOpen" : ""}" data-id="${line.id}">
+                <div class="sizesBar">
+                  <span class="badge">Tallas</span>
+                  <button class="btn small primary" type="button" data-act="toggleSizes" data-id="${line.id}">
+                    ${open ? "Ocultar tallas ▲" : "Mostrar tallas ▼"}
+                  </button>
                 </div>
-              </details>
+                <div class="sizesBody">
+                  <div class="sizes">
+                    ${SIZES.map(s=>`
+                      <div class="sz">
+                        <span class="t">${s}</span>
+                        <span class="step">
+                          <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
+                          <input value="${n2(line.qty[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
+                          <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
+                        </span>
+                      </div>
+                    `).join("")}
+                  </div>
+                </div>
+              </div>
 
             </div>
           </div>
         `;
+
         linesWrap.appendChild(card);
 
         const refInp = card.querySelector(".refInput");
@@ -795,6 +846,8 @@
         L.ref = it.ref;
         L.desc = it.desc;
         L.price = it.price;
+        // al elegir referencia, abrimos tallas automáticamente
+        state.expanded[L.id] = true;
         render();
       }
 
@@ -817,7 +870,7 @@
         if(e.key==="Escape"){ box.style.display="none"; }
       });
 
-      box.addEventListener("mousedown", (e)=>{
+      box.addEventListener("pointerdown", (e)=>{
         const item = e.target.closest(".suggest-item");
         if(!item) return;
         e.preventDefault();
@@ -831,11 +884,11 @@
         const it = getInfoByRef(v);
         const L = state.lines[lineIndex];
         L.ref = v;
-        if(it.desc){ L.desc = it.desc; L.price = it.price; }
+        if(it.desc){ L.desc = it.desc; L.price = it.price; state.expanded[L.id] = true; }
         render();
       });
 
-      document.addEventListener("click", (e)=>{
+      document.addEventListener("pointerdown", (e)=>{
         if(e.target===input) return;
         if(box.contains(e.target)) return;
         box.style.display="none";
@@ -966,7 +1019,7 @@
     function addLine(){
       const l = defaultLine();
       state.lines.push(l);
-      state.expanded[l.id] = true; // al añadir, lo dejamos abierto
+      state.expanded[l.id] = true;
       render();
     }
     function clearAll(){
@@ -976,15 +1029,26 @@
       render();
     }
 
-    function handleClick(e){
+    // IMPORTANTE: pointerdown para móvil (táctil perfecto)
+    function handlePointerDown(e){
       const btn = e.target.closest("[data-act]");
       if(!btn) return;
+
       const act = btn.dataset.act;
+
+      // Evita doble toque raro en móviles
+      e.preventDefault();
 
       if(act==="toggleSizes"){
         const id = btn.dataset.id;
         state.expanded[id] = !state.expanded[id];
-        render();
+
+        // Toggle sin romper inputs
+        const panel = btn.closest(".sizesPanel");
+        if(panel){
+          panel.classList.toggle("isOpen", !!state.expanded[id]);
+          btn.textContent = state.expanded[id] ? "Ocultar tallas ▲" : "Mostrar tallas ▼";
+        }
         return;
       }
 
@@ -1069,7 +1133,8 @@
         $("#addLineBtn").addEventListener("click", addLine);
         $("#addLineBtn2").addEventListener("click", addLine);
 
-        $("#lines").addEventListener("click", handleClick);
+        // Pointerdown = táctil perfecto
+        $("#lines").addEventListener("pointerdown", handlePointerDown, { passive:false });
         $("#lines").addEventListener("input", handleInput);
 
         $("#copyEmailBtn").addEventListener("click", copyEmail);
