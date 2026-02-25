@@ -209,7 +209,7 @@
     .suggest-item .desc{font-size:.92rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
     .suggest-item .price{font-weight:900;white-space:nowrap}
 
-    /* DETAILS tallas (la versión buena) */
+    /* DETAILS tallas */
     details.sizesDetails{
       margin-top:12px;
       border:1px solid rgba(0,0,0,.08);
@@ -268,15 +268,20 @@
       overflow:hidden;
       background:#fff;
       flex:0 0 auto;
+      padding:0 4px;
+      touch-action: manipulation;
     }
     .step button{
       width:34px;height:34px;border:0;background:transparent;cursor:pointer;font-weight:900;
       font-size: 1.05rem;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .step input{
       width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
       border-radius:0;padding:0;text-align:center;font-weight:900;min-height:34px;
+      outline:none;
+      background:#fff;
     }
 
     /* Resumen */
@@ -355,8 +360,8 @@
         </div>
         <div class="bd">
           <p class="hint">
-            Autocompletar: escribe “12”, “25”, “43”… y sale el desplegable con referencia, descripción y precio.
-            Las tallas se ajustan automáticamente según el tipo de referencia.
+            Escribe “12”, “25”, “43”… y te sale el desplegable con referencia, descripción y precio.
+            Las tallas cambian solas según el tipo (12/13/30/31 bebé, 25/22/43 niño, 08 TU).
           </p>
 
           <div id="lines"></div>
@@ -424,7 +429,7 @@
   <script>
   (function(){
     // =======================
-    // TARIFA (la tuya ya pegada)
+    // TARIFA (tu bloque)
     // =======================
     window.PRICE_MAP = {"0899426":{"desc":"Diadema","price":9.25},"1299426":{"desc":"Jesusito con Capota","price":53.8},"1399426":{"desc":"Jesusito sin Capota","price":49.95},"2599426":{"desc":"Vestido","price":50.65},"4399426":{"desc":"Conjunto de Niño","price":31.75},"0899427":{"desc":"Diadema","price":9.25},"1299427":{"desc":"Jesusito con Capota","price":40.65},"1399427":{"desc":"Jesusito sin Capota","price":34.5},"2599427":{"desc":"Vestido","price":38.85},"4399427":{"desc":"Conjunto de Niño","price":33.35},"43099427":{"desc":"Conjunto de Niño","price":33.35},"0899428":{"desc":"Diadema","price":9.25},"1199428":{"desc":"Pelele","price":20.25},"1299428":{"desc":"Jesusito con Capota","price":53.35},"1399428":{"desc":"Jesusito sin Capota","price":50.75},"2599428":{"desc":"Vestido","price":51.7},"1299429":{"desc":"Jesusito con Capota","price":47.15},"1399429":{"desc":"Jesusito sin Capota","price":44.85},"2599429":{"desc":"Vestido","price":51.7},"0899430":{"desc":"Diadema","price":9.25},"1299430":{"desc":"Jesusito con Capota","price":39.7},"1399430":{"desc":"Jesusito sin Capota","price":36.95},"2599430":{"desc":"Vestido","price":38.5},"4399430":{"desc":"Conjunto de Niño","price":31.35},"0899431":{"desc":"Diadema","price":9.25},"1299431":{"desc":"Jesusito con Capota","price":40.45},"1399431":{"desc":"Jesusito sin Capota","price":37.95},"2599431":{"desc":"Vestido","price":39.8},"3099431":{"desc":"Conjunto de Niño","price":24.65},"0809432":{"desc":"Diadema","price":9.25},"1209432":{"desc":"Jesusito con Capota","price":39.15},"1309432":{"desc":"Jesusito sin Capota","price":36.95},"2509432":{"desc":"Vestido","price":38.95},"4309432":{"desc":"Conjunto de Niño","price":29.75},"0899432":{"desc":"Diadema","price":9.25},"1299432":{"desc":"Jesusito con Capota","price":41.95},"1399432":{"desc":"Jesusito sin Capota","price":39.25},"2599432":{"desc":"Vestido","price":41.65},"4399432":{"desc":"Conjunto de Niño","price":30.75},"0899433":{"desc":"Diadema","price":9.25},"1299433":{"desc":"Jesusito con Capota","price":46.75},"1399433":{"desc":"Jesusito sin Capota","price":45.25},"2599433":{"desc":"Vestido","price":49.25},"0899434":{"desc":"Diadema","price":9.25},"1199434":{"desc":"Pelele","price":22.65},"1299434":{"desc":"Jesusito con Capota","price":44.45},"1399434":{"desc":"Jesusito sin Capota","price":39.15},"2599434":{"desc":"Vestido","price":37.7},"0805435":{"desc":"Diadema","price":9.25},"1205435":{"desc":"Jesusito con Capota","price":41.5},"1305435":{"desc":"Jesusito sin Capota","price":39.35},"2505435":{"desc":"Vestido","price":43.1},"0899435":{"desc":"Diadema","price":9.25},"1208435":{"desc":"Jesusito con Capota","price":41.5},"1308435":{"desc":"Jesusito sin Capota","price":39.35},"2508435":{"desc":"Vestido","price":43.1},"220257":{"desc":"Abrigo Rojo","price":40.75},"220357":{"desc":"Abrigo Azul Marino","price":40.75},"220657":{"desc":"Abrigo Camel","price":40.75},"220158":{"desc":"Abrigo Rosa","price":37.65},"220258":{"desc":"Abrigo Rojo","price":37.65},"220358":{"desc":"Abrigo Azul Marino","price":37.65},"220658":{"desc":"Abrigo Camel","price":37.65},"220159":{"desc":"Abrigo Rosa","price":39.35},"220259":{"desc":"Abrigo Rojo","price":39.35},"220359":{"desc":"Abrigo Azul Marino","price":39.35},"220659":{"desc":"Abrigo Camel","price":39.35},"220160":{"desc":"Abrigo Rosa","price":37.75},"220260":{"desc":"Abrigo Rojo","price":37.75},"220360":{"desc":"Abrigo Azul Marino","price":37.75},"220660":{"desc":"Abrigo Camel","price":37.75}};
 
@@ -459,22 +464,21 @@
       if(p==="08") return SIZES_U;
       if(p==="12" || p==="13" || p==="30" || p==="31") return SIZES_BABY;
       if(p==="25" || p==="22" || p==="43") return SIZES_KIDS;
-      return SIZES_KIDS; // por defecto
+      return SIZES_KIDS;
     }
 
     function ensureSizes(line, ref){
       const wanted = sizesForRef(ref);
       line.sizes = wanted.slice();
-
       const nextQty = {};
-      line.sizes.forEach(s => nextQty[s] = n2(line.qty?.[s] ?? 0)); // conserva si existe
+      line.sizes.forEach(s => nextQty[s] = n2(line.qty?.[s] ?? 0));
       line.qty = nextQty;
     }
 
     function defaultLine(){
       const id = (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()));
       const line = { ref:"", desc:"", price:0, qty:{}, sizes:SIZES_KIDS.slice(), id };
-      ensureSizes(line, "25"); // arranca en tallaje KIDS (por defecto)
+      ensureSizes(line, "25");
       return line;
     }
 
@@ -523,12 +527,55 @@
     });
     document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeImageModal(); });
 
+    // ===== Acciones GLOBAL (para + y - sin bloqueos) =====
+    function findLineById(lineId){ return state.lines.find(l => l.id === lineId); }
+
+    window.incQty = function(lineId, size){
+      const L = findLineById(lineId);
+      if(!L) return;
+      L.qty[size] = n2(L.qty?.[size]) + 1;
+      render();
+    };
+
+    window.decQty = function(lineId, size){
+      const L = findLineById(lineId);
+      if(!L) return;
+      L.qty[size] = Math.max(0, n2(L.qty?.[size]) - 1);
+      render();
+    };
+
+    window.setQty = function(lineId, size, val){
+      const L = findLineById(lineId);
+      if(!L) return;
+      L.qty[size] = n2(val);
+      render();
+    };
+
+    window.delLine = function(lineId){
+      const idx = state.lines.findIndex(l => l.id === lineId);
+      if(idx === -1) return;
+      delete state.expanded[lineId];
+      state.lines.splice(idx, 1);
+      if(!state.lines.length){
+        const l = defaultLine();
+        state.lines.push(l);
+        state.expanded[l.id] = true;
+      }
+      render();
+    };
+
+    window.zoomLine = function(lineId){
+      const L = findLineById(lineId);
+      if(!L) return;
+      openImageModal({ src: imgForRef(L.ref), ref: L.ref, desc: L.desc });
+    };
+
     // ===== Render =====
     function render(){
       const linesWrap = $("#lines");
       linesWrap.innerHTML = "";
 
-      state.lines.forEach((line, idx)=>{
+      state.lines.forEach((line)=>{
         const isOpen = !!state.expanded[line.id];
         const sizes = line.sizes || SIZES_KIDS;
 
@@ -537,7 +584,9 @@
 
         card.innerHTML = `
           <div class="lineTop">
-            <button class="pimgBtn" type="button" data-act="zoom" data-i="${idx}" title="Ver imagen ampliada">
+            <button class="pimgBtn" type="button"
+              onclick="zoomLine('${line.id}')"
+              title="Ver imagen ampliada">
               <img src="${imgForRef(line.ref)}" alt="" onerror="this.src='images/placeholder.jpg'">
             </button>
 
@@ -546,23 +595,23 @@
                 <div class="field suggest-wrap">
                   <label>Referencia</label>
                   <input type="text" inputmode="numeric" placeholder="Ej.: 1299426"
-                         value="${line.ref}" data-i="${idx}" class="refInput">
+                         value="${line.ref}" class="refInput" data-lineid="${line.id}">
                   <div class="suggest" id="suggest_${line.id}"></div>
                 </div>
 
                 <div class="field">
                   <label>Descripción</label>
                   <input type="text" placeholder="(automática)"
-                         value="${line.desc}" data-i="${idx}" class="descInput">
+                         value="${line.desc}" class="descInput" data-lineid="${line.id}">
                 </div>
 
                 <div class="field" style="max-width:200px">
                   <label>Precio (€/ud)</label>
                   <input type="number" step="0.01" value="${Number(line.price||0)}"
-                         data-i="${idx}" class="priceInput">
+                         class="priceInput" data-lineid="${line.id}">
                 </div>
 
-                <button class="btn small" data-act="del" data-i="${idx}" type="button">Eliminar</button>
+                <button class="btn small" type="button" onclick="delLine('${line.id}')">Eliminar</button>
               </div>
 
               <div class="r2">
@@ -584,23 +633,33 @@
                     ${sizes.map(s=>`
                       <div class="sz">
                         <span class="t">${s}</span>
-                        <span class="step">
-                          <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
-                          <input value="${n2(line.qty?.[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
-                          <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
+                        <span class="step" onclick="event.stopPropagation()">
+                          <button type="button"
+                            onclick="decQty('${line.id}','${s}');event.stopPropagation();"
+                            aria-label="Disminuir">−</button>
+
+                          <input value="${n2(line.qty?.[s])}"
+                            inputmode="numeric"
+                            onclick="event.stopPropagation()"
+                            onchange="setQty('${line.id}','${s}', this.value)"
+                            aria-label="Cantidad ${s}">
+
+                          <button type="button"
+                            onclick="incQty('${line.id}','${s}');event.stopPropagation();"
+                            aria-label="Aumentar">+</button>
                         </span>
                       </div>
                     `).join("")}
                   </div>
                 </div>
               </details>
-
             </div>
           </div>
         `;
 
         linesWrap.appendChild(card);
 
+        // Guardar estado de abierto/cerrado
         const det = card.querySelector("details.sizesDetails");
         if(det){
           det.addEventListener("toggle", () => {
@@ -608,9 +667,10 @@
           });
         }
 
+        // Autocomplete por línea
         const refInp = card.querySelector(".refInput");
         const sugBox = card.querySelector(`#suggest_${line.id}`);
-        setupAutocomplete(refInp, sugBox, idx);
+        setupAutocomplete(refInp, sugBox, line.id);
       });
 
       $("#totalUds").textContent = totalUnits();
@@ -713,7 +773,7 @@
     }
 
     // Autocomplete
-    function setupAutocomplete(input, box, lineIndex){
+    function setupAutocomplete(input, box, lineId){
       const all = Object.entries(window.PRICE_MAP).map(([ref,v])=>({
         ref:String(ref),
         desc:String(v.desc||""),
@@ -747,14 +807,12 @@
       }
 
       function apply(it){
-        const L = state.lines[lineIndex];
+        const L = findLineById(lineId);
+        if(!L) return;
         L.ref = it.ref;
         L.desc = it.desc;
         L.price = it.price;
-
-        // 👇 aquí se cambia el tallaje automáticamente
         ensureSizes(L, it.ref);
-
         state.expanded[L.id] = true;
         render();
       }
@@ -788,12 +846,10 @@
 
       input.addEventListener("change", ()=>{
         const v = String(input.value||"").trim();
-        const L = state.lines[lineIndex];
+        const L = findLineById(lineId);
+        if(!L) return;
         L.ref = v;
-
-        // 👇 cambio de tallaje también si la escribes a mano
         ensureSizes(L, v);
-
         const it = getInfoByRef(v);
         if(it.desc){ L.desc = it.desc; L.price = it.price; }
         state.expanded[L.id] = true;
@@ -807,7 +863,7 @@
       });
     }
 
-    // PDF con imagen y fecha (respeta tallaje por línea)
+    // PDF con imagen y fecha
     function loadImageAsDataURL(url){
       return new Promise((resolve)=>{
         const img = new Image();
@@ -939,70 +995,6 @@
       render();
     }
 
-    // click (Chrome estable) y sin preventDefault general
-    function handleClick(e){
-      const btn = e.target.closest("[data-act]");
-      if(!btn) return;
-
-      const act = btn.dataset.act;
-      const i = Number(btn.dataset.i);
-      const s = btn.dataset.s;
-
-      if(act==="plus"){
-        const L = state.lines[i];
-        L.qty[s] = n2(L.qty?.[s]) + 1;
-        render();
-        return;
-      }
-      if(act==="minus"){
-        const L = state.lines[i];
-        L.qty[s] = Math.max(0, n2(L.qty?.[s]) - 1);
-        render();
-        return;
-      }
-      if(act==="zoom"){
-        const L = state.lines[i];
-        openImageModal({ src: imgForRef(L.ref), ref: L.ref, desc: L.desc });
-        return;
-      }
-      if(act==="del"){
-        const id = state.lines[i].id;
-        state.lines.splice(i,1);
-        delete state.expanded[id];
-        if(!state.lines.length){
-          const l = defaultLine();
-          state.lines.push(l);
-          state.expanded[l.id] = true;
-        }
-        render();
-        return;
-      }
-    }
-
-    function handleInput(e){
-      const el = e.target;
-
-      if(el.dataset.act==="qty"){
-        const i = Number(el.dataset.i);
-        const s = el.dataset.s;
-        state.lines[i].qty[s] = n2(el.value);
-        render();
-        return;
-      }
-      if(el.classList.contains("descInput")){
-        const i = Number(el.dataset.i);
-        state.lines[i].desc = el.value;
-        render();
-        return;
-      }
-      if(el.classList.contains("priceInput")){
-        const i = Number(el.dataset.i);
-        state.lines[i].price = Number(el.value||0);
-        render();
-        return;
-      }
-    }
-
     function copyEmail(){
       const t = $("#emailBox");
       t.focus();
@@ -1024,9 +1016,6 @@
 
       $("#addLineBtn").addEventListener("click", addLine);
       $("#addLineBtn2").addEventListener("click", addLine);
-
-      $("#lines").addEventListener("click", handleClick);
-      $("#lines").addEventListener("input", handleInput);
 
       $("#copyEmailBtn").addEventListener("click", copyEmail);
       $("#mailtoBtn").addEventListener("click", openMailto);
