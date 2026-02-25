@@ -16,9 +16,12 @@
       --line:rgba(0,0,0,.10);
       --shadow:0 18px 44px rgba(0,0,0,.09);
       --r:18px;
-      --r2:14px;
-      --good:#0b7a2a;
       --bad:#b00020;
+
+      /* Verde agua */
+      --aqua:#62c7c1;
+      --aqua2:#41b6af;
+      --aquaInk:#073b3a;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -85,9 +88,7 @@
       gap:14px;
       align-items:start;
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
     .card{
       background:var(--card);
@@ -109,7 +110,7 @@
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .hint{color:var(--muted);font-size:.94rem;line-height:1.35;margin:8px 0 0}
 
-    /* Botones: mejor táctil + más bonitos */
+    /* Botones verde agua */
     .btn{
       border:1px solid rgba(0,0,0,.10);
       background: linear-gradient(180deg,#ffffff,#f6f6f6);
@@ -123,14 +124,14 @@
       user-select:none;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
       transition: transform .06s ease, box-shadow .12s ease, filter .12s ease;
-      min-height: 44px; /* accesibilidad táctil */
+      min-height: 44px;
     }
     .btn:hover{ box-shadow: 0 14px 22px rgba(0,0,0,.08); }
     .btn:active{ transform: translateY(1px); }
     .btn.primary{
-      background: linear-gradient(180deg,#1a1a1a,#0c0c0c);
-      color:#fff;
-      border-color:#0c0c0c;
+      background: linear-gradient(180deg,var(--aqua),var(--aqua2));
+      color:var(--aquaInk);
+      border-color: rgba(7,59,58,.18);
     }
     .btn.danger{
       background: linear-gradient(180deg,#fff,#fff);
@@ -164,12 +165,8 @@
       background:rgba(255,255,255,.92);
     }
     .lineTop{display:flex;gap:12px;align-items:flex-start}
+    @media (max-width: 520px){ .lineTop{gap:10px} }
 
-    @media (max-width: 520px){
-      .lineTop{gap:10px}
-    }
-
-    /* Imagen clicable */
     .pimgBtn{
       width:82px;height:82px;border-radius:16px;border:1px solid var(--line);
       background:#fff;overflow:hidden;flex:0 0 auto;
@@ -180,24 +177,19 @@
 
     .meta{flex:1;min-width:0}
     .meta .r1{
-      display:flex;
-      gap:10px;
-      align-items:flex-end;
-      flex-wrap:wrap;
+      display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;
     }
     .meta .r2{margin-top:8px;color:var(--muted);font-size:.94rem;line-height:1.25}
     .meta .r2 b{color:var(--ink)}
 
     .field{
       display:flex; flex-direction:column; gap:6px;
-      min-width: 240px;
-      flex:1;
+      min-width: 240px; flex:1;
     }
     @media (max-width: 520px){
       .field{min-width: 100%}
       .pimgBtn{width:76px;height:76px}
     }
-
     label{font-size:.84rem;color:var(--muted);font-weight:750}
     input, textarea{
       width:100%;
@@ -210,54 +202,6 @@
       min-height: 44px;
     }
     textarea{min-height:170px;resize:vertical}
-
-    /* Tallas: grid adaptable (móvil/tablet/PC) */
-    .sizes{
-      display:grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap:8px;
-      margin-top:12px;
-    }
-    @media (max-width: 980px){
-      .sizes{ grid-template-columns: repeat(5, minmax(0, 1fr)); }
-    }
-    @media (max-width: 740px){
-      .sizes{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    }
-    @media (max-width: 520px){
-      .sizes{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
-
-    .sz{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:6px 10px;
-      background:#fff;
-      min-height: 44px;
-      overflow:hidden;
-    }
-    .sz .t{font-weight:900;font-size:.9rem;white-space:nowrap}
-
-    .step{
-      display:inline-flex;align-items:center;gap:6px;
-      border:1px solid rgba(0,0,0,.10);
-      border-radius:999px;
-      overflow:hidden;
-      background:#fff;
-      flex:0 0 auto;
-    }
-    .step button{
-      width:34px;height:34px;border:0;background:transparent;cursor:pointer;font-weight:900;
-      font-size: 1.05rem;
-    }
-    .step input{
-      width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
-      border-radius:0;padding:0;text-align:center;font-weight:900;min-height:34px;
-    }
 
     /* Autocomplete */
     .suggest-wrap{position:relative;flex:1;min-width:240px}
@@ -280,6 +224,76 @@
     .suggest-item .ref{font-weight:900}
     .suggest-item .desc{font-size:.92rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
     .suggest-item .price{font-weight:900;white-space:nowrap}
+
+    /* Plegable de tallas */
+    details.sizesDetails{
+      margin-top:12px;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:16px;
+      background:#fff;
+      overflow:hidden;
+    }
+    details.sizesDetails summary{
+      list-style:none;
+      cursor:pointer;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      user-select:none;
+      font-weight:900;
+    }
+    details.sizesDetails summary::-webkit-details-marker{display:none}
+    .sumLeft{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      background:rgba(98,199,193,.18);
+      color:var(--aquaInk);
+      font-weight:900;
+      min-height: 34px;
+    }
+    .chev{opacity:.7}
+
+    .sizes{
+      display:grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap:8px;
+      padding:12px;
+      border-top:1px solid rgba(0,0,0,.08);
+    }
+    @media (max-width: 980px){ .sizes{ grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+    @media (max-width: 740px){ .sizes{ grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    @media (max-width: 520px){ .sizes{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+    .sz{
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      background:#fff;
+      min-height: 44px;
+      overflow:hidden;
+    }
+    .sz .t{font-weight:900;font-size:.9rem;white-space:nowrap}
+    .step{
+      display:inline-flex;align-items:center;gap:6px;
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:999px;
+      overflow:hidden;
+      background:#fff;
+      flex:0 0 auto;
+    }
+    .step button{
+      width:34px;height:34px;border:0;background:transparent;cursor:pointer;font-weight:900;
+      font-size: 1.05rem;
+    }
+    .step input{
+      width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
+      border-radius:0;padding:0;text-align:center;font-weight:900;min-height:34px;
+    }
 
     /* Resumen: tabla scrolleable en móvil */
     .tableScroll{
@@ -318,7 +332,7 @@
     }
     .totals{display:flex;gap:10px;flex-wrap:wrap}
 
-    /* Lightbox (imagen ampliada) */
+    /* Lightbox */
     .modal{ position:fixed; inset:0; display:none; z-index:2000; }
     .modal[aria-hidden="false"]{ display:block; }
     .modal__backdrop{
@@ -337,10 +351,7 @@
       box-shadow: 0 28px 60px rgba(0,0,0,.20);
       overflow:hidden;
     }
-    .modal__close{
-      position:absolute; top:10px; right:10px;
-      z-index:2;
-    }
+    .modal__close{ position:absolute; top:10px; right:10px; z-index:2; }
     .modal__content{ padding: 14px; }
     .modal__content img{
       width:100%;
@@ -374,7 +385,7 @@
         </div>
         <div class="ttl">
           <h1>Pedidos · Invierno AW 26/27</h1>
-          <p>Funciona en móvil, tablet y PC · Email y PDF</p>
+          <p><span id="orderDateLabel"></span> · Funciona en móvil, tablet y PC</p>
         </div>
       </div>
 
@@ -386,14 +397,15 @@
         <div class="hd">
           <h2>Pedido</h2>
           <div class="row">
+            <span class="pill"><span class="muted">Fecha:</span> <b id="orderDatePill"></b></span>
             <span class="pill"><span class="muted">Unidades:</span> <span id="totalUds" class="money">0</span></span>
             <span class="pill"><span class="muted">Total:</span> <span id="totalEur" class="money">0,00 €</span></span>
           </div>
         </div>
         <div class="bd">
           <p class="hint">
-            Escribe “12” para ver el desplegable con las referencias <b>12xxxx</b> (precio y descripción).
-            Toca la imagen para ampliarla.
+            Escribe “12” para ver el desplegable con referencias <b>12xxxx</b>.
+            Las tallas se pueden plegar y desplegar por cada referencia.
           </p>
 
           <div id="lines"></div>
@@ -432,6 +444,7 @@
   <div class="bar">
     <div class="barin">
       <div class="totals">
+        <span class="pill"><span class="muted">Fecha:</span> <b id="orderDatePill2"></b></span>
         <span class="pill"><span class="muted">Unidades:</span> <span id="totalUds2" class="money">0</span></span>
         <span class="pill"><span class="muted">Total:</span> <span id="totalEur2" class="money">0,00 €</span></span>
       </div>
@@ -460,7 +473,7 @@
   <script>
   (function(){
     // =======================
-    // TARIFA (puedes ampliarla cuando quieras)
+    // TARIFA (amplía aquí cuando quieras)
     // =======================
     window.PRICE_MAP = {
       "0899426":{"desc":"Diadema","price":9.25},
@@ -486,7 +499,7 @@
     // APP
     // =======================
     const SIZES = ["3M","6M","9M","12M","18M","2Y","3Y","4Y","5Y","6Y","8Y","10Y","12Y"];
-    const state = { lines: [] };
+    const state = { lines: [], expanded: {} };
     const $ = (sel)=>document.querySelector(sel);
 
     function fatal(err){
@@ -497,6 +510,10 @@
         el.style.display = "block";
       }catch(e){}
     }
+
+    // Fecha del pedido (automática)
+    const now = new Date();
+    const ORDER_DATE = new Intl.DateTimeFormat("es-ES", { day:"2-digit", month:"2-digit", year:"numeric" }).format(now);
 
     function eur(n){
       const v = Number(n||0);
@@ -511,7 +528,8 @@
     function defaultLine(){
       const qty = {};
       SIZES.forEach(s=>qty[s]=0);
-      return { ref:"", desc:"", price:0, qty, id: (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random())) };
+      const id = (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()));
+      return { ref:"", desc:"", price:0, qty, id };
     }
 
     function getInfoByRef(ref){
@@ -549,14 +567,12 @@
       pic.src = src;
       r.textContent = ref ? `REF ${ref}` : "";
       d.textContent = desc || "";
-
       modal.setAttribute("aria-hidden","false");
     }
     function closeImageModal(){
       const modal = document.getElementById("imgModal");
       modal.setAttribute("aria-hidden","true");
-      const pic = document.getElementById("imgModalPic");
-      pic.src = "";
+      document.getElementById("imgModalPic").src = "";
     }
     document.addEventListener("click", (e)=>{
       if(e.target && e.target.dataset && e.target.dataset.close === "1"){
@@ -573,6 +589,7 @@
       linesWrap.innerHTML = "";
 
       state.lines.forEach((line, idx)=>{
+        const isOpen = !!state.expanded[line.id];
         const card = document.createElement("div");
         card.className = "line";
         card.innerHTML = `
@@ -610,18 +627,28 @@
                 <span class="muted"> · Unidades: ${lineUnits(line)}</span>
               </div>
 
-              <div class="sizes">
-                ${SIZES.map(s=>`
-                  <div class="sz">
-                    <span class="t">${s}</span>
-                    <span class="step">
-                      <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
-                      <input value="${n2(line.qty[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
-                      <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
-                    </span>
-                  </div>
-                `).join("")}
-              </div>
+              <details class="sizesDetails" ${isOpen ? "open" : ""} data-id="${line.id}">
+                <summary data-act="toggleSizes" data-id="${line.id}">
+                  <span class="sumLeft">
+                    <span class="badge">Tallas</span>
+                    <span class="muted">Pulsa para ${isOpen ? "plegar" : "desplegar"}</span>
+                  </span>
+                  <span class="chev">${isOpen ? "▲" : "▼"}</span>
+                </summary>
+                <div class="sizes">
+                  ${SIZES.map(s=>`
+                    <div class="sz">
+                      <span class="t">${s}</span>
+                      <span class="step">
+                        <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
+                        <input value="${n2(line.qty[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
+                        <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
+                      </span>
+                    </div>
+                  `).join("")}
+                </div>
+              </details>
+
             </div>
           </div>
         `;
@@ -656,7 +683,7 @@
       }
 
       wrap.innerHTML = `
-        <label>Resumen</label>
+        <label>Resumen (Fecha del pedido: <b>${ORDER_DATE}</b>)</label>
         <div class="tableScroll" role="region" aria-label="Resumen del pedido" tabindex="0">
           <table>
             <thead>
@@ -695,7 +722,7 @@
       `;
     }
 
-    // ✅ Email neutro: SIN firma y SIN “All the best”
+    // Email neutro + fecha del pedido
     function renderEmail(){
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
@@ -704,10 +731,11 @@
           return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
         });
 
-      const subject = `Pedido · Abuela Tata · Invierno AW 26/27`;
+      const subject = `Pedido · Abuela Tata · Invierno AW 26/27 · ${ORDER_DATE}`;
       let body = "";
       body += `Hola,\n\n`;
-      body += `Adjunto el pedido de Invierno AW 26/27 con el detalle por referencia:\n\n`;
+      body += `Pedido Invierno AW 26/27\n`;
+      body += `Fecha: ${ORDER_DATE}\n\n`;
 
       if(!rows.length){
         body += `— Aún no hay unidades en el pedido.\n`;
@@ -814,7 +842,7 @@
       });
     }
 
-    // ===== PDF con imagen por referencia =====
+    // ===== PDF con imagen y fecha =====
     function loadImageAsDataURL(url){
       return new Promise((resolve)=>{
         const img = new Image();
@@ -826,9 +854,7 @@
             const ctx = canvas.getContext("2d");
             ctx.drawImage(img,0,0);
             resolve(canvas.toDataURL("image/jpeg", 0.92));
-          }catch(e){
-            resolve(null);
-          }
+          }catch(e){ resolve(null); }
         };
         img.onerror = ()=> resolve(null);
         img.src = url + (url.includes("?") ? "&" : "?") + "v=" + Date.now();
@@ -861,7 +887,7 @@
       y += 18;
       doc.setFont("helvetica","normal");
       doc.setFontSize(11);
-      doc.text(`Total unidades: ${totalUnits()}   ·   Total: ${eur(totalEur())}`, 40, y);
+      doc.text(`Fecha: ${ORDER_DATE}   ·   Total unidades: ${totalUnits()}   ·   Total: ${eur(totalEur())}`, 40, y);
 
       y += 26;
 
@@ -896,17 +922,11 @@
           y = 52;
         }
 
-        const imgX = 40;
-        const imgY = y - 6;
-        const boxW = 70;
-        const boxH = 70;
-
+        const imgX = 40, imgY = y - 6, boxW = 70, boxH = 70;
         doc.setDrawColor(220);
         doc.rect(imgX, imgY, boxW, boxH);
 
-        const imgUrl = `images/${r.ref}.jpg`;
-        const dataUrl = await loadImageAsDataURL(imgUrl);
-
+        const dataUrl = await loadImageAsDataURL(`images/${r.ref}.jpg`);
         if(dataUrl){
           try{ doc.addImage(dataUrl, "JPEG", imgX, imgY, boxW, boxH); }catch(e){}
         }
@@ -936,19 +956,23 @@
 
       doc.setFont("helvetica","bold");
       doc.setFontSize(12);
-      doc.text(`TOTAL UNIDADES: ${totalUnits()}`, 40, H-54);
+      doc.text(`FECHA: ${ORDER_DATE}`, 40, H-54);
       doc.text(`TOTAL: ${eur(totalEur())}`, W-40, H-54, { align:"right" });
 
-      doc.save("pedido_aw26-27.pdf");
+      doc.save(`pedido_aw26-27_${ORDER_DATE.replaceAll("/","-")}.pdf`);
     }
 
     // ===== Acciones =====
     function addLine(){
-      state.lines.push(defaultLine());
+      const l = defaultLine();
+      state.lines.push(l);
+      state.expanded[l.id] = true; // al añadir, lo dejamos abierto
       render();
     }
     function clearAll(){
       state.lines = [defaultLine()];
+      state.expanded = {};
+      state.expanded[state.lines[0].id] = true;
       render();
     }
 
@@ -956,6 +980,14 @@
       const btn = e.target.closest("[data-act]");
       if(!btn) return;
       const act = btn.dataset.act;
+
+      if(act==="toggleSizes"){
+        const id = btn.dataset.id;
+        state.expanded[id] = !state.expanded[id];
+        render();
+        return;
+      }
+
       const i = Number(btn.dataset.i);
       const s = btn.dataset.s;
 
@@ -965,8 +997,14 @@
         return;
       }
       if(act==="del"){
+        const id = state.lines[i].id;
         state.lines.splice(i,1);
-        if(!state.lines.length) state.lines.push(defaultLine());
+        delete state.expanded[id];
+        if(!state.lines.length){
+          const l = defaultLine();
+          state.lines.push(l);
+          state.expanded[l.id] = true;
+        }
         render();
         return;
       }
@@ -1024,6 +1062,10 @@
     // ===== INIT =====
     document.addEventListener("DOMContentLoaded", ()=>{
       try{
+        $("#orderDateLabel").textContent = `Fecha del pedido: ${ORDER_DATE}`;
+        $("#orderDatePill").textContent = ORDER_DATE;
+        $("#orderDatePill2").textContent = ORDER_DATE;
+
         $("#addLineBtn").addEventListener("click", addLine);
         $("#addLineBtn2").addEventListener("click", addLine);
 
@@ -1038,7 +1080,9 @@
 
         $("#clearBtn").addEventListener("click", clearAll);
 
-        state.lines = [defaultLine()];
+        const first = defaultLine();
+        state.lines = [first];
+        state.expanded[first.id] = true;
         render();
       }catch(e){
         console.error(e);
