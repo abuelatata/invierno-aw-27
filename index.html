@@ -18,7 +18,6 @@
       --r:18px;
       --bad:#b00020;
 
-      /* Verde agua */
       --aqua:#62c7c1;
       --aqua2:#41b6af;
       --aquaInk:#073b3a;
@@ -34,7 +33,6 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Fallback anti “pantalla en blanco” */
     .fatal{
       position:fixed; inset:0; display:none;
       padding:18px;
@@ -110,7 +108,6 @@
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .hint{color:var(--muted);font-size:.94rem;line-height:1.35;margin:8px 0 0}
 
-    /* Botones verde agua */
     .btn{
       border:1px solid rgba(0,0,0,.10);
       background: linear-gradient(180deg,#ffffff,#f6f6f6);
@@ -156,7 +153,6 @@
     .money{font-weight:900}
     .muted{color:var(--muted)}
 
-    /* Line item */
     .line{
       border:1px solid var(--line);
       border-radius:16px;
@@ -203,7 +199,6 @@
     }
     textarea{min-height:170px;resize:vertical}
 
-    /* Autocomplete */
     .suggest-wrap{position:relative;flex:1;min-width:240px}
     .suggest{
       position:absolute;left:0;right:0;top:76px;
@@ -225,7 +220,6 @@
     .suggest-item .desc{font-size:.92rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
     .suggest-item .price{font-weight:900;white-space:nowrap}
 
-    /* Plegable de tallas */
     details.sizesDetails{
       margin-top:12px;
       border:1px solid rgba(0,0,0,.08);
@@ -257,10 +251,11 @@
     }
     .chev{opacity:.7}
 
+    /* ✅ NUEVO GRID DE TALLAS: tarjetas, sin recortes en móvil */
     .sizes{
       display:grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap:8px;
+      gap:10px;
       padding:12px;
       border-top:1px solid rgba(0,0,0,.08);
     }
@@ -269,40 +264,53 @@
     @media (max-width: 520px){ .sizes{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
     .sz{
-      display:flex;align-items:center;justify-content:space-between;gap:8px;
       border:1px solid var(--line);
-      border-radius:999px;
-      padding:6px 10px;
+      border-radius:16px;
+      padding:10px;
       background:#fff;
-      min-height: 44px;
-      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height: 96px;
     }
-    .sz .t{font-weight:900;font-size:.9rem;white-space:nowrap}
+    .sz .t{
+      font-weight:900;
+      font-size:1rem;
+      text-align:center;
+      white-space:nowrap;
+    }
     .step{
-      display:inline-flex;align-items:center;gap:6px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
       border:1px solid rgba(0,0,0,.10);
-      border-radius:999px;
-      overflow:hidden;
+      border-radius:14px;
+      padding:6px;
       background:#fff;
-      flex:0 0 auto;
     }
     .step button{
-      width:34px;height:34px;border:0;background:transparent;cursor:pointer;font-weight:900;
-      font-size: 1.05rem;
+      width:36px;height:36px;border:0;cursor:pointer;font-weight:900;
+      font-size: 1.15rem;
+      border-radius:12px;
+      background: linear-gradient(180deg,var(--aqua),var(--aqua2));
+      color:var(--aquaInk);
+      flex:0 0 auto;
     }
+    .step button:active{ transform: translateY(1px); }
     .step input{
-      width:56px;
-      border:0;
-      border-left:1px solid rgba(0,0,0,.10);
-      border-right:1px solid rgba(0,0,0,.10);
-      border-radius:0;
+      width:52px;
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:12px;
       padding:0;
       text-align:center;
       font-weight:900;
-      min-height:34px;
+      min-height:36px;
+      height:36px;
+      flex:1;
+      background:#fff;
     }
 
-    /* Resumen: tabla scrolleable en móvil */
     .tableScroll{
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
@@ -324,7 +332,6 @@
     .chips{display:flex;flex-wrap:wrap;gap:6px}
     .chip{border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:4px 8px;font-weight:850;background:#fff;font-size:.86rem}
 
-    /* Barra inferior fija */
     .bar{
       position:fixed;left:0;right:0;bottom:0;
       padding:10px 12px calc(10px + env(safe-area-inset-bottom));
@@ -339,7 +346,6 @@
     }
     .totals{display:flex;gap:10px;flex-wrap:wrap}
 
-    /* Lightbox */
     .modal{ position:fixed; inset:0; display:none; z-index:2000; }
     .modal[aria-hidden="false"]{ display:block; }
     .modal__backdrop{
@@ -462,7 +468,6 @@
     </div>
   </div>
 
-  <!-- Visor de imagen -->
   <div id="imgModal" class="modal" aria-hidden="true">
     <div class="modal__backdrop" data-close="1"></div>
     <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Imagen de producto">
@@ -479,9 +484,7 @@
 
   <script>
   (function(){
-    // =======================
-    // TARIFA (amplía aquí cuando quieras)
-    // =======================
+    // TARIFA
     window.PRICE_MAP = {
       "0899426":{"desc":"Diadema","price":9.25},
       "1299426":{"desc":"Jesusito con capota","price":53.80},
@@ -502,29 +505,20 @@
       "2599428":{"desc":"Vestido","price":51.70}
     };
 
-    // =======================
-    // TALLAS POR REFERENCIA (NUEVO)
-    // =======================
+    // TALLAS POR REFERENCIA
     function getSizesByRef(ref){
       const r = String(ref || "").trim();
       const prefix = r.slice(0,2);
 
-      // 12 / 13 / 31 / 30 -> 3m,6m,9m,18m,2a,3a,4a
       if(["12","13","31","30"].includes(prefix)){
         return ["3M","6M","9M","18M","2Y","3Y","4Y"];
       }
-
-      // 25 / 22 / 43 -> 12m,18m,2a,3a,4a,5a,6a,8a,10a,12a
       if(["25","22","43"].includes(prefix)){
         return ["12M","18M","2Y","3Y","4Y","5Y","6Y","8Y","10Y","12Y"];
       }
-
-      // 08 -> talla única
       if(prefix === "08"){
         return ["TU"];
       }
-
-      // fallback mientras no haya ref o no coincida
       return ["3M","6M","9M","18M","2Y","3Y","4Y"];
     }
 
@@ -534,21 +528,16 @@
       sizes.forEach(s=>{ if(line.qty[s] == null) line.qty[s] = 0; });
       return sizes;
     }
-
     function pruneQtyToSizes(line){
       const sizes = getSizesByRef(line.ref);
       if(!line.qty || typeof line.qty !== "object") line.qty = {};
       const keep = new Set(sizes);
-      Object.keys(line.qty).forEach(k=>{
-        if(!keep.has(k)) delete line.qty[k];
-      });
+      Object.keys(line.qty).forEach(k=>{ if(!keep.has(k)) delete line.qty[k]; });
       sizes.forEach(s=>{ if(line.qty[s] == null) line.qty[s] = 0; });
       return sizes;
     }
 
-    // =======================
     // APP
-    // =======================
     const state = { lines: [], expanded: {} };
     const $ = (sel)=>document.querySelector(sel);
 
@@ -561,7 +550,6 @@
       }catch(e){}
     }
 
-    // Fecha del pedido (automática)
     const now = new Date();
     const ORDER_DATE = new Intl.DateTimeFormat("es-ES", { day:"2-digit", month:"2-digit", year:"numeric" }).format(now);
 
@@ -606,7 +594,7 @@
       return `images/${r}.jpg`;
     }
 
-    // ===== Visor de imagen =====
+    // Visor de imagen
     function openImageModal({src, ref, desc}){
       const modal = document.getElementById("imgModal");
       const pic = document.getElementById("imgModalPic");
@@ -624,23 +612,17 @@
       document.getElementById("imgModalPic").src = "";
     }
     document.addEventListener("click", (e)=>{
-      if(e.target && e.target.dataset && e.target.dataset.close === "1"){
-        closeImageModal();
-      }
+      if(e.target && e.target.dataset && e.target.dataset.close === "1") closeImageModal();
     });
-    document.addEventListener("keydown", (e)=>{
-      if(e.key === "Escape") closeImageModal();
-    });
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeImageModal(); });
 
-    // ===== Render =====
+    // Render
     function render(){
       const linesWrap = $("#lines");
       linesWrap.innerHTML = "";
 
       state.lines.forEach((line, idx)=>{
         const isOpen = !!state.expanded[line.id];
-
-        // asegura qty de las tallas de esa ref
         const sizes = ensureQtyForSizes(line);
 
         const card = document.createElement("div");
@@ -701,7 +683,6 @@
                   `).join("")}
                 </div>
               </details>
-
             </div>
           </div>
         `;
@@ -776,7 +757,6 @@
       `;
     }
 
-    // Email neutro + fecha del pedido
     function renderEmail(){
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
@@ -811,7 +791,7 @@
       $("#mailtoBtn").dataset.subject = subject;
     }
 
-    // ===== Autocomplete =====
+    // Autocomplete
     function setupAutocomplete(input, box, lineIndex){
       const all = Object.entries(window.PRICE_MAP).map(([ref,v])=>({
         ref:String(ref),
@@ -850,10 +830,7 @@
         L.ref = it.ref;
         L.desc = it.desc;
         L.price = it.price;
-
-        // ajusta tallas a la nueva ref
         pruneQtyToSizes(L);
-
         render();
       }
 
@@ -893,9 +870,7 @@
         const it = getInfoByRef(v);
         if(it.desc){ L.desc = it.desc; L.price = it.price; }
 
-        // ajusta tallas a la nueva ref
         pruneQtyToSizes(L);
-
         render();
       });
 
@@ -906,19 +881,29 @@
       });
     }
 
-    // ===== PDF con imagen y fecha =====
-    function loadImageAsDataURL(url){
+    // ✅ PDF: imágenes reducidas para iPhone (evita petadas)
+    function loadImageAsDataURL(url, maxSide=700){
       return new Promise((resolve)=>{
         const img = new Image();
         img.onload = ()=>{
           try{
+            const iw = img.naturalWidth || 800;
+            const ih = img.naturalHeight || 800;
+
+            const scale = Math.min(1, maxSide / Math.max(iw, ih));
+            const w = Math.max(1, Math.round(iw * scale));
+            const h = Math.max(1, Math.round(ih * scale));
+
             const canvas = document.createElement("canvas");
-            canvas.width = img.naturalWidth || 800;
-            canvas.height = img.naturalHeight || 800;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img,0,0);
-            resolve(canvas.toDataURL("image/jpeg", 0.92));
-          }catch(e){ resolve(null); }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext("2d", { alpha:false });
+            ctx.drawImage(img,0,0,w,h);
+
+            resolve(canvas.toDataURL("image/jpeg", 0.82));
+          }catch(e){
+            resolve(null);
+          }
         };
         img.onerror = ()=> resolve(null);
         img.src = url + (url.includes("?") ? "&" : "?") + "v=" + Date.now();
@@ -991,7 +976,8 @@
         doc.setDrawColor(220);
         doc.rect(imgX, imgY, boxW, boxH);
 
-        const dataUrl = await loadImageAsDataURL(`images/${r.ref}.jpg`);
+        // si no puede cargar imagen, seguimos sin romper el PDF
+        const dataUrl = await loadImageAsDataURL(`images/${r.ref}.jpg`, 700);
         if(dataUrl){
           try{ doc.addImage(dataUrl, "JPEG", imgX, imgY, boxW, boxH); }catch(e){}
         }
@@ -1027,11 +1013,11 @@
       doc.save(`pedido_aw26-27_${ORDER_DATE.replaceAll("/","-")}.pdf`);
     }
 
-    // ===== Acciones =====
+    // Acciones
     function addLine(){
       const l = defaultLine();
       state.lines.push(l);
-      state.expanded[l.id] = true; // al añadir, lo dejamos abierto
+      state.expanded[l.id] = true;
       render();
     }
     function clearAll(){
@@ -1093,7 +1079,6 @@
 
     function handleInput(e){
       const el = e.target;
-
       if(el.dataset.act==="qty"){
         const i = Number(el.dataset.i);
         const s = el.dataset.s;
@@ -1129,7 +1114,6 @@
       window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
 
-    // ===== INIT =====
     document.addEventListener("DOMContentLoaded", ()=>{
       try{
         $("#orderDateLabel").textContent = `Fecha del pedido: ${ORDER_DATE}`;
