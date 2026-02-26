@@ -4,410 +4,54 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Abuela Tata · Invierno AW 26/27 · Pedidos</title>
+
   <style>
     :root{
-      --mint:#7fd8c6;
-      --mint2:#5fcab4;
-      --bg:#f7f7f7;
+      --bg:#fbfaf8;
       --card:#ffffff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --line:#e5e7eb;
-      --danger:#ef4444;
+      --ink:#141414;
+      --muted:rgba(20,20,20,.62);
+      --line:rgba(0,0,0,.10);
+      --shadow:0 18px 40px rgba(0,0,0,.08);
+      --radius:18px;
+      --radius2:14px;
+      --pad:14px;
+      --accent:#111;
+      --good:#0b7a2a;
     }
+
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    header{position:sticky;top:0;z-index:10;background:rgba(247,247,247,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-    .wrap{max-width:1100px;margin:0 auto;padding:14px}
-    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-    .brand{display:flex;flex-direction:column;gap:2px}
-    .brand .t{font-weight:800;letter-spacing:.2px}
-    .brand .s{font-size:12px;color:var(--muted)}
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
-    button{
-      border:0;cursor:pointer;border-radius:12px;
-      padding:10px 12px;font-weight:700;
-      background:var(--mint);color:#063b33;
-      box-shadow:0 6px 16px rgba(0,0,0,.06);
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color: var(--ink);
     }
-    button:hover{background:var(--mint2)}
-    button.ghost{background:#fff;border:1px solid var(--line);color:var(--text)}
-    button.danger{background:#fee2e2;color:#7f1d1d}
-    button.danger:hover{background:#fecaca}
-    main .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}
-    @media (max-width: 980px){ main .grid{grid-template-columns:1fr} }
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      box-shadow:0 10px 30px rgba(0,0,0,.05);
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 14px 110px;
     }
-    .card h2{margin:0 0 8px 0;font-size:14px}
-    .muted{color:var(--muted);font-size:12px}
-    .table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0 10px;
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 10px 6px 14px;
     }
-    .row{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:14px;
-      overflow:hidden;
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
     }
-    .row td{padding:10px;vertical-align:top}
-    .row td:first-child{width:120px}
-    .row td:last-child{width:44px;text-align:right}
-    input[type="text"], input[type="number"]{
-      width:100%;
-      border:1px solid var(--line);
+    .brand img{
+      width:44px;
+      height:44px;
+      object-fit:contain;
       border-radius:12px;
-      padding:10px 10px;
-      outline:none;
-      background:#fff;
-      font-size:14px;
-    }
-    input[type="number"]{appearance:textfield}
-    input:focus{border-color:var(--mint2);box-shadow:0 0 0 3px rgba(127,216,198,.25)}
-    .lineTop{display:grid;grid-template-columns:1fr 1fr 120px;gap:8px;align-items:center}
-    @media (max-width:680px){ .lineTop{grid-template-columns:1fr; } }
-
-    .sizesWrap{
-      margin-top:10px;
-      padding:10px;
-      border:1px dashed var(--line);
-      border-radius:14px;
-      background:#fafafa;
-    }
-    .sizesTitle{
-      display:flex;align-items:center;justify-content:space-between;
-      margin-bottom:8px;
-      font-size:12px;color:var(--muted)
-    }
-    .sizesGrid{
-      display:grid;
-      grid-template-columns:repeat(6, minmax(0, 1fr));
-      gap:8px;
-    }
-    @media (max-width:980px){ .sizesGrid{grid-template-columns:repeat(4,minmax(0,1fr))} }
-    @media (max-width:560px){ .sizesGrid{grid-template-columns:repeat(3,minmax(0,1fr))} }
-
-    .qtyBox{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:8px;
-    }
-    .qtyLabel{font-size:12px;color:var(--muted);margin-bottom:6px}
-    .qtyControl{display:flex;align-items:center;gap:6px}
-    .qtyBtn{
-      width:34px;height:34px;border-radius:12px;
-      display:grid;place-items:center;
-      padding:0;
-      background:var(--mint);
-      color:#063b33;
-      font-size:18px;
-      line-height:1;
-      font-weight:900;
-      user-select:none;
-    }
-    .qtyBtn:hover{background:var(--mint2)}
-    .qtyInput{
-      height:34px;
-      text-align:center;
-      padding:0 8px;
-      border-radius:12px;
-    }
-
-    .sumRow{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:10px 12px;border-radius:999px;
-      background:#f0fdf9;border:1px solid rgba(95,202,180,.35);
-      font-weight:800;
-    }
-    .kpi{font-size:12px;color:var(--muted);margin-top:2px}
-    .small{font-size:12px}
-    .hr{height:1px;background:var(--line);margin:10px 0}
-  </style>
-</head>
-
-<body>
-<header>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="t">Abuela Tata · Pedidos</div>
-        <div class="s">Invierno AW 26/27 · Selector de cantidades por talla (funcionando)</div>
-      </div>
-      <div class="actions">
-        <button id="addLine" type="button">+ Añadir línea</button>
-        <button id="clearAll" class="ghost" type="button">Vaciar</button>
-      </div>
-    </div>
-  </div>
-</header>
-
-<main class="wrap" id="app">
-  <div class="grid">
-    <section class="card">
-      <h2>Líneas de pedido</h2>
-      <div class="muted">Metes referencia, descripción, precio y cantidades por talla con + / - (o escribiendo).</div>
-
-      <table class="table" id="linesTable" aria-label="Tabla de líneas"></table>
-    </section>
-
-    <aside class="card">
-      <h2>Resumen</h2>
-      <div class="muted">Se recalcula al tocar + / - o al cambiar precio/descripción. Al escribir cantidad manual no renderiza hasta que salgas del input.</div>
-
-      <div class="hr"></div>
-
-      <div class="sumRow">
-        <div>
-          <div class="small muted">Unidades totales</div>
-          <div style="font-size:26px;font-weight:900" id="unitsTotal">0</div>
-          <div class="kpi" id="linesCount">0 líneas</div>
-        </div>
-        <div class="pill">
-          <span>Total</span>
-          <span id="orderTotal">0,00 €</span>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="muted small">
-        <b>Tallas por familia (según tus reglas):</b><br>
-        - Ref empieza por <b>12, 13, 31, 30</b> → 3M, 6M, 9M, 18M, 2A, 3A, 4A<br>
-        - Ref empieza por <b>25, 22, 43</b> → 12M, 18M, 2A, 3A, 4A, 5A, 6A, 8A, 10A, 12A<br>
-        - Ref empieza por <b>08</b> → Talla Única
-      </div>
-    </aside>
-  </div>
-</main>
-
-<script>
-  // ---------- Helpers ----------
-  const fmtEUR = (n)=> (Number(n||0)).toLocaleString("es-ES",{style:"currency",currency:"EUR"});
-  const n2 = (v)=> {
-    const x = Number(String(v??"").replace(",","."));
-    return Number.isFinite(x) ? x : 0;
-  };
-  const clamp0 = (n)=> Math.max(0, n|0);
-
-  // ---------- Reglas de tallas ----------
-  const SIZES_A = ["3M","6M","9M","18M","2A","3A","4A"]; // 12,13,31,30
-  const SIZES_B = ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"]; // 25,22,43
-  const SIZES_U = ["TU"]; // 08
-
-  function sizesForRef(ref){
-    const r = String(ref||"").trim();
-    const pre = r.slice(0,2);
-    if(["12","13","31","30"].includes(pre)) return SIZES_A;
-    if(["25","22","43"].includes(pre)) return SIZES_B;
-    if(["08"].includes(pre)) return SIZES_U;
-    // fallback: si aún no hay ref o es otra cosa, mostramos las más comunes para que no se quede vacío
-    return SIZES_A;
-  }
-
-  // ---------- State ----------
-  const state = {
-    lines: [
-      { ref:"", desc:"", price:0, qty:{} }
-    ]
-  };
-
-  // ---------- Render ----------
-  function lineUnits(line){
-    return Object.values(line.qty||{}).reduce((a,b)=>a + (Number(b)||0), 0);
-  }
-  function lineTotal(line){
-    return lineUnits(line) * Number(line.price||0);
-  }
-  function orderUnits(){
-    return state.lines.reduce((a,l)=>a+lineUnits(l),0);
-  }
-  function orderTotal(){
-    return state.lines.reduce((a,l)=>a+lineTotal(l),0);
-  }
-
-  function render(){
-    const table = document.querySelector("#linesTable");
-    const rows = state.lines.map((line, i)=>{
-      const sizes = sizesForRef(line.ref);
-      // asegura keys
-      if(!line.qty) line.qty = {};
-      sizes.forEach(s=>{ if(line.qty[s] == null) line.qty[s] = 0; });
-
-      const sizesHtml = sizes.map(s=>{
-        return `
-          <div class="qtyBox">
-            <div class="qtyLabel">${s === "TU" ? "Talla única" : s}</div>
-            <div class="qtyControl">
-              <button type="button" class="qtyBtn" data-act="dec" data-i="${i}" data-s="${s}">−</button>
-              <input
-                class="qtyInput"
-                type="number"
-                min="0"
-                inputmode="numeric"
-                value="${Number(line.qty[s]||0)}"
-                data-act="qty"
-                data-i="${i}"
-                data-s="${s}"
-              />
-              <button type="button" class="qtyBtn" data-act="inc" data-i="${i}" data-s="${s}">+</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      return `
-        <tr class="row">
-          <td>
-            <div class="muted small">Ref</div>
-            <input type="text" value="${escapeHtml(line.ref)}" data-act="ref" data-i="${i}" placeholder="Ej: 1204402" />
-          </td>
-          <td>
-            <div class="lineTop">
-              <div>
-                <div class="muted small">Descripción</div>
-                <input class="descInput" type="text" value="${escapeHtml(line.desc)}" data-i="${i}" placeholder="Descripción del artículo" />
-              </div>
-              <div>
-                <div class="muted small">Precio (€)</div>
-                <input class="priceInput" type="number" min="0" step="0.01" value="${Number(line.price||0)}" data-i="${i}" placeholder="0,00" />
-              </div>
-              <div>
-                <div class="muted small">Total línea</div>
-                <div style="font-weight:900;font-size:16px;padding:10px 0">${fmtEUR(lineTotal(line))}</div>
-              </div>
-            </div>
-
-            <div class="sizesWrap">
-              <div class="sizesTitle">
-                <span>Tallas</span>
-                <span class="muted">Unidades: <b>${lineUnits(line)}</b></span>
-              </div>
-              <div class="sizesGrid">${sizesHtml}</div>
-            </div>
-          </td>
-          <td>
-            <button type="button" class="danger" data-act="delLine" data-i="${i}" title="Borrar línea">🗑</button>
-          </td>
-        </tr>
-      `;
-    }).join("");
-
-    table.innerHTML = rows;
-
-    document.querySelector("#unitsTotal").textContent = orderUnits();
-    document.querySelector("#orderTotal").textContent = fmtEUR(orderTotal());
-    document.querySelector("#linesCount").textContent = `${state.lines.length} línea${state.lines.length===1?"":"s"}`;
-  }
-
-  // evita que se rompa el HTML si metes caracteres raros
-  function escapeHtml(str){
-    return String(str??"")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  // ---------- Input handler (NO render en qty mientras tecleas) ----------
-  function handleInput(e){
-    const el = e.target;
-
-    // qty manual: guardamos pero NO renderizamos aquí
-    if(el.dataset.act === "qty"){
-      const i = Number(el.dataset.i);
-      const s = el.dataset.s;
-      state.lines[i].qty[s] = clamp0(n2(el.value));
-      return;
-    }
-
-    if(el.dataset.act === "ref"){
-      const i = Number(el.dataset.i);
-      state.lines[i].ref = el.value.trim();
-      // al cambiar ref, cambia el set de tallas => render sí o sí
-      render();
-      return;
-    }
-
-    if(el.classList.contains("descInput")){
-      const i = Number(el.dataset.i);
-      state.lines[i].desc = el.value;
-      render();
-      return;
-    }
-
-    if(el.classList.contains("priceInput")){
-      const i = Number(el.dataset.i);
-      state.lines[i].price = n2(el.value);
-      render();
-      return;
-    }
-  }
-
-  // ---------- Event delegation (click + / - y borrado) ----------
-  const app = document.querySelector("#app");
-
-  app.addEventListener("input", handleInput);
-
-  // al salir del input de cantidad manual, renderizamos para refrescar totales
-  app.addEventListener("change", (e)=>{
-    const el = e.target;
-    if(el && el.dataset && el.dataset.act === "qty"){
-      // ya está guardao, ahora sí refrescamos
-      render();
-    }
-  });
-
-  app.addEventListener("click", (e)=>{
-    const btn = e.target.closest("button[data-act]");
-    if(!btn) return;
-
-    const act = btn.dataset.act;
-
-    if(act === "inc" || act === "dec"){
-      const i = Number(btn.dataset.i);
-      const s = btn.dataset.s;
-      const delta = act === "inc" ? 1 : -1;
-
-      const line = state.lines[i];
-      if(!line.qty) line.qty = {};
-      line.qty[s] = clamp0((line.qty[s]||0) + delta);
-
-      render();
-      return;
-    }
-
-    if(act === "delLine"){
-      const i = Number(btn.dataset.i);
-      state.lines.splice(i,1);
-      if(state.lines.length === 0) state.lines.push({ref:"",desc:"",price:0,qty:{}});
-      render();
-      return;
-    }
-  });
-
-  // ---------- Top actions ----------
-  document.querySelector("#addLine").addEventListener("click", ()=>{
-    state.lines.push({ ref:"", desc:"", price:0, qty:{} });
-    render();
-  });
-
-  document.querySelector("#clearAll").addEventListener("click", ()=>{
-    state.lines = [{ ref:"", desc:"", price:0, qty:{} }];
-    render();
-  });
-
-  // ---------- Init ----------
-  render();
-</script>
-</body>
-</html>
+      background:#fff
