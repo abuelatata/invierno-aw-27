@@ -11,73 +11,66 @@
     :root{
       --bg:#fbfaf8;
       --card:#ffffff;
-      --ink:#121212;
-      --muted:rgba(18,18,18,.62);
+      --ink:#141414;
+      --muted:rgba(20,20,20,.62);
       --line:rgba(0,0,0,.10);
-      --shadow:0 18px 44px rgba(0,0,0,.09);
-      --r:18px;
-      --r2:14px;
-      --good:#0b7a2a;
+      --shadow:0 18px 40px rgba(0,0,0,.08);
+      --radius:18px;
+
+      /* VERDE AGUA (botones) */
+      --aqua:#62c7c1;
+      --aqua2:#41b6af;
+      --aquaInk:#073b3a;
+
       --bad:#b00020;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background:var(--bg);
-      color:var(--ink);
+      background: var(--bg);
+      color: var(--ink);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Fallback anti “pantalla en blanco” */
-    .fatal{
-      position:fixed; inset:0; display:none;
-      padding:18px;
-      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.92));
-      backdrop-filter: blur(10px);
-      z-index:9999;
-      overflow:auto;
-    }
-    .fatal__box{
-      max-width: 860px;
+    .wrap{
+      max-width: 1120px;
       margin: 0 auto;
-      background:#fff;
-      border:1px solid rgba(176,0,32,.18);
-      border-radius:18px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.12);
-      padding: 14px;
-    }
-    .fatal h1{margin:0 0 8px;font-size:1.1rem}
-    .fatal p{margin:6px 0;color:rgba(0,0,0,.75);line-height:1.4}
-    .fatal pre{
-      margin:10px 0 0;
-      padding:10px;
-      background:#fafafa;
-      border:1px solid rgba(0,0,0,.08);
-      border-radius:14px;
-      white-space:pre-wrap;
-      overflow-wrap:anywhere;
-      font-size:.92rem;
+      padding: 14px 14px 120px;
     }
 
-    .wrap{max-width:1120px;margin:0 auto;padding:14px 14px 124px}
     header{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; padding:8px 2px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 10px 6px 14px;
+      flex-wrap:wrap;
     }
-    .brand{display:flex; align-items:center; gap:12px; min-width:0}
-    .logo{
-      width:46px;height:46px;border-radius:14px;background:#fff;
-      border:1px solid var(--line); display:grid; place-items:center;
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .brand .logo{
+      width:44px;height:44px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
       overflow:hidden;
+      display:grid;
+      place-items:center;
       flex:0 0 auto;
     }
-    .logo img{width:100%;height:100%;object-fit:contain}
-    .ttl{min-width:0}
-    .ttl h1{margin:0;font-size:clamp(1rem, 2vw, 1.08rem);letter-spacing:.2px}
-    .ttl p{margin:2px 0 0;color:var(--muted);font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .brand .logo img{width:100%;height:100%;object-fit:contain}
+    .brand .ttl{min-width:0}
+    .brand .ttl h1{margin:0;font-size:1.05rem}
+    .brand .ttl p{margin:2px 0 0;color:var(--muted);font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
     .grid{
       display:grid;
@@ -85,23 +78,21 @@
       gap:14px;
       align-items:start;
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
     .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:var(--r);
+      border-radius:var(--radius);
       box-shadow:var(--shadow);
       overflow:hidden;
     }
     .card .hd{
       padding:12px 14px;
       border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      background: linear-gradient(180deg, #fff, rgba(255,255,255,.86));
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
       flex-wrap:wrap;
+      background: linear-gradient(180deg,#fff,rgba(255,255,255,.9));
     }
     .card .hd h2{margin:0;font-size:1.02rem}
     .card .bd{padding:14px}
@@ -109,47 +100,40 @@
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .hint{color:var(--muted);font-size:.94rem;line-height:1.35;margin:8px 0 0}
 
-    /* Botones: mejor táctil + más bonitos */
+    /* BOTONES: todos verde agua */
     .btn{
-      border:1px solid rgba(0,0,0,.10);
-      background: linear-gradient(180deg,#ffffff,#f6f6f6);
+      border:1px solid rgba(7,59,58,.18);
+      background: linear-gradient(180deg,var(--aqua),var(--aqua2));
+      color:var(--aquaInk);
       border-radius: 14px;
       padding: 11px 14px;
-      font-weight: 850;
+      font-weight: 900;
       cursor:pointer;
       display:inline-flex;
       align-items:center;
       gap:8px;
       user-select:none;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
-      transition: transform .06s ease, box-shadow .12s ease, filter .12s ease;
-      min-height: 44px; /* accesibilidad táctil */
+      transition: transform .06s ease, box-shadow .12s ease;
+      min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn:hover{ box-shadow: 0 14px 22px rgba(0,0,0,.08); }
     .btn:active{ transform: translateY(1px); }
-    .btn.primary{
-      background: linear-gradient(180deg,#1a1a1a,#0c0c0c);
-      color:#fff;
-      border-color:#0c0c0c;
-    }
+    .btn.small{padding:9px 12px;border-radius:12px;min-height:40px}
+    .btn.icon{width:44px;height:44px;justify-content:center;padding:10px}
+
+    /* Vaciar pedido en rojo (alerta) */
     .btn.danger{
-      background: linear-gradient(180deg,#fff,#fff);
+      background:#fff;
       color:var(--bad);
       border-color: rgba(176,0,32,.22);
-    }
-    .btn.small{padding:9px 12px;border-radius:12px;min-height:40px}
-    .btn.btn--icon{
-      padding: 10px;
-      width: 44px;
-      height: 44px;
-      justify-content:center;
-      border-radius: 14px;
     }
 
     .pill{
       display:inline-flex;align-items:center;gap:8px;
       border:1px solid rgba(0,0,0,.12);
-      border-radius:999px;padding:7px 11px;background:#fff;font-weight:850;
+      border-radius:999px;padding:7px 11px;background:#fff;font-weight:900;
       min-height: 40px;
     }
     .money{font-weight:900}
@@ -164,41 +148,33 @@
       background:rgba(255,255,255,.92);
     }
     .lineTop{display:flex;gap:12px;align-items:flex-start}
+    @media (max-width: 520px){ .lineTop{gap:10px} }
 
-    @media (max-width: 520px){
-      .lineTop{gap:10px}
-    }
-
-    /* Imagen clicable */
     .pimgBtn{
       width:82px;height:82px;border-radius:16px;border:1px solid var(--line);
       background:#fff;overflow:hidden;flex:0 0 auto;
       padding:0; cursor:pointer;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      -webkit-tap-highlight-color: transparent;
     }
     .pimgBtn img{width:100%;height:100%;object-fit:cover;display:block}
 
     .meta{flex:1;min-width:0}
     .meta .r1{
-      display:flex;
-      gap:10px;
-      align-items:flex-end;
-      flex-wrap:wrap;
+      display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;
     }
     .meta .r2{margin-top:8px;color:var(--muted);font-size:.94rem;line-height:1.25}
     .meta .r2 b{color:var(--ink)}
 
     .field{
       display:flex; flex-direction:column; gap:6px;
-      min-width: 240px;
-      flex:1;
+      min-width: 240px; flex:1;
     }
     @media (max-width: 520px){
       .field{min-width: 100%}
       .pimgBtn{width:76px;height:76px}
     }
-
-    label{font-size:.84rem;color:var(--muted);font-weight:750}
+    label{font-size:.84rem;color:var(--muted);font-weight:850}
     input, textarea{
       width:100%;
       padding:12px 12px;
@@ -210,54 +186,6 @@
       min-height: 44px;
     }
     textarea{min-height:170px;resize:vertical}
-
-    /* Tallas: grid adaptable (móvil/tablet/PC) */
-    .sizes{
-      display:grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap:8px;
-      margin-top:12px;
-    }
-    @media (max-width: 980px){
-      .sizes{ grid-template-columns: repeat(5, minmax(0, 1fr)); }
-    }
-    @media (max-width: 740px){
-      .sizes{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    }
-    @media (max-width: 520px){
-      .sizes{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
-
-    .sz{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:6px 10px;
-      background:#fff;
-      min-height: 44px;
-      overflow:hidden;
-    }
-    .sz .t{font-weight:900;font-size:.9rem;white-space:nowrap}
-
-    .step{
-      display:inline-flex;align-items:center;gap:6px;
-      border:1px solid rgba(0,0,0,.10);
-      border-radius:999px;
-      overflow:hidden;
-      background:#fff;
-      flex:0 0 auto;
-    }
-    .step button{
-      width:34px;height:34px;border:0;background:transparent;cursor:pointer;font-weight:900;
-      font-size: 1.05rem;
-    }
-    .step input{
-      width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
-      border-radius:0;padding:0;text-align:center;font-weight:900;min-height:34px;
-    }
 
     /* Autocomplete */
     .suggest-wrap{position:relative;flex:1;min-width:240px}
@@ -281,27 +209,87 @@
     .suggest-item .desc{font-size:.92rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
     .suggest-item .price{font-weight:900;white-space:nowrap}
 
-    /* Resumen: tabla scrolleable en móvil */
-    .tableScroll{
-      overflow-x:auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: 14px;
+    /* DETAILS tallas (la versión buena) */
+    details.sizesDetails{
+      margin-top:12px;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:16px;
+      background:#fff;
+      overflow:hidden;
     }
+    details.sizesDetails summary{
+      list-style:none;
+      cursor:pointer;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      user-select:none;
+      font-weight:900;
+      -webkit-tap-highlight-color: transparent;
+    }
+    details.sizesDetails summary::-webkit-details-marker{display:none}
+    .sumLeft{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      background:rgba(98,199,193,.18);
+      color:var(--aquaInk);
+      font-weight:900;
+      min-height: 34px;
+      white-space:nowrap;
+    }
+    .sizesBody{padding:12px;border-top:1px solid rgba(0,0,0,.08)}
+    .sizes{
+      display:grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap:8px;
+    }
+    @media (max-width: 980px){ .sizes{ grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+    @media (max-width: 740px){ .sizes{ grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    @media (max-width: 520px){ .sizes{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+    .sz{
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      background:#fff;
+      min-height: 44px;
+      overflow:hidden;
+    }
+    .sz .t{font-weight:900;font-size:.9rem;white-space:nowrap}
+    .step{
+      display:inline-flex;align-items:center;gap:6px;
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:999px;
+      overflow:hidden;
+      background:#fff;
+      flex:0 0 auto;
+    }
+    .step button{
+      width:34px;height:34px;border:0;background:transparent;cursor:pointer;font-weight:900;
+      font-size: 1.05rem;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .step input{
+      width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
+      border-radius:0;padding:0;text-align:center;font-weight:900;min-height:34px;
+    }
+
+    /* Resumen */
+    .tableScroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
     table{width:100%;border-collapse:separate;border-spacing:0 10px;min-width: 720px;}
-    th{
-      font-size:.82rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);
-      text-align:left;padding:0 8px
-    }
-    td{
-      background:#fff;border:1px solid var(--line);
-      padding:10px 8px;vertical-align:top
-    }
+    th{font-size:.82rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);text-align:left;padding:0 8px}
+    td{background:#fff;border:1px solid var(--line);padding:10px 8px;vertical-align:top}
     td:first-child{border-top-left-radius:14px;border-bottom-left-radius:14px}
     td:last-child{border-top-right-radius:14px;border-bottom-right-radius:14px}
     .nowrap{white-space:nowrap}
     .right{text-align:right}
     .chips{display:flex;flex-wrap:wrap;gap:6px}
-    .chip{border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:4px 8px;font-weight:850;background:#fff;font-size:.86rem}
+    .chip{border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:4px 8px;font-weight:900;background:#fff;font-size:.86rem}
 
     /* Barra inferior fija */
     .bar{
@@ -318,37 +306,20 @@
     }
     .totals{display:flex;gap:10px;flex-wrap:wrap}
 
-    /* Lightbox (imagen ampliada) */
+    /* Lightbox */
     .modal{ position:fixed; inset:0; display:none; z-index:2000; }
     .modal[aria-hidden="false"]{ display:block; }
-    .modal__backdrop{
-      position:absolute; inset:0;
-      background: rgba(0,0,0,.45);
-      backdrop-filter: blur(6px);
-    }
+    .modal__backdrop{position:absolute; inset:0;background: rgba(0,0,0,.45);backdrop-filter: blur(6px);}
     .modal__panel{
-      position:absolute;
-      left:50%; top:50%;
-      transform: translate(-50%,-50%);
+      position:absolute;left:50%; top:50%;transform: translate(-50%,-50%);
       width:min(820px, calc(100vw - 24px));
-      background:#fff;
-      border:1px solid rgba(0,0,0,.12);
-      border-radius: 20px;
-      box-shadow: 0 28px 60px rgba(0,0,0,.20);
+      background:#fff;border:1px solid rgba(0,0,0,.12);
+      border-radius: 20px;box-shadow: 0 28px 60px rgba(0,0,0,.20);
       overflow:hidden;
     }
-    .modal__close{
-      position:absolute; top:10px; right:10px;
-      z-index:2;
-    }
+    .modal__close{ position:absolute; top:10px; right:10px; z-index:2; }
     .modal__content{ padding: 14px; }
-    .modal__content img{
-      width:100%;
-      height:auto;
-      border-radius: 16px;
-      border:1px solid rgba(0,0,0,.10);
-      background:#fff;
-    }
+    .modal__content img{width:100%;height:auto;border-radius: 16px;border:1px solid rgba(0,0,0,.10);background:#fff;}
     .modal__cap{ margin-top:10px; }
     .modal__ref{ font-weight: 900; font-size: 1rem; }
     .modal__desc{ color: rgba(0,0,0,.65); margin-top:2px; }
@@ -356,15 +327,6 @@
 </head>
 
 <body>
-  <div class="fatal" id="fatal">
-    <div class="fatal__box">
-      <h1>Se ha detectado un problema al cargar la aplicación</h1>
-      <p>El mensaje de abajo ayuda a corregirlo rápido.</p>
-      <pre id="fatalMsg"></pre>
-      <p style="margin-top:10px"><b>Consejo:</b> abre la web con <code>?v=999</code> para evitar caché.</p>
-    </div>
-  </div>
-
   <div class="wrap">
     <header>
       <div class="brand">
@@ -374,11 +336,11 @@
         </div>
         <div class="ttl">
           <h1>Pedidos · Invierno AW 26/27</h1>
-          <p>Funciona en móvil, tablet y PC · Email y PDF</p>
+          <p><span id="orderDateLabel"></span> · Móvil / tablet / PC</p>
         </div>
       </div>
 
-      <button class="btn primary" id="addLineBtn" type="button">Añadir referencia</button>
+      <button class="btn" id="addLineBtn" type="button">Añadir referencia</button>
     </header>
 
     <div class="grid">
@@ -386,14 +348,15 @@
         <div class="hd">
           <h2>Pedido</h2>
           <div class="row">
+            <span class="pill"><span class="muted">Fecha:</span> <b id="orderDatePill"></b></span>
             <span class="pill"><span class="muted">Unidades:</span> <span id="totalUds" class="money">0</span></span>
             <span class="pill"><span class="muted">Total:</span> <span id="totalEur" class="money">0,00 €</span></span>
           </div>
         </div>
         <div class="bd">
           <p class="hint">
-            Escribe “12” para ver el desplegable con las referencias <b>12xxxx</b> (precio y descripción).
-            Toca la imagen para ampliarla.
+            Autocompletar: escribe “12”, “25”, “43”… y sale el desplegable con referencia, descripción y precio.
+            Las tallas se ajustan automáticamente según el tipo de referencia.
           </p>
 
           <div id="lines"></div>
@@ -410,7 +373,7 @@
           <div class="row">
             <button class="btn" id="copyEmailBtn" type="button">Copiar email</button>
             <button class="btn" id="mailtoBtn" type="button">Abrir email</button>
-            <button class="btn primary" id="pdfBtn" type="button">Generar PDF</button>
+            <button class="btn" id="pdfBtn" type="button">Generar PDF</button>
           </div>
         </div>
         <div class="bd">
@@ -422,7 +385,7 @@
           <textarea id="emailBox" spellcheck="false"></textarea>
 
           <p class="hint">
-            Si “Generar PDF” tarda, recarga con <b>Ctrl+F5</b> y vuelve a intentarlo.
+            Para ver cambios tras un commit, abre la web con <b>?v=123</b> (cambia el número).
           </p>
         </div>
       </aside>
@@ -432,12 +395,13 @@
   <div class="bar">
     <div class="barin">
       <div class="totals">
+        <span class="pill"><span class="muted">Fecha:</span> <b id="orderDatePill2"></b></span>
         <span class="pill"><span class="muted">Unidades:</span> <span id="totalUds2" class="money">0</span></span>
         <span class="pill"><span class="muted">Total:</span> <span id="totalEur2" class="money">0,00 €</span></span>
       </div>
       <div class="row">
         <button class="btn danger" id="clearBtn" type="button">Vaciar pedido</button>
-        <button class="btn primary" id="pdfBtn2" type="button">PDF</button>
+        <button class="btn" id="pdfBtn2" type="button">PDF</button>
       </div>
     </div>
   </div>
@@ -446,7 +410,7 @@
   <div id="imgModal" class="modal" aria-hidden="true">
     <div class="modal__backdrop" data-close="1"></div>
     <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Imagen de producto">
-      <button class="btn btn--icon modal__close" data-close="1" title="Cerrar" type="button">✕</button>
+      <button class="btn icon modal__close" data-close="1" title="Cerrar" type="button">✕</button>
       <div class="modal__content">
         <img id="imgModalPic" alt="Imagen ampliada" />
         <div class="modal__cap">
@@ -460,43 +424,20 @@
   <script>
   (function(){
     // =======================
-    // TARIFA (puedes ampliarla cuando quieras)
+    // TARIFA (la tuya ya pegada)
     // =======================
-    window.PRICE_MAP = {
-      "0899426":{"desc":"Diadema","price":9.25},
-      "1299426":{"desc":"Jesusito con capota","price":53.80},
-      "1399426":{"desc":"Jesusito sin capota","price":49.95},
-      "2599426":{"desc":"Vestido","price":50.65},
-      "4399426":{"desc":"Conjunto de niño","price":31.75},
+    window.PRICE_MAP = {"0899426":{"desc":"Diadema","price":9.25},"1299426":{"desc":"Jesusito con Capota","price":53.8},"1399426":{"desc":"Jesusito sin Capota","price":49.95},"2599426":{"desc":"Vestido","price":50.65},"4399426":{"desc":"Conjunto de Niño","price":31.75},"0899427":{"desc":"Diadema","price":9.25},"1299427":{"desc":"Jesusito con Capota","price":40.65},"1399427":{"desc":"Jesusito sin Capota","price":34.5},"2599427":{"desc":"Vestido","price":38.85},"4399427":{"desc":"Conjunto de Niño","price":33.35},"43099427":{"desc":"Conjunto de Niño","price":33.35},"0899428":{"desc":"Diadema","price":9.25},"1199428":{"desc":"Pelele","price":20.25},"1299428":{"desc":"Jesusito con Capota","price":53.35},"1399428":{"desc":"Jesusito sin Capota","price":50.75},"2599428":{"desc":"Vestido","price":51.7},"1299429":{"desc":"Jesusito con Capota","price":47.15},"1399429":{"desc":"Jesusito sin Capota","price":44.85},"2599429":{"desc":"Vestido","price":51.7},"0899430":{"desc":"Diadema","price":9.25},"1299430":{"desc":"Jesusito con Capota","price":39.7},"1399430":{"desc":"Jesusito sin Capota","price":36.95},"2599430":{"desc":"Vestido","price":38.5},"4399430":{"desc":"Conjunto de Niño","price":31.35},"0899431":{"desc":"Diadema","price":9.25},"1299431":{"desc":"Jesusito con Capota","price":40.45},"1399431":{"desc":"Jesusito sin Capota","price":37.95},"2599431":{"desc":"Vestido","price":39.8},"3099431":{"desc":"Conjunto de Niño","price":24.65},"0809432":{"desc":"Diadema","price":9.25},"1209432":{"desc":"Jesusito con Capota","price":39.15},"1309432":{"desc":"Jesusito sin Capota","price":36.95},"2509432":{"desc":"Vestido","price":38.95},"4309432":{"desc":"Conjunto de Niño","price":29.75},"0899432":{"desc":"Diadema","price":9.25},"1299432":{"desc":"Jesusito con Capota","price":41.95},"1399432":{"desc":"Jesusito sin Capota","price":39.25},"2599432":{"desc":"Vestido","price":41.65},"4399432":{"desc":"Conjunto de Niño","price":30.75},"0899433":{"desc":"Diadema","price":9.25},"1299433":{"desc":"Jesusito con Capota","price":46.75},"1399433":{"desc":"Jesusito sin Capota","price":45.25},"2599433":{"desc":"Vestido","price":49.25},"0899434":{"desc":"Diadema","price":9.25},"1199434":{"desc":"Pelele","price":22.65},"1299434":{"desc":"Jesusito con Capota","price":44.45},"1399434":{"desc":"Jesusito sin Capota","price":39.15},"2599434":{"desc":"Vestido","price":37.7},"0805435":{"desc":"Diadema","price":9.25},"1205435":{"desc":"Jesusito con Capota","price":41.5},"1305435":{"desc":"Jesusito sin Capota","price":39.35},"2505435":{"desc":"Vestido","price":43.1},"0899435":{"desc":"Diadema","price":9.25},"1208435":{"desc":"Jesusito con Capota","price":41.5},"1308435":{"desc":"Jesusito sin Capota","price":39.35},"2508435":{"desc":"Vestido","price":43.1},"220257":{"desc":"Abrigo Rojo","price":40.75},"220357":{"desc":"Abrigo Azul Marino","price":40.75},"220657":{"desc":"Abrigo Camel","price":40.75},"220158":{"desc":"Abrigo Rosa","price":37.65},"220258":{"desc":"Abrigo Rojo","price":37.65},"220358":{"desc":"Abrigo Azul Marino","price":37.65},"220658":{"desc":"Abrigo Camel","price":37.65},"220159":{"desc":"Abrigo Rosa","price":39.35},"220259":{"desc":"Abrigo Rojo","price":39.35},"220359":{"desc":"Abrigo Azul Marino","price":39.35},"220659":{"desc":"Abrigo Camel","price":39.35},"220160":{"desc":"Abrigo Rosa","price":37.75},"220260":{"desc":"Abrigo Rojo","price":37.75},"220360":{"desc":"Abrigo Azul Marino","price":37.75},"220660":{"desc":"Abrigo Camel","price":37.75}};
 
-      "0899427":{"desc":"Diadema","price":9.25},
-      "1299427":{"desc":"Jesusito con capota","price":40.65},
-      "1399427":{"desc":"Jesusito sin capota","price":34.50},
-      "2599427":{"desc":"Vestido","price":38.85},
-      "4399427":{"desc":"Conjunto de niño","price":33.35},
+    // Tallajes por tipo
+    const SIZES_BABY = ["3M","6M","9M","18M","2A","3A","4A"]; // 12/13/30/31
+    const SIZES_KIDS = ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"]; // 25/22/43
+    const SIZES_U = ["TU"]; // 08
 
-      "0899428":{"desc":"Diadema","price":9.25},
-      "1199428":{"desc":"Pelele","price":20.25},
-      "1299428":{"desc":"Jesusito con capota","price":53.35},
-      "1399428":{"desc":"Jesusito sin capota","price":50.75},
-      "2599428":{"desc":"Vestido","price":51.70}
-    };
-
-    // =======================
-    // APP
-    // =======================
-    const SIZES = ["3M","6M","9M","12M","18M","2Y","3Y","4Y","5Y","6Y","8Y","10Y","12Y"];
-    const state = { lines: [] };
+    const state = { lines: [], expanded: {} };
     const $ = (sel)=>document.querySelector(sel);
 
-    function fatal(err){
-      try{
-        const el = $("#fatal");
-        const msg = $("#fatalMsg");
-        msg.textContent = String(err && (err.stack || err.message) ? (err.stack || err.message) : err);
-        el.style.display = "block";
-      }catch(e){}
-    }
+    const now = new Date();
+    const ORDER_DATE = new Intl.DateTimeFormat("es-ES", { day:"2-digit", month:"2-digit", year:"numeric" }).format(now);
 
     function eur(n){
       const v = Number(n||0);
@@ -508,10 +449,33 @@
     }
     function n2(v){ return Math.max(0, Math.floor(Number(v||0))); }
 
+    function prefix2(ref){
+      const r = String(ref||"").trim();
+      return r.length>=2 ? r.slice(0,2) : "";
+    }
+
+    function sizesForRef(ref){
+      const p = prefix2(ref);
+      if(p==="08") return SIZES_U;
+      if(p==="12" || p==="13" || p==="30" || p==="31") return SIZES_BABY;
+      if(p==="25" || p==="22" || p==="43") return SIZES_KIDS;
+      return SIZES_KIDS; // por defecto
+    }
+
+    function ensureSizes(line, ref){
+      const wanted = sizesForRef(ref);
+      line.sizes = wanted.slice();
+
+      const nextQty = {};
+      line.sizes.forEach(s => nextQty[s] = n2(line.qty?.[s] ?? 0)); // conserva si existe
+      line.qty = nextQty;
+    }
+
     function defaultLine(){
-      const qty = {};
-      SIZES.forEach(s=>qty[s]=0);
-      return { ref:"", desc:"", price:0, qty, id: (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random())) };
+      const id = (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()));
+      const line = { ref:"", desc:"", price:0, qty:{}, sizes:SIZES_KIDS.slice(), id };
+      ensureSizes(line, "25"); // arranca en tallaje KIDS (por defecto)
+      return line;
     }
 
     function getInfoByRef(ref){
@@ -521,7 +485,7 @@
     }
 
     function lineUnits(line){
-      return SIZES.reduce((a,s)=>a + n2(line.qty[s]), 0);
+      return (line.sizes||[]).reduce((a,s)=>a + n2(line.qty?.[s]), 0);
     }
     function lineSubtotal(line){
       return lineUnits(line) * Number(line.price||0);
@@ -542,30 +506,22 @@
     // ===== Visor de imagen =====
     function openImageModal({src, ref, desc}){
       const modal = document.getElementById("imgModal");
-      const pic = document.getElementById("imgModalPic");
-      const r = document.getElementById("imgModalRef");
-      const d = document.getElementById("imgModalDesc");
-
-      pic.src = src;
-      r.textContent = ref ? `REF ${ref}` : "";
-      d.textContent = desc || "";
-
+      document.getElementById("imgModalPic").src = src;
+      document.getElementById("imgModalRef").textContent = ref ? `REF ${ref}` : "";
+      document.getElementById("imgModalDesc").textContent = desc || "";
       modal.setAttribute("aria-hidden","false");
     }
     function closeImageModal(){
       const modal = document.getElementById("imgModal");
       modal.setAttribute("aria-hidden","true");
-      const pic = document.getElementById("imgModalPic");
-      pic.src = "";
+      document.getElementById("imgModalPic").src = "";
     }
     document.addEventListener("click", (e)=>{
       if(e.target && e.target.dataset && e.target.dataset.close === "1"){
         closeImageModal();
       }
     });
-    document.addEventListener("keydown", (e)=>{
-      if(e.key === "Escape") closeImageModal();
-    });
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeImageModal(); });
 
     // ===== Render =====
     function render(){
@@ -573,8 +529,12 @@
       linesWrap.innerHTML = "";
 
       state.lines.forEach((line, idx)=>{
+        const isOpen = !!state.expanded[line.id];
+        const sizes = line.sizes || SIZES_KIDS;
+
         const card = document.createElement("div");
         card.className = "line";
+
         card.innerHTML = `
           <div class="lineTop">
             <button class="pimgBtn" type="button" data-act="zoom" data-i="${idx}" title="Ver imagen ampliada">
@@ -602,7 +562,7 @@
                          data-i="${idx}" class="priceInput">
                 </div>
 
-                <button class="btn small danger" data-act="del" data-i="${idx}" type="button">Eliminar</button>
+                <button class="btn small" data-act="del" data-i="${idx}" type="button">Eliminar</button>
               </div>
 
               <div class="r2">
@@ -610,22 +570,43 @@
                 <span class="muted"> · Unidades: ${lineUnits(line)}</span>
               </div>
 
-              <div class="sizes">
-                ${SIZES.map(s=>`
-                  <div class="sz">
-                    <span class="t">${s}</span>
-                    <span class="step">
-                      <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
-                      <input value="${n2(line.qty[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
-                      <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
-                    </span>
+              <details class="sizesDetails" ${isOpen ? "open" : ""} data-id="${line.id}">
+                <summary class="sizesSummary">
+                  <span class="sumLeft">
+                    <span class="badge">Tallas</span>
+                    <span class="muted">(${prefix2(line.ref)||"—"}) · Pulsa para ${isOpen ? "plegar" : "desplegar"}</span>
+                  </span>
+                  <span class="muted">${isOpen ? "▲" : "▼"}</span>
+                </summary>
+
+                <div class="sizesBody">
+                  <div class="sizes">
+                    ${sizes.map(s=>`
+                      <div class="sz">
+                        <span class="t">${s}</span>
+                        <span class="step">
+                          <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
+                          <input value="${n2(line.qty?.[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
+                          <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
+                        </span>
+                      </div>
+                    `).join("")}
                   </div>
-                `).join("")}
-              </div>
+                </div>
+              </details>
+
             </div>
           </div>
         `;
+
         linesWrap.appendChild(card);
+
+        const det = card.querySelector("details.sizesDetails");
+        if(det){
+          det.addEventListener("toggle", () => {
+            state.expanded[line.id] = det.open;
+          });
+        }
 
         const refInp = card.querySelector(".refInput");
         const sugBox = card.querySelector(`#suggest_${line.id}`);
@@ -646,7 +627,8 @@
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
         .map(l=>{
-          const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>({s, q:n2(l.qty[s])}));
+          const sizes = l.sizes || [];
+          const tallas = sizes.filter(s=>n2(l.qty?.[s])>0).map(s=>({s, q:n2(l.qty?.[s])}));
           return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
         });
 
@@ -656,7 +638,7 @@
       }
 
       wrap.innerHTML = `
-        <label>Resumen</label>
+        <label>Resumen (Fecha del pedido: <b>${ORDER_DATE}</b>)</label>
         <div class="tableScroll" role="region" aria-label="Resumen del pedido" tabindex="0">
           <table>
             <thead>
@@ -695,19 +677,21 @@
       `;
     }
 
-    // ✅ Email neutro: SIN firma y SIN “All the best”
+    // Email neutro + fecha (SIN FIRMA)
     function renderEmail(){
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
         .map(l=>{
-          const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>`${s}: ${n2(l.qty[s])}`).join(" · ");
+          const sizes = l.sizes || [];
+          const tallas = sizes.filter(s=>n2(l.qty?.[s])>0).map(s=>`${s}: ${n2(l.qty?.[s])}`).join(" · ");
           return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
         });
 
-      const subject = `Pedido · Abuela Tata · Invierno AW 26/27`;
+      const subject = `Pedido · Abuela Tata · Invierno AW 26/27 · ${ORDER_DATE}`;
       let body = "";
       body += `Hola,\n\n`;
-      body += `Adjunto el pedido de Invierno AW 26/27 con el detalle por referencia:\n\n`;
+      body += `Pedido Invierno AW 26/27\n`;
+      body += `Fecha: ${ORDER_DATE}\n\n`;
 
       if(!rows.length){
         body += `— Aún no hay unidades en el pedido.\n`;
@@ -728,7 +712,7 @@
       $("#mailtoBtn").dataset.subject = subject;
     }
 
-    // ===== Autocomplete =====
+    // Autocomplete
     function setupAutocomplete(input, box, lineIndex){
       const all = Object.entries(window.PRICE_MAP).map(([ref,v])=>({
         ref:String(ref),
@@ -767,12 +751,17 @@
         L.ref = it.ref;
         L.desc = it.desc;
         L.price = it.price;
+
+        // 👇 aquí se cambia el tallaje automáticamente
+        ensureSizes(L, it.ref);
+
+        state.expanded[L.id] = true;
         render();
       }
 
       input.addEventListener("input", ()=>{
         const v = String(input.value||"").trim();
-        if(v.length < 2){ box.style.display="none"; return; }
+        if(v.length < 1){ box.style.display="none"; return; }
         let res = all.filter(x=>x.ref.startsWith(v));
         if(!res.length) res = all.filter(x=>x.ref.includes(v));
         res = res.slice(0,12);
@@ -799,11 +788,15 @@
 
       input.addEventListener("change", ()=>{
         const v = String(input.value||"").trim();
-        if(!v) return;
-        const it = getInfoByRef(v);
         const L = state.lines[lineIndex];
         L.ref = v;
+
+        // 👇 cambio de tallaje también si la escribes a mano
+        ensureSizes(L, v);
+
+        const it = getInfoByRef(v);
         if(it.desc){ L.desc = it.desc; L.price = it.price; }
+        state.expanded[L.id] = true;
         render();
       });
 
@@ -814,7 +807,7 @@
       });
     }
 
-    // ===== PDF con imagen por referencia =====
+    // PDF con imagen y fecha (respeta tallaje por línea)
     function loadImageAsDataURL(url){
       return new Promise((resolve)=>{
         const img = new Image();
@@ -826,9 +819,7 @@
             const ctx = canvas.getContext("2d");
             ctx.drawImage(img,0,0);
             resolve(canvas.toDataURL("image/jpeg", 0.92));
-          }catch(e){
-            resolve(null);
-          }
+          }catch(e){ resolve(null); }
         };
         img.onerror = ()=> resolve(null);
         img.src = url + (url.includes("?") ? "&" : "?") + "v=" + Date.now();
@@ -838,14 +829,15 @@
     async function makePDF(){
       const { jsPDF } = (window.jspdf || {});
       if(!jsPDF){
-        alert("La librería del PDF aún no ha cargado. Recarga con Ctrl+F5 y vuelve a intentarlo.");
+        alert("La librería del PDF aún no ha cargado. Recarga y vuelve a intentarlo.");
         return;
       }
 
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
         .map(l=>{
-          const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>`${s}: ${n2(l.qty[s])}`);
+          const sizes = l.sizes || [];
+          const tallas = sizes.filter(s=>n2(l.qty?.[s])>0).map(s=>`${s}: ${n2(l.qty?.[s])}`);
           return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
         });
 
@@ -861,12 +853,11 @@
       y += 18;
       doc.setFont("helvetica","normal");
       doc.setFontSize(11);
-      doc.text(`Total unidades: ${totalUnits()}   ·   Total: ${eur(totalEur())}`, 40, y);
+      doc.text(`Fecha: ${ORDER_DATE}   ·   Total unidades: ${totalUnits()}   ·   Total: ${eur(totalEur())}`, 40, y);
 
       y += 26;
 
       if(!rows.length){
-        doc.setFont("helvetica","normal");
         doc.text("No hay unidades en el pedido.", 40, y);
         doc.save("pedido_aw26-27.pdf");
         return;
@@ -882,7 +873,6 @@
       doc.text("SUBTOTAL", W-40, y, { align:"right" });
 
       y += 10;
-      doc.setDrawColor(0);
       doc.setLineWidth(0.5);
       doc.line(40, y, W-40, y);
       y += 16;
@@ -896,17 +886,11 @@
           y = 52;
         }
 
-        const imgX = 40;
-        const imgY = y - 6;
-        const boxW = 70;
-        const boxH = 70;
-
+        const imgX = 40, imgY = y - 6, boxW = 70, boxH = 70;
         doc.setDrawColor(220);
         doc.rect(imgX, imgY, boxW, boxH);
 
-        const imgUrl = `images/${r.ref}.jpg`;
-        const dataUrl = await loadImageAsDataURL(imgUrl);
-
+        const dataUrl = await loadImageAsDataURL(`images/${r.ref}.jpg`);
         if(dataUrl){
           try{ doc.addImage(dataUrl, "JPEG", imgX, imgY, boxW, boxH); }catch(e){}
         }
@@ -936,49 +920,60 @@
 
       doc.setFont("helvetica","bold");
       doc.setFontSize(12);
-      doc.text(`TOTAL UNIDADES: ${totalUnits()}`, 40, H-54);
+      doc.text(`FECHA: ${ORDER_DATE}`, 40, H-54);
       doc.text(`TOTAL: ${eur(totalEur())}`, W-40, H-54, { align:"right" });
 
-      doc.save("pedido_aw26-27.pdf");
+      doc.save(`pedido_aw26-27_${ORDER_DATE.replaceAll("/","-")}.pdf`);
     }
 
-    // ===== Acciones =====
     function addLine(){
-      state.lines.push(defaultLine());
+      const l = defaultLine();
+      state.lines.push(l);
+      state.expanded[l.id] = true;
       render();
     }
     function clearAll(){
       state.lines = [defaultLine()];
+      state.expanded = {};
+      state.expanded[state.lines[0].id] = true;
       render();
     }
 
+    // click (Chrome estable) y sin preventDefault general
     function handleClick(e){
       const btn = e.target.closest("[data-act]");
       if(!btn) return;
+
       const act = btn.dataset.act;
       const i = Number(btn.dataset.i);
       const s = btn.dataset.s;
 
+      if(act==="plus"){
+        const L = state.lines[i];
+        L.qty[s] = n2(L.qty?.[s]) + 1;
+        render();
+        return;
+      }
+      if(act==="minus"){
+        const L = state.lines[i];
+        L.qty[s] = Math.max(0, n2(L.qty?.[s]) - 1);
+        render();
+        return;
+      }
       if(act==="zoom"){
         const L = state.lines[i];
         openImageModal({ src: imgForRef(L.ref), ref: L.ref, desc: L.desc });
         return;
       }
       if(act==="del"){
+        const id = state.lines[i].id;
         state.lines.splice(i,1);
-        if(!state.lines.length) state.lines.push(defaultLine());
-        render();
-        return;
-      }
-      if(act==="plus"){
-        const L = state.lines[i];
-        L.qty[s] = n2(L.qty[s]) + 1;
-        render();
-        return;
-      }
-      if(act==="minus"){
-        const L = state.lines[i];
-        L.qty[s] = Math.max(0, n2(L.qty[s]) - 1);
+        delete state.expanded[id];
+        if(!state.lines.length){
+          const l = defaultLine();
+          state.lines.push(l);
+          state.expanded[l.id] = true;
+        }
         render();
         return;
       }
@@ -986,6 +981,7 @@
 
     function handleInput(e){
       const el = e.target;
+
       if(el.dataset.act==="qty"){
         const i = Number(el.dataset.i);
         const s = el.dataset.s;
@@ -1021,29 +1017,29 @@
       window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
 
-    // ===== INIT =====
     document.addEventListener("DOMContentLoaded", ()=>{
-      try{
-        $("#addLineBtn").addEventListener("click", addLine);
-        $("#addLineBtn2").addEventListener("click", addLine);
+      $("#orderDateLabel").textContent = `Fecha del pedido: ${ORDER_DATE}`;
+      $("#orderDatePill").textContent = ORDER_DATE;
+      $("#orderDatePill2").textContent = ORDER_DATE;
 
-        $("#lines").addEventListener("click", handleClick);
-        $("#lines").addEventListener("input", handleInput);
+      $("#addLineBtn").addEventListener("click", addLine);
+      $("#addLineBtn2").addEventListener("click", addLine);
 
-        $("#copyEmailBtn").addEventListener("click", copyEmail);
-        $("#mailtoBtn").addEventListener("click", openMailto);
+      $("#lines").addEventListener("click", handleClick);
+      $("#lines").addEventListener("input", handleInput);
 
-        $("#pdfBtn").addEventListener("click", makePDF);
-        $("#pdfBtn2").addEventListener("click", makePDF);
+      $("#copyEmailBtn").addEventListener("click", copyEmail);
+      $("#mailtoBtn").addEventListener("click", openMailto);
 
-        $("#clearBtn").addEventListener("click", clearAll);
+      $("#pdfBtn").addEventListener("click", makePDF);
+      $("#pdfBtn2").addEventListener("click", makePDF);
 
-        state.lines = [defaultLine()];
-        render();
-      }catch(e){
-        console.error(e);
-        fatal(e);
-      }
+      $("#clearBtn").addEventListener("click", clearAll);
+
+      const first = defaultLine();
+      state.lines = [first];
+      state.expanded[first.id] = true;
+      render();
     });
   })();
   </script>
