@@ -1,1 +1,5 @@
-
+[
+  { "ref": "1225406", "name": "Nombre del modelo", "price": 43.15 },
+  { "ref": "2509403", "name": "Nombre del modelo", "price": 55.00 },
+  { "ref": "0800001", "name": "Complemento", "price": 12.50 }
+]
