@@ -5,151 +5,163 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Abuela Tata · Invierno AW 26/27 · Pedidos</title>
 
+  <!-- jsPDF (para PDF). Si no carga, la app sigue funcionando igual. -->
   <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
   <style>
     :root{
       --bg:#fbfaf8;
       --card:#ffffff;
-      --ink:#141414;
-      --muted:rgba(20,20,20,.62);
+      --ink:#121212;
+      --muted:rgba(18,18,18,.62);
       --line:rgba(0,0,0,.10);
-      --shadow:0 18px 40px rgba(0,0,0,.08);
-      --radius:18px;
-
-      /* Verde agua */
-      --aqua:#62c7c1;
-      --aqua2:#41b6af;
-      --aquaInk:#073b3a;
-
+      --shadow:0 16px 40px rgba(0,0,0,.08);
+      --r:18px;
+      --r2:14px;
+      --pad:14px;
+      --good:#0b7a2a;
       --bad:#b00020;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background: var(--bg);
-      color: var(--ink);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--ink)}
+    a{color:inherit}
     .wrap{max-width:1120px;margin:0 auto;padding:14px 14px 120px}
-    header{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding: 10px 6px 14px;flex-wrap:wrap;
-    }
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 2px 14px}
     .brand{display:flex;align-items:center;gap:12px;min-width:0}
-    .brand .logo{
-      width:44px;height:44px;border-radius:12px;border:1px solid var(--line);
-      background:#fff;overflow:hidden;display:grid;place-items:center;flex:0 0 auto;
-      font-weight:900;
+    .logo{
+      width:46px;height:46px;border-radius:14px;background:#fff;border:1px solid var(--line);
+      display:grid;place-items:center;overflow:hidden
     }
-    .brand .logo img{width:100%;height:100%;object-fit:contain}
-    .brand .ttl h1{margin:0;font-size:1.05rem}
-    .brand .ttl p{margin:2px 0 0;color:var(--muted);font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .logo img{width:100%;height:100%;object-fit:contain}
+    .ttl{min-width:0}
+    .ttl h1{margin:0;font-size:1.02rem;letter-spacing:.2px}
+    .ttl p{margin:2px 0 0;color:var(--muted);font-size:.90rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:start}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    .grid{display:grid;grid-template-columns: 1.3fr .7fr;gap:14px}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
     .card{
-      background:var(--card);border:1px solid var(--line);
-      border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
-    .card .hd{
-      padding:12px 14px;border-bottom:1px solid var(--line);
-      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
-      background: linear-gradient(180deg,#fff,rgba(255,255,255,.9));
-    }
+    .card .hd{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
     .card .hd h2{margin:0;font-size:1.02rem}
     .card .bd{padding:14px}
 
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .hint{color:var(--muted);font-size:.94rem;line-height:1.35;margin:8px 0 0}
-    .muted{color:var(--muted)}
-    .money{font-weight:900}
-
     .btn{
-      border:1px solid rgba(7,59,58,.18);
-      background: linear-gradient(180deg,var(--aqua),var(--aqua2));
-      color:var(--aquaInk);
-      border-radius: 14px;
-      padding: 11px 14px;
-      font-weight: 900;
+      border:1px solid rgba(0,0,0,.12);
+      background:#fff;
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:800;
       cursor:pointer;
       display:inline-flex;
       align-items:center;
       gap:8px;
       user-select:none;
-      box-shadow: 0 10px 18px rgba(0,0,0,.06);
-      transition: transform .06s ease, box-shadow .12s ease;
-      min-height: 44px;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
     }
-    .btn:active{transform: translateY(1px)}
-    .btn.small{padding:9px 12px;border-radius:12px;min-height:40px}
-    .btn.danger{background:#fff;color:var(--bad);border-color: rgba(176,0,32,.22)}
-    .btn.icon{width:44px;height:44px;justify-content:center;padding:10px}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background:#111;color:#fff;border-color:#111}
+    .btn.ghost{background:transparent}
+    .btn.small{padding:8px 10px;border-radius:12px;font-weight:800}
+    .btn.danger{border-color:rgba(176,0,32,.25);color:var(--bad)}
+    .hint{color:var(--muted);font-size:.92rem;line-height:1.35;margin:8px 0 0}
 
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      border:1px solid rgba(0,0,0,.12);
-      border-radius:999px;padding:7px 11px;background:#fff;font-weight:900;
-      min-height: 40px;
+    .safe{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(176,0,32,.18);
+      background:rgba(176,0,32,.06);
+      color:#3a0b12;
+      font-size:.92rem;
+      display:none;
+      margin-bottom:12px;
     }
 
+    /* Line item */
     .line{
       border:1px solid var(--line);
       border-radius:16px;
       padding:12px;
       margin-bottom:12px;
-      background:rgba(255,255,255,.92);
+      background:rgba(255,255,255,.9);
     }
     .lineTop{display:flex;gap:12px;align-items:flex-start}
-    @media (max-width:520px){.lineTop{gap:10px}}
-
-    .pimgBtn{
-      width:82px;height:82px;border-radius:16px;border:1px solid var(--line);
-      background:#fff;overflow:hidden;flex:0 0 auto;padding:0;cursor:pointer;
-      box-shadow: 0 10px 18px rgba(0,0,0,.06);
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
+    .pimg{
+      width:76px;height:76px;border-radius:16px;border:1px solid var(--line);
+      background:#fff;overflow:hidden;flex:0 0 auto;
     }
-    .pimgBtn img{width:100%;height:100%;object-fit:cover;display:block}
-
+    .pimg img{width:100%;height:100%;object-fit:cover}
     .meta{flex:1;min-width:0}
-    .meta .r1{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
-    .meta .r2{margin-top:8px;color:var(--muted);font-size:.94rem;line-height:1.25}
+    .meta .r1{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .meta .r2{margin-top:6px;color:var(--muted);font-size:.92rem;line-height:1.25}
     .meta .r2 b{color:var(--ink)}
-
-    .field{display:flex;flex-direction:column;gap:6px;min-width:240px;flex:1}
-    @media (max-width:520px){.field{min-width:100%}.pimgBtn{width:76px;height:76px}}
-    label{font-size:.84rem;color:var(--muted);font-weight:850}
-    input, textarea{
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 220px;
+      flex:1;
+    }
+    label{font-size:.84rem;color:var(--muted);font-weight:700}
+    input, select, textarea{
       width:100%;
-      padding:12px 12px;
+      padding:11px 12px;
       border-radius:14px;
       border:1px solid var(--line);
       outline:none;
       background:#fff;
       font-size:1rem;
-      min-height: 44px;
     }
-    textarea{min-height:170px;resize:vertical}
+    textarea{min-height:160px;resize:vertical}
+
+    .money{font-weight:900}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(0,0,0,.12);
+      border-radius:999px;padding:6px 10px;background:#fff;font-weight:800;
+    }
+
+    /* Sizes */
+    .sizes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .sz{
+      display:flex;align-items:center;gap:8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      background:#fff;
+    }
+    .sz .t{font-weight:900;font-size:.9rem}
+    .step{
+      display:inline-flex;align-items:center;gap:6px;
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:999px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .step button{
+      width:30px;height:28px;border:0;background:transparent;cursor:pointer;font-weight:900;
+    }
+    .step input{
+      width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
+      border-radius:0;padding:0;text-align:center;font-weight:900;
+    }
 
     /* Autocomplete */
-    .suggest-wrap{position:relative;flex:1;min-width:240px}
+    .suggest-wrap{position:relative;flex:1;min-width:220px}
     .suggest{
-      position:absolute;left:0;right:0;top:76px;
+      position:absolute;left:0;right:0;top:64px;
       z-index:9999;background:rgba(255,255,255,.98);
       border:1px solid rgba(0,0,0,.12);
       border-radius:14px;
       box-shadow:0 14px 30px rgba(0,0,0,.12);
       overflow:hidden;
-      max-height:300px;overflow-y:auto;
+      max-height:280px;overflow-y:auto;
       display:none;
     }
     .suggest-item{
@@ -162,84 +174,19 @@
     .suggest-item .desc{font-size:.92rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
     .suggest-item .price{font-weight:900;white-space:nowrap}
 
-    /* Panel de tallas (SIN details/summary) */
-    .sizesPanel{
-      margin-top:12px;
-      border:1px solid rgba(0,0,0,.08);
-      border-radius:16px;
-      background:#fff;
-      overflow:hidden;
-    }
-    .sizesHead{
-      padding:10px 12px;
-      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
-      border-bottom:1px solid rgba(0,0,0,.08);
-      background: rgba(98,199,193,.10);
-    }
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:6px 10px;border-radius:999px;border:1px solid rgba(0,0,0,.12);
-      background:rgba(98,199,193,.18);color:var(--aquaInk);font-weight:900;min-height:34px;
-      white-space:nowrap;
-    }
-    .sizesBody{padding:12px;display:block}
-    .sizesBody.hidden{display:none}
-
-    .sizes{
-      display:grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap:8px;
-    }
-    @media (max-width:980px){.sizes{grid-template-columns:repeat(5, minmax(0, 1fr))}}
-    @media (max-width:740px){.sizes{grid-template-columns:repeat(4, minmax(0, 1fr))}}
-    @media (max-width:520px){.sizes{grid-template-columns:repeat(3, minmax(0, 1fr))}}
-
-    .sz{
-      display:flex;align-items:center;justify-content:space-between;gap:8px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:6px 10px;
-      background:#fff;
-      min-height: 44px;
-      overflow:hidden;
-    }
-    .sz .t{font-weight:900;font-size:.9rem;white-space:nowrap}
-
-    .step{
-      display:inline-flex;align-items:center;gap:6px;
-      border:1px solid rgba(0,0,0,.10);
-      border-radius:999px;
-      overflow:hidden;
-      background:#fff;
-      flex:0 0 auto;
-      padding:0 4px;
-      touch-action: manipulation;
-    }
-    .step button{
-      width:38px;height:38px;border:0;background:transparent;cursor:pointer;font-weight:900;
-      font-size: 1.15rem;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    .step input{
-      width:48px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
-      border-radius:0;padding:0;text-align:center;font-weight:900;min-height:38px;
-      outline:none;background:#fff;
-    }
-
-    /* Resumen */
-    .tableScroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
-    table{width:100%;border-collapse:separate;border-spacing:0 10px;min-width: 720px;}
+    /* Summary table */
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
     th{font-size:.82rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);text-align:left;padding:0 8px}
     td{background:#fff;border:1px solid var(--line);padding:10px 8px;vertical-align:top}
     td:first-child{border-top-left-radius:14px;border-bottom-left-radius:14px}
     td:last-child{border-top-right-radius:14px;border-bottom-right-radius:14px}
     .nowrap{white-space:nowrap}
     .right{text-align:right}
+    .muted{color:var(--muted)}
     .chips{display:flex;flex-wrap:wrap;gap:6px}
-    .chip{border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:4px 8px;font-weight:900;background:#fff;font-size:.86rem}
+    .chip{border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:4px 8px;font-weight:800;background:#fff;font-size:.86rem}
 
-    /* Barra fija */
+    /* Bottom bar */
     .bar{
       position:fixed;left:0;right:0;bottom:0;
       padding:10px 12px calc(10px + env(safe-area-inset-bottom));
@@ -253,24 +200,6 @@
       display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
     }
     .totals{display:flex;gap:10px;flex-wrap:wrap}
-
-    /* Modal imagen */
-    .modal{position:fixed;inset:0;display:none;z-index:2000}
-    .modal[aria-hidden="false"]{display:block}
-    .modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(6px)}
-    .modal__panel{
-      position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-      width:min(820px, calc(100vw - 24px));
-      background:#fff;border:1px solid rgba(0,0,0,.12);
-      border-radius:20px;box-shadow:0 28px 60px rgba(0,0,0,.20);
-      overflow:hidden;
-    }
-    .modal__close{position:absolute;top:10px;right:10px;z-index:2}
-    .modal__content{padding:14px}
-    .modal__content img{width:100%;height:auto;border-radius:16px;border:1px solid rgba(0,0,0,.10);background:#fff}
-    .modal__cap{margin-top:10px}
-    .modal__ref{font-weight:900;font-size:1rem}
-    .modal__desc{color:rgba(0,0,0,.65);margin-top:2px}
   </style>
 </head>
 
@@ -279,38 +208,34 @@
     <header>
       <div class="brand">
         <div class="logo">
-          <img src="images/logo.png" alt="Abuela Tata"
-               onerror="this.style.display='none';this.parentElement.textContent='AT';" />
+          <img src="images/logo.png" alt="Abuela Tata" onerror="this.style.display='none';this.parentElement.textContent='AT';this.parentElement.style.fontWeight='900';" />
         </div>
         <div class="ttl">
           <h1>Pedidos · Invierno AW 26/27</h1>
-          <p><span id="orderDateLabel"></span> · Móvil / tablet / PC</p>
+          <p>Ref + tallas + totales · Email y PDF listos pa mandá</p>
         </div>
       </div>
-      <button class="btn" id="addLineBtn" type="button">Añadir referencia</button>
+      <button class="btn primary" id="addLineBtn">+ Añadí referencia</button>
     </header>
+
+    <div class="safe" id="safeBox"></div>
 
     <div class="grid">
       <section class="card">
         <div class="hd">
           <h2>Pedido</h2>
           <div class="row">
-            <span class="pill"><span class="muted">Fecha:</span> <b id="orderDatePill"></b></span>
-            <span class="pill"><span class="muted">Unidades:</span> <span id="totalUds" class="money">0</span></span>
+            <span class="pill"><span class="muted">Uds:</span> <span id="totalUds" class="money">0</span></span>
             <span class="pill"><span class="muted">Total:</span> <span id="totalEur" class="money">0,00 €</span></span>
           </div>
         </div>
         <div class="bd">
           <p class="hint">
-            Escribe “12”, “25”, “43”… y sale el desplegable con referencia, descripción y precio.
-            Las tallas cambian solas según el tipo (12/13/30/31 bebé, 25/22/43 niño, 08 TU).
+            Escribí “12” y te sale el desplegable con todas las <b>12xxxx</b> (precio y descripción).
+            Si una imagen no existe, te pone un placeholder.
           </p>
-
           <div id="lines"></div>
-
-          <div class="row">
-            <button class="btn" id="addLineBtn2" type="button">Añadir otra referencia</button>
-          </div>
+          <button class="btn" id="addLineBtn2">+ Añadí otra referencia</button>
         </div>
       </section>
 
@@ -318,9 +243,9 @@
         <div class="hd">
           <h2>Resumen · Email · PDF</h2>
           <div class="row">
-            <button class="btn" id="copyEmailBtn" type="button">Copiar email</button>
-            <button class="btn" id="mailtoBtn" type="button">Abrir email</button>
-            <button class="btn" id="pdfBtn" type="button">Generar PDF</button>
+            <button class="btn" id="copyEmailBtn">Copiá email</button>
+            <button class="btn" id="mailtoBtn">Abrí email</button>
+            <button class="btn primary" id="pdfBtn">Generá PDF</button>
           </div>
         </div>
         <div class="bd">
@@ -328,10 +253,12 @@
 
           <div style="height:12px"></div>
 
-          <label for="emailBox">Email (neutro, sin firma)</label>
+          <label>Email (bien estructuradito)</label>
           <textarea id="emailBox" spellcheck="false"></textarea>
 
-          <p class="hint">Para evitar caché: abre con <b>?v=999</b> cambiando el número.</p>
+          <p class="hint">
+            Si el PDF no sale, no pasa ná: a veces el CDN tarda. La app sigue andando y el email lo tenéi siempre.
+          </p>
         </div>
       </aside>
     </div>
@@ -340,411 +267,495 @@
   <div class="bar">
     <div class="barin">
       <div class="totals">
-        <span class="pill"><span class="muted">Fecha:</span> <b id="orderDatePill2"></b></span>
-        <span class="pill"><span class="muted">Unidades:</span> <span id="totalUds2" class="money">0</span></span>
+        <span class="pill"><span class="muted">Uds:</span> <span id="totalUds2" class="money">0</span></span>
         <span class="pill"><span class="muted">Total:</span> <span id="totalEur2" class="money">0,00 €</span></span>
       </div>
       <div class="row">
-        <button class="btn danger" id="clearBtn" type="button">Vaciar pedido</button>
-        <button class="btn" id="pdfBtn2" type="button">PDF</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal imagen -->
-  <div id="imgModal" class="modal" aria-hidden="true">
-    <div class="modal__backdrop" data-close="1"></div>
-    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Imagen de producto">
-      <button class="btn icon modal__close" data-close="1" title="Cerrar" type="button">✕</button>
-      <div class="modal__content">
-        <img id="imgModalPic" alt="Imagen ampliada" />
-        <div class="modal__cap">
-          <div id="imgModalRef" class="modal__ref"></div>
-          <div id="imgModalDesc" class="modal__desc"></div>
-        </div>
+        <button class="btn" id="clearBtn">Vaciá pedido</button>
+        <button class="btn primary" id="pdfBtn2">PDF</button>
       </div>
     </div>
   </div>
 
   <script>
-  (function(){
-    // ===== TARIFA (tu bloque) =====
-    window.PRICE_MAP = {"0899426":{"desc":"Diadema","price":9.25},"1299426":{"desc":"Jesusito con Capota","price":53.8},"1399426":{"desc":"Jesusito sin Capota","price":49.95},"2599426":{"desc":"Vestido","price":50.65},"4399426":{"desc":"Conjunto de Niño","price":31.75},"0899427":{"desc":"Diadema","price":9.25},"1299427":{"desc":"Jesusito con Capota","price":40.65},"1399427":{"desc":"Jesusito sin Capota","price":34.5},"2599427":{"desc":"Vestido","price":38.85},"4399427":{"desc":"Conjunto de Niño","price":33.35},"43099427":{"desc":"Conjunto de Niño","price":33.35},"0899428":{"desc":"Diadema","price":9.25},"1199428":{"desc":"Pelele","price":20.25},"1299428":{"desc":"Jesusito con Capota","price":53.35},"1399428":{"desc":"Jesusito sin Capota","price":50.75},"2599428":{"desc":"Vestido","price":51.7},"1299429":{"desc":"Jesusito con Capota","price":47.15},"1399429":{"desc":"Jesusito sin Capota","price":44.85},"2599429":{"desc":"Vestido","price":51.7},"0899430":{"desc":"Diadema","price":9.25},"1299430":{"desc":"Jesusito con Capota","price":39.7},"1399430":{"desc":"Jesusito sin Capota","price":36.95},"2599430":{"desc":"Vestido","price":38.5},"4399430":{"desc":"Conjunto de Niño","price":31.35},"0899431":{"desc":"Diadema","price":9.25},"1299431":{"desc":"Jesusito con Capota","price":40.45},"1399431":{"desc":"Jesusito sin Capota","price":37.95},"2599431":{"desc":"Vestido","price":39.8},"3099431":{"desc":"Conjunto de Niño","price":24.65},"0809432":{"desc":"Diadema","price":9.25},"1209432":{"desc":"Jesusito con Capota","price":39.15},"1309432":{"desc":"Jesusito sin Capota","price":36.95},"2509432":{"desc":"Vestido","price":38.95},"4309432":{"desc":"Conjunto de Niño","price":29.75},"0899432":{"desc":"Diadema","price":9.25},"1299432":{"desc":"Jesusito con Capota","price":41.95},"1399432":{"desc":"Jesusito sin Capota","price":39.25},"2599432":{"desc":"Vestido","price":41.65},"4399432":{"desc":"Conjunto de Niño","price":30.75},"0899433":{"desc":"Diadema","price":9.25},"1299433":{"desc":"Jesusito con Capota","price":46.75},"1399433":{"desc":"Jesusito sin Capota","price":45.25},"2599433":{"desc":"Vestido","price":49.25},"0899434":{"desc":"Diadema","price":9.25},"1199434":{"desc":"Pelele","price":22.65},"1299434":{"desc":"Jesusito con Capota","price":44.45},"1399434":{"desc":"Jesusito sin Capota","price":39.15},"2599434":{"desc":"Vestido","price":37.7},"0805435":{"desc":"Diadema","price":9.25},"1205435":{"desc":"Jesusito con Capota","price":41.5},"1305435":{"desc":"Jesusito sin Capota","price":39.35},"2505435":{"desc":"Vestido","price":43.1},"0899435":{"desc":"Diadema","price":9.25},"1208435":{"desc":"Jesusito con Capota","price":41.5},"1308435":{"desc":"Jesusito sin Capota","price":39.35},"2508435":{"desc":"Vestido","price":43.1},"220257":{"desc":"Abrigo Rojo","price":40.75},"220357":{"desc":"Abrigo Azul Marino","price":40.75},"220657":{"desc":"Abrigo Camel","price":40.75},"220158":{"desc":"Abrigo Rosa","price":37.65},"220258":{"desc":"Abrigo Rojo","price":37.65},"220358":{"desc":"Abrigo Azul Marino","price":37.65},"220658":{"desc":"Abrigo Camel","price":37.65},"220159":{"desc":"Abrigo Rosa","price":39.35},"220259":{"desc":"Abrigo Rojo","price":39.35},"220359":{"desc":"Abrigo Azul Marino","price":39.35},"220659":{"desc":"Abrigo Camel","price":39.35},"220160":{"desc":"Abrigo Rosa","price":37.75},"220260":{"desc":"Abrigo Rojo","price":37.75},"220360":{"desc":"Abrigo Azul Marino","price":37.75},"220660":{"desc":"Abrigo Camel","price":37.75}};
+  // =======================
+  // TARIFA INCRUSTADA (INV 26-27)
+  // =======================
+  window.PRICE_MAP = {
+    "0899426":{"desc":"DIADEMA","price":9.25},
+    "1299426":{"desc":"JESUSITO CON CAPOTA","price":53.80},
+    "1399426":{"desc":"JESUSITO SIN CAPOTA","price":49.95},
+    "2599426":{"desc":"VESTIDO","price":50.65},
+    "4399426":{"desc":"CONJUNTO DE NIÑO","price":31.75},
 
-    const SIZES_BABY = ["3M","6M","9M","18M","2A","3A","4A"];
-    const SIZES_KIDS = ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"];
-    const SIZES_U = ["TU"];
+    "0899427":{"desc":"DIADEMA","price":9.25},
+    "1299427":{"desc":"JESUSITO CON CAPOTA","price":40.65},
+    "1399427":{"desc":"JESUSITO SIN CAPOTA","price":34.50},
+    "2599427":{"desc":"VESTIDO","price":38.85},
+    "4399427":{"desc":"CONJUNTO DE NIÑO","price":33.35},
+    "43099427":{"desc":"CONJUNTO DE NIÑO","price":33.35},
 
-    const state = { lines: [], panelOpen: {} };
-    const $ = (s)=>document.querySelector(s);
+    "0899428":{"desc":"DIADEMA","price":9.25},
+    "1199428":{"desc":"PELELE","price":20.25},
+    "1299428":{"desc":"JESUSITO CON CAPOTA","price":53.35},
+    "1399428":{"desc":"JESUSITO SIN CAPOTA","price":50.75},
+    "2599428":{"desc":"VESTIDO","price":51.70},
 
-    const now = new Date();
-    const ORDER_DATE = new Intl.DateTimeFormat("es-ES",{day:"2-digit",month:"2-digit",year:"numeric"}).format(now);
+    "1299429":{"desc":"JESUSITO CON CAPOTA","price":47.15},
+    "1399429":{"desc":"JESUSITO SIN CAPOTA","price":44.85},
+    "2599429":{"desc":"VESTIDO","price":51.70},
 
-    function eur(n){
-      const v = Number(n||0);
-      try{ return new Intl.NumberFormat("es-ES",{style:"currency",currency:"EUR"}).format(v); }
-      catch(e){ return (Math.round(v*100)/100).toFixed(2).replace(".",",")+" €"; }
-    }
-    function n2(v){ return Math.max(0, Math.floor(Number(v||0))); }
+    "0899430":{"desc":"DIADEMA","price":9.25},
+    "1299430":{"desc":"JESUSITO CON CAPOTA","price":39.70},
+    "1399430":{"desc":"JESUSITO SIN CAPOTA","price":36.95},
+    "2599430":{"desc":"VESTIDO","price":38.50},
+    "4399430":{"desc":"CONJUNTO DE NIÑO","price":31.35},
 
-    function prefix2(ref){
-      const r = String(ref||"").trim();
-      return r.length>=2 ? r.slice(0,2) : "";
-    }
+    "0899431":{"desc":"DIADEMA","price":9.25},
+    "1299431":{"desc":"JESUSITO CON CAPOTA","price":40.45},
+    "1399431":{"desc":"JESUSITO SIN CAPOTA","price":37.95},
+    "2599431":{"desc":"VESTIDO","price":39.80},
+    "3099431":{"desc":"CONJUNTO DE NIÑO","price":24.65},
 
-    function sizesForRef(ref){
-      const p = prefix2(ref);
-      if(p==="08") return SIZES_U;
-      if(p==="12" || p==="13" || p==="30" || p==="31") return SIZES_BABY;
-      if(p==="25" || p==="22" || p==="43") return SIZES_KIDS;
-      return SIZES_KIDS;
-    }
+    "0809432":{"desc":"DIADEMA","price":9.25},
+    "1209432":{"desc":"JESUSITO CON CAPOTA","price":39.15},
+    "1309432":{"desc":"JESUSITO SIN CAPOTA","price":36.95},
+    "2509432":{"desc":"VESTIDO","price":38.95},
+    "4309432":{"desc":"CONJUNTO DE NIÑO","price":29.75},
+    "0899432":{"desc":"DIADEMA","price":9.25},
+    "1299432":{"desc":"JESUSITO CON CAPOTA","price":41.95},
+    "1399432":{"desc":"JESUSITO SIN CAPOTA","price":39.25},
+    "2599432":{"desc":"VESTIDO","price":41.65},
+    "4399432":{"desc":"CONJUNTO DE NIÑO","price":30.75},
 
-    function ensureSizes(line, ref){
-      const wanted = sizesForRef(ref);
-      line.sizes = wanted.slice();
-      const next = {};
-      line.sizes.forEach(s => next[s] = n2(line.qty?.[s] ?? 0));
-      line.qty = next;
-    }
+    "0899433":{"desc":"DIADEMA","price":9.25},
+    "1299433":{"desc":"JESUSITO CON CAPOTA","price":41.95},
+    "1399433":{"desc":"JESUSITO SIN CAPOTA","price":39.25},
+    "2599433":{"desc":"VESTIDO","price":41.65},
+    "4399433":{"desc":"CONJUNTO DE NIÑO","price":30.75},
 
-    function uid(){
-      return (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()+Math.random());
-    }
+    "0899434":{"desc":"DIADEMA","price":9.25},
+    "1299434":{"desc":"JESUSITO CON CAPOTA","price":41.50},
+    "1399434":{"desc":"JESUSITO SIN CAPOTA","price":39.35},
+    "2599434":{"desc":"VESTIDO","price":43.10},
 
-    function defaultLine(){
-      const id = uid();
-      const line = { id, ref:"", desc:"", price:0, qty:{}, sizes:SIZES_KIDS.slice() };
-      ensureSizes(line, "25");
-      return line;
-    }
+    "0899435":{"desc":"DIADEMA","price":9.25},
+    "1208435":{"desc":"JESUSITO CON CAPOTA","price":41.50},
+    "1308435":{"desc":"JESUSITO SIN CAPOTA","price":39.35},
+    "2508435":{"desc":"VESTIDO","price":43.10},
+    "2505435":{"desc":"VESTIDO","price":43.10},
 
-    function getInfoByRef(ref){
-      const it = window.PRICE_MAP[String(ref||"").trim()];
-      if(!it) return {desc:"", price:0};
-      return {desc: it.desc||"", price:Number(it.price||0)};
-    }
+    "220257":{"desc":"ABRIGO ROJO","price":40.75},
+    "220357":{"desc":"ABRIGO AZUL MARINO","price":40.75},
+    "220657":{"desc":"ABRIGO CAMEL","price":40.75},
+    "220158":{"desc":"ABRIGO ROSA","price":37.65},
+    "220258":{"desc":"ABRIGO ROJO","price":37.65},
+    "220358":{"desc":"ABRIGO AZUL MARINO","price":37.65},
+    "220658":{"desc":"ABRIGO CAMEL","price":37.65},
+    "220159":{"desc":"ABRIGO ROSA","price":39.35},
+    "220259":{"desc":"ABRIGO ROJO","price":39.35},
+    "220359":{"desc":"ABRIGO AZUL MARINO","price":39.35},
+    "220659":{"desc":"ABRIGO CAMEL","price":39.35},
+    "220160":{"desc":"ABRIGO ROSA","price":37.75},
+    "220260":{"desc":"ABRIGO ROJO","price":37.75},
+    "220360":{"desc":"ABRIGO AZUL MARINO","price":37.75},
+    "220660":{"desc":"ABRIGO CAMEL","price":37.75}
+  };
 
-    function lineUnits(line){
-      return (line.sizes||[]).reduce((a,s)=>a+n2(line.qty?.[s]),0);
-    }
-    function lineSubtotal(line){ return lineUnits(line) * Number(line.price||0); }
-    function totalUnits(){ return state.lines.reduce((a,l)=>a+lineUnits(l),0); }
-    function totalEur(){ return state.lines.reduce((a,l)=>a+lineSubtotal(l),0); }
+  // =======================
+  // APP (modo seguro)
+  // =======================
+  const SIZES = ["3M","6M","9M","12M","18M","2Y","3Y","4Y","5Y","6Y","8Y","10Y","12Y"];
+  const state = { lines: [] };
 
-    function imgForRef(ref){
-      const r = String(ref||"").trim();
-      return r ? `images/${r}.jpg` : "images/placeholder.jpg";
-    }
+  const $ = (sel)=>document.querySelector(sel);
+  const safeBox = $("#safeBox");
 
-    // ===== Modal imagen =====
-    function openImageModal(line){
-      $("#imgModalPic").src = imgForRef(line.ref);
-      $("#imgModalRef").textContent = line.ref ? `REF ${line.ref}` : "";
-      $("#imgModalDesc").textContent = line.desc || "";
-      $("#imgModal").setAttribute("aria-hidden","false");
-    }
-    function closeImageModal(){
-      $("#imgModal").setAttribute("aria-hidden","true");
-      $("#imgModalPic").src = "";
-    }
-    document.addEventListener("click",(e)=>{
-      if(e.target?.dataset?.close==="1") closeImageModal();
-    });
-    document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeImageModal(); });
+  function showSafe(msg){
+    safeBox.style.display = "block";
+    safeBox.textContent = "Aviso: " + msg;
+  }
 
-    // ===== Render =====
-    function render(){
-      const wrap = $("#lines");
-      wrap.innerHTML = "";
+  function eur(n){
+    const v = Number(n||0);
+    return new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(v);
+  }
+  function n2(v){ return Math.max(0, Math.floor(Number(v||0))); }
 
-      state.lines.forEach((line)=>{
-        const open = state.panelOpen[line.id] ?? true; // por defecto abierto
-        const sizes = line.sizes || SIZES_KIDS;
+  function defaultLine(){
+    const qty = {};
+    SIZES.forEach(s=>qty[s]=0);
+    return { ref:"", desc:"", price:0, qty, id: crypto.randomUUID() };
+  }
 
-        const el = document.createElement("div");
-        el.className = "line";
-        el.dataset.lineid = line.id;
+  function getInfoByRef(ref){
+    const it = window.PRICE_MAP[String(ref||"").trim()];
+    if(!it) return {desc:"", price:0};
+    return {desc: it.desc || "", price: Number(it.price||0)};
+  }
 
-        el.innerHTML = `
-          <div class="lineTop">
-            <button class="pimgBtn" type="button" data-act="zoom">
-              <img src="${imgForRef(line.ref)}" alt="" onerror="this.src='images/placeholder.jpg'">
-            </button>
+  function lineUnits(line){
+    return SIZES.reduce((a,s)=>a + n2(line.qty[s]), 0);
+  }
+  function lineSubtotal(line){
+    return lineUnits(line) * Number(line.price||0);
+  }
 
-            <div class="meta">
-              <div class="r1">
-                <div class="field suggest-wrap">
-                  <label>Referencia</label>
-                  <input type="text" inputmode="numeric" placeholder="Ej.: 1299426"
-                         value="${line.ref}" data-act="ref">
-                  <div class="suggest" id="suggest_${line.id}"></div>
-                </div>
+  function totalUnits(){
+    return state.lines.reduce((a,l)=>a+lineUnits(l),0);
+  }
+  function totalEur(){
+    return state.lines.reduce((a,l)=>a+lineSubtotal(l),0);
+  }
 
-                <div class="field">
-                  <label>Descripción</label>
-                  <input type="text" placeholder="(automática)"
-                         value="${line.desc}" data-act="desc">
-                </div>
+  function imgForRef(ref){
+    const r = String(ref||"").trim();
+    if(!r) return "images/placeholder.jpg";
+    return `images/${r}.jpg`;
+  }
 
-                <div class="field" style="max-width:200px">
-                  <label>Precio (€/ud)</label>
-                  <input type="number" step="0.01" value="${Number(line.price||0)}" data-act="price">
-                </div>
+  function render(){
+    const linesWrap = $("#lines");
+    linesWrap.innerHTML = "";
 
-                <button class="btn small" type="button" data-act="del">Eliminar</button>
+    state.lines.forEach((line, idx)=>{
+      const card = document.createElement("div");
+      card.className = "line";
+      card.innerHTML = `
+        <div class="lineTop">
+          <div class="pimg">
+            <img src="${imgForRef(line.ref)}" alt="" onerror="this.src='images/placeholder.jpg'">
+          </div>
+          <div class="meta">
+            <div class="r1">
+              <div class="field suggest-wrap">
+                <label>Referencia</label>
+                <input type="text" inputmode="numeric" placeholder="Ej: 1299426" value="${line.ref}" data-k="ref" data-i="${idx}" class="refInput">
+                <div class="suggest" id="suggest_${line.id}"></div>
               </div>
-
-              <div class="r2">
-                <b>Subtotal:</b> <span class="money" data-kpi="sub">${eur(lineSubtotal(line))}</span>
-                <span class="muted"> · Unidades: <span data-kpi="uds">${lineUnits(line)}</span></span>
+              <div class="field">
+                <label>Descripción</label>
+                <input type="text" placeholder="(automática)" value="${line.desc}" data-k="desc" data-i="${idx}" class="descInput">
               </div>
-
-              <div class="sizesPanel">
-                <div class="sizesHead">
-                  <div class="row">
-                    <span class="badge">Tallas</span>
-                    <span class="muted">(${prefix2(line.ref)||"—"})</span>
-                  </div>
-                  <button class="btn small" type="button" data-act="toggleSizes">
-                    ${open ? "Ocultar tallas" : "Mostrar tallas"}
-                  </button>
-                </div>
-
-                <div class="sizesBody ${open ? "" : "hidden"}">
-                  <div class="sizes">
-                    ${sizes.map(s=>`
-                      <div class="sz">
-                        <span class="t">${s}</span>
-                        <span class="step">
-                          <button type="button" data-act="minus" data-size="${s}" aria-label="Disminuir">−</button>
-                          <input value="${n2(line.qty?.[s])}" inputmode="numeric" data-act="qty" data-size="${s}">
-                          <button type="button" data-act="plus" data-size="${s}" aria-label="Aumentar">+</button>
-                        </span>
-                      </div>
-                    `).join("")}
-                  </div>
-                </div>
+              <div class="field" style="max-width:170px">
+                <label>€/ud</label>
+                <input type="number" step="0.01" value="${Number(line.price||0)}" data-k="price" data-i="${idx}" class="priceInput">
               </div>
+              <button class="btn small danger" data-act="del" data-i="${idx}">Borrá</button>
+            </div>
+
+            <div class="r2">
+              <b>Subtotal:</b> <span class="money">${eur(lineSubtotal(line))}</span>
+              <span class="muted"> · Uds: ${lineUnits(line)}</span>
+            </div>
+
+            <div class="sizes">
+              ${SIZES.map(s=>`
+                <div class="sz">
+                  <span class="t">${s}</span>
+                  <span class="step">
+                    <button data-act="minus" data-i="${idx}" data-s="${s}" aria-label="menos">−</button>
+                    <input value="${n2(line.qty[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
+                    <button data-act="plus" data-i="${idx}" data-s="${s}" aria-label="más">+</button>
+                  </span>
+                </div>
+              `).join("")}
             </div>
           </div>
-        `;
-
-        wrap.appendChild(el);
-
-        const refInp = el.querySelector('input[data-act="ref"]');
-        const sugBox = el.querySelector(`#suggest_${line.id}`);
-        setupAutocomplete(refInp, sugBox, line.id);
-      });
-
-      $("#totalUds").textContent = totalUnits();
-      $("#totalUds2").textContent = totalUnits();
-      $("#totalEur").textContent = eur(totalEur());
-      $("#totalEur2").textContent = eur(totalEur());
-
-      renderSummary();
-      renderEmail();
-    }
-
-    function renderSummary(){
-      const wrap = $("#summaryWrap");
-      const rows = state.lines
-        .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
-        .map(l=>{
-          const tallas = (l.sizes||[]).filter(s=>n2(l.qty?.[s])>0).map(s=>({s,q:n2(l.qty?.[s])}));
-          return {ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas};
-        });
-
-      if(!rows.length){
-        wrap.innerHTML = `<p class="hint">Aún no hay líneas con unidades. Añade una referencia y asigna cantidades por talla.</p>`;
-        return;
-      }
-
-      wrap.innerHTML = `
-        <label>Resumen (Fecha del pedido: <b>${ORDER_DATE}</b>)</label>
-        <div class="tableScroll" role="region" tabindex="0">
-          <table>
-            <thead>
-              <tr>
-                <th class="nowrap">Ref.</th>
-                <th>Descripción</th>
-                <th class="nowrap right">€/ud</th>
-                <th>Tallas</th>
-                <th class="nowrap right">Uds</th>
-                <th class="nowrap right">Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows.map(r=>`
-                <tr>
-                  <td class="nowrap"><b>${r.ref}</b></td>
-                  <td>${r.desc || '<span class="muted">(sin descripción)</span>'}</td>
-                  <td class="nowrap right">${eur(r.price)}</td>
-                  <td>
-                    <div class="chips">
-                      ${r.tallas.map(t=>`<span class="chip">${t.s}: ${t.q}</span>`).join("")}
-                    </div>
-                  </td>
-                  <td class="nowrap right"><b>${r.uds}</b></td>
-                  <td class="nowrap right"><b>${eur(r.sub)}</b></td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="row" style="justify-content:flex-end;margin-top:10px">
-          <span class="pill"><span class="muted">Total unidades:</span> <b>${totalUnits()}</b></span>
-          <span class="pill"><span class="muted">Total:</span> <b>${eur(totalEur())}</b></span>
         </div>
       `;
+
+      linesWrap.appendChild(card);
+
+      // Autocomplete por línea
+      const refInp = card.querySelector(".refInput");
+      const sugBox = card.querySelector(`#suggest_${line.id}`);
+      setupAutocomplete(refInp, sugBox, idx);
+    });
+
+    $("#totalUds").textContent = totalUnits();
+    $("#totalUds2").textContent = totalUnits();
+    $("#totalEur").textContent = eur(totalEur());
+    $("#totalEur2").textContent = eur(totalEur());
+
+    renderSummary();
+    renderEmail();
+  }
+
+  function renderSummary(){
+    const wrap = $("#summaryWrap");
+    const rows = state.lines
+      .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
+      .map(l=>{
+        const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>({s, q:n2(l.qty[s])}));
+        return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
+      });
+
+    if(!rows.length){
+      wrap.innerHTML = `<p class="hint">Todavía no hay líneas con unidades. Añadí una referencia y meté cantidades por talla.</p>`;
+      return;
     }
 
-    function renderEmail(){
-      const rows = state.lines
-        .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
-        .map(l=>{
-          const tallas = (l.sizes||[]).filter(s=>n2(l.qty?.[s])>0).map(s=>`${s}: ${n2(l.qty?.[s])}`).join(" · ");
-          return {ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas};
-        });
+    wrap.innerHTML = `
+      <label>Resumen</label>
+      <table>
+        <thead>
+          <tr>
+            <th class="nowrap">Ref</th>
+            <th>Descripción</th>
+            <th class="nowrap right">€/ud</th>
+            <th>Tallas</th>
+            <th class="nowrap right">Uds</th>
+            <th class="nowrap right">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r=>`
+            <tr>
+              <td class="nowrap"><b>${r.ref}</b></td>
+              <td>${r.desc || '<span class="muted">(sin descripción)</span>'}</td>
+              <td class="nowrap right">${eur(r.price)}</td>
+              <td>
+                <div class="chips">
+                  ${r.tallas.map(t=>`<span class="chip">${t.s}: ${t.q}</span>`).join("")}
+                </div>
+              </td>
+              <td class="nowrap right"><b>${r.uds}</b></td>
+              <td class="nowrap right"><b>${eur(r.sub)}</b></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+      <div class="row" style="justify-content:flex-end;margin-top:8px">
+        <span class="pill"><span class="muted">Total uds:</span> <b>${totalUnits()}</b></span>
+        <span class="pill"><span class="muted">Total €:</span> <b>${eur(totalEur())}</b></span>
+      </div>
+    `;
+  }
 
-      const subject = `Pedido · Abuela Tata · Invierno AW 26/27 · ${ORDER_DATE}`;
-      let body = `Hola,\n\nPedido Invierno AW 26/27\nFecha: ${ORDER_DATE}\n\n`;
-
-      if(!rows.length){
-        body += `— Aún no hay unidades en el pedido.\n`;
-      }else{
-        rows.forEach(r=>{
-          body += `REF ${r.ref}\n`;
-          body += `Descripción: ${r.desc}\n`;
-          body += `Precio/unidad: ${eur(r.price)}\n`;
-          body += `Tallas: ${r.tallas}\n`;
-          body += `Subtotal (${r.uds} uds): ${eur(r.sub)}\n`;
-          body += `----------------------------------------\n`;
-        });
-        body += `TOTAL UNIDADES: ${totalUnits()}\n`;
-        body += `TOTAL: ${eur(totalEur())}\n`;
-      }
-
-      $("#emailBox").value = body;
-      $("#mailtoBtn").dataset.subject = subject;
-    }
-
-    // ===== Autocomplete =====
-    function setupAutocomplete(input, box, lineId){
-      const all = Object.entries(window.PRICE_MAP).map(([ref,v])=>({
-        ref:String(ref), desc:String(v.desc||""), price:Number(v.price||0)
-      }));
-
-      let active = -1;
-      let current = [];
-
-      function open(list){
-        if(!list.length){ box.style.display="none"; box.innerHTML=""; return; }
-        current = list;
-        active = 0;
-        box.innerHTML = list.map((it,i)=>`
-          <div class="suggest-item ${i===0?'active':''}" data-i="${i}">
-            <div>
-              <div class="ref">${it.ref}</div>
-              <div class="desc">${it.desc}</div>
-            </div>
-            <div class="price">${eur(it.price)}</div>
-          </div>
-        `).join("");
-        box.style.display="block";
-      }
-
-      function setActive(i){
-        active = i;
-        [...box.querySelectorAll(".suggest-item")].forEach((el,idx)=>el.classList.toggle("active", idx===active));
-      }
-
-      function apply(it){
-        const L = state.lines.find(l=>l.id===lineId);
-        if(!L) return;
-        L.ref = it.ref; L.desc = it.desc; L.price = it.price;
-        ensureSizes(L, it.ref);
-        state.panelOpen[L.id] = true;
-        render();
-      }
-
-      input.addEventListener("input", ()=>{
-        const v = String(input.value||"").trim();
-        if(v.length < 1){ box.style.display="none"; return; }
-        let res = all.filter(x=>x.ref.startsWith(v));
-        if(!res.length) res = all.filter(x=>x.ref.includes(v));
-        open(res.slice(0,12));
-      });
-
-      input.addEventListener("keydown", (e)=>{
-        if(box.style.display!=="block") return;
-        if(e.key==="ArrowDown"){ e.preventDefault(); setActive(Math.min(active+1, current.length-1)); }
-        if(e.key==="ArrowUp"){ e.preventDefault(); setActive(Math.max(active-1, 0)); }
-        if(e.key==="Enter"){
-          if(current[active]){ e.preventDefault(); apply(current[active]); }
-        }
-        if(e.key==="Escape"){ box.style.display="none"; }
-      });
-
-      box.addEventListener("mousedown", (e)=>{
-        const item = e.target.closest(".suggest-item");
-        if(!item) return;
-        e.preventDefault();
-        const i = Number(item.dataset.i);
-        if(current[i]) apply(current[i]);
-      });
-
-      input.addEventListener("change", ()=>{
-        const v = String(input.value||"").trim();
-        const L = state.lines.find(l=>l.id===lineId);
-        if(!L) return;
-        L.ref = v;
-        ensureSizes(L, v);
-        const it = getInfoByRef(v);
-        if(it.desc){ L.desc = it.desc; L.price = it.price; }
-        state.panelOpen[L.id] = true;
-        render();
-      });
-
-      document.addEventListener("click", (e)=>{
-        if(e.target===input) return;
-        if(box.contains(e.target)) return;
-        box.style.display="none";
-      });
-    }
-
-    // ===== PDF (con imagen) =====
-    function loadImageAsDataURL(url){
-      return new Promise((resolve)=>{
-        const img = new Image();
-        img.onload = ()=>{
-          try{
-            const c = document.createElement("canvas");
-            c.width = img.naturalWidth || 800;
-            c.height = img.naturalHeight || 800;
-            const ctx = c.getContext("2d");
-            ctx.drawImage(img,0,0);
-            resolve(c.toDataURL("image/jpeg", 0.92));
-          }catch(e){ resolve(null); }
+  function renderEmail(){
+    const rows = state.lines
+      .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
+      .map(l=>{
+        const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>`${s}: ${n2(l.qty[s])}`).join(" · ");
+        return {
+          ref:l.ref,
+          desc:l.desc,
+          price:l.price,
+          uds:lineUnits(l),
+          sub:lineSubtotal(l),
+          tallas
         };
-        img.onerror = ()=> resolve(null);
-        img.src = url + (url.includes("?") ? "&" : "?") + "v=" + Date.now();
+      });
+
+    const subject = `Pedido · Abuela Tata · Invierno AW 26/27`;
+    let body = "";
+    body += `Hola,\n\n`;
+    body += `Adjunto el pedido (Invierno AW 26/27) con el detalle por referencia y tallas:\n\n`;
+
+    if(!rows.length){
+      body += `— (Aún no hay unidades en el pedido)\n\n`;
+    } else {
+      rows.forEach(r=>{
+        body += `REF ${r.ref}\n`;
+        body += `Descripción: ${r.desc}\n`;
+        body += `Precio/ud: ${eur(r.price)}\n`;
+        body += `Tallas: ${r.tallas}\n`;
+        body += `Subtotal (${r.uds} uds): ${eur(r.sub)}\n`;
+        body += `----------------------------------------\n`;
+      });
+      body += `TOTAL UDS: ${totalUnits()}\n`;
+      body += `TOTAL €: ${eur(totalEur())}\n\n`;
+    }
+
+    body += `All the best,\nAntonio\n`;
+
+    $("#emailBox").value = body;
+    $("#mailtoBtn").dataset.subject = subject;
+  }
+
+  function setupAutocomplete(input, box, lineIndex){
+    const all = Object.entries(window.PRICE_MAP).map(([ref,v])=>({
+      ref:String(ref),
+      desc:String(v.desc||""),
+      price:Number(v.price||0)
+    }));
+
+    let active = -1;
+    let current = [];
+
+    function open(list){
+      if(!list.length){ box.style.display="none"; box.innerHTML=""; return; }
+      current = list;
+      active = 0;
+      box.innerHTML = list.map((it,i)=>`
+        <div class="suggest-item ${i===0?'active':''}" data-i="${i}">
+          <div>
+            <div class="ref">${it.ref}</div>
+            <div class="desc">${it.desc}</div>
+          </div>
+          <div class="price">${eur(it.price)}</div>
+        </div>
+      `).join("");
+      box.style.display="block";
+    }
+
+    function setActive(i){
+      active = i;
+      [...box.querySelectorAll(".suggest-item")].forEach((el,idx)=>{
+        el.classList.toggle("active", idx===active);
       });
     }
 
-    async function makePDF(){
+    function apply(it){
+      const L = state.lines[lineIndex];
+      L.ref = it.ref;
+      L.desc = it.desc;
+      L.price = it.price;
+      render();
+    }
+
+    input.addEventListener("input", ()=>{
+      const v = String(input.value||"").trim();
+      if(v.length < 2){ box.style.display="none"; return; }
+
+      // Prioriza "startsWith" (ej: escribes 12 => 12xxxx)
+      let res = all.filter(x=>x.ref.startsWith(v));
+      if(!res.length) res = all.filter(x=>x.ref.includes(v));
+      res = res.slice(0,12);
+      open(res);
+    });
+
+    input.addEventListener("keydown", (e)=>{
+      if(box.style.display!=="block") return;
+      if(e.key==="ArrowDown"){ e.preventDefault(); setActive(Math.min(active+1, current.length-1)); }
+      if(e.key==="ArrowUp"){ e.preventDefault(); setActive(Math.max(active-1, 0)); }
+      if(e.key==="Enter"){
+        if(current[active]){ e.preventDefault(); apply(current[active]); }
+      }
+      if(e.key==="Escape"){ box.style.display="none"; }
+    });
+
+    box.addEventListener("mousedown", (e)=>{
+      const item = e.target.closest(".suggest-item");
+      if(!item) return;
+      e.preventDefault();
+      const i = Number(item.dataset.i);
+      if(current[i]) apply(current[i]);
+    });
+
+    // Si pega una ref manual y existe, autocompleta
+    input.addEventListener("change", ()=>{
+      const v = String(input.value||"").trim();
+      if(!v) return;
+      const it = window.PRICE_MAP[v];
+      if(it){
+        const L = state.lines[lineIndex];
+        L.ref = v;
+        L.desc = it.desc || "";
+        L.price = Number(it.price||0);
+        render();
+      } else {
+        // deja lo que haya escrito, pero no rompe
+        const L = state.lines[lineIndex];
+        L.ref = v;
+        render();
+      }
+    });
+
+    document.addEventListener("click", (e)=>{
+      if(e.target===input) return;
+      if(box.contains(e.target)) return;
+      box.style.display="none";
+    });
+  }
+
+  function addLine(){
+    state.lines.push(defaultLine());
+    render();
+  }
+
+  function clearAll(){
+    state.lines = [defaultLine()];
+    render();
+  }
+
+  function handleClick(e){
+    const btn = e.target.closest("[data-act]");
+    if(!btn) return;
+    const act = btn.dataset.act;
+    const i = Number(btn.dataset.i);
+    const s = btn.dataset.s;
+
+    if(act==="del"){
+      state.lines.splice(i,1);
+      if(!state.lines.length) state.lines.push(defaultLine());
+      render();
+      return;
+    }
+    if(act==="plus"){
+      const L = state.lines[i];
+      L.qty[s] = n2(L.qty[s]) + 1;
+      render();
+      return;
+    }
+    if(act==="minus"){
+      const L = state.lines[i];
+      L.qty[s] = Math.max(0, n2(L.qty[s]) - 1);
+      render();
+      return;
+    }
+  }
+
+  function handleInput(e){
+    const el = e.target;
+    if(el.dataset.act==="qty"){
+      const i = Number(el.dataset.i);
+      const s = el.dataset.s;
+      state.lines[i].qty[s] = n2(el.value);
+      render();
+      return;
+    }
+    if(el.classList.contains("descInput")){
+      const i = Number(el.dataset.i);
+      state.lines[i].desc = el.value;
+      render();
+      return;
+    }
+    if(el.classList.contains("priceInput")){
+      const i = Number(el.dataset.i);
+      state.lines[i].price = Number(el.value||0);
+      render();
+      return;
+    }
+  }
+
+  function copyEmail(){
+    const t = $("#emailBox");
+    t.select();
+    t.setSelectionRange(0, 999999);
+    document.execCommand("copy");
+  }
+
+  function openMailto(){
+    const subject = $("#mailtoBtn").dataset.subject || "Pedido";
+    const body = $("#emailBox").value || "";
+    const href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = href;
+  }
+
+  async function makePDF(){
+    try{
       const { jsPDF } = (window.jspdf || {});
       if(!jsPDF){
-        alert("La librería del PDF aún no ha cargado. Recarga y vuelve a intentarlo.");
+        alert("No cargó jsPDF todavía. Probá a recargá la página (Ctrl+F5) y dale otra ve al PDF.");
         return;
       }
 
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
         .map(l=>{
-          const tallas = (l.sizes||[]).filter(s=>n2(l.qty?.[s])>0).map(s=>`${s}: ${n2(l.qty?.[s])}`);
+          const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>`${s}:${n2(l.qty[s])}`);
           return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
         });
 
@@ -752,187 +763,92 @@
       const W = doc.internal.pageSize.getWidth();
       const H = doc.internal.pageSize.getHeight();
 
-      let y = 44;
+      let y = 42;
       doc.setFont("helvetica","bold");
       doc.setFontSize(16);
-      doc.text("Pedido · Abuela Tata · Invierno AW 26/27", 40, y);
+      doc.text("PACKING / ORDER SUMMARY · AW 26/27", 40, y);
 
       y += 18;
       doc.setFont("helvetica","normal");
       doc.setFontSize(11);
-      doc.text(`Fecha: ${ORDER_DATE}   ·   Total unidades: ${totalUnits()}   ·   Total: ${eur(totalEur())}`, 40, y);
+      doc.text(`Total uds: ${totalUnits()}   ·   Total: ${eur(totalEur())}`, 40, y);
 
       y += 26;
 
       if(!rows.length){
-        doc.text("No hay unidades en el pedido.", 40, y);
-        doc.save("pedido_aw26-27.pdf");
-        return;
-      }
+        doc.setFont("helvetica","normal");
+        doc.text("Sin unidades en el pedido.", 40, y);
+      } else {
+        // Cabecera tabla
+        const col = { ref:40, desc:130, price:360, uds:430, sub:480 };
+        doc.setFont("helvetica","bold");
+        doc.setFontSize(10);
+        doc.text("REF", col.ref, y);
+        doc.text("DESCRIPCIÓN", col.desc, y);
+        doc.text("€/UD", col.price, y, { align:"right" });
+        doc.text("UDS", col.uds, y, { align:"right" });
+        doc.text("SUBTOTAL", col.sub, y, { align:"right" });
+        y += 10;
+        doc.setDrawColor(0);
+        doc.setLineWidth(0.5);
+        doc.line(40, y, W-40, y);
+        y += 16;
 
-      doc.setFont("helvetica","bold");
-      doc.setFontSize(10);
-      doc.text("IMAGEN", 40, y);
-      doc.text("REF", 125, y);
-      doc.text("DESCRIPCIÓN", 190, y);
-      doc.text("€/UD", W-210, y, { align:"right" });
-      doc.text("UDS", W-150, y, { align:"right" });
-      doc.text("SUBTOTAL", W-40, y, { align:"right" });
+        doc.setFont("helvetica","normal");
+        doc.setFontSize(10);
 
-      y += 10;
-      doc.setLineWidth(0.5);
-      doc.line(40, y, W-40, y);
-      y += 16;
+        for(const r of rows){
+          if(y > H-90){
+            doc.addPage();
+            y = 52;
+          }
+          doc.setFont("helvetica","bold");
+          doc.text(String(r.ref), col.ref, y);
+          doc.setFont("helvetica","normal");
+          doc.text(String(r.desc||""), col.desc, y, { maxWidth: 210 });
 
-      doc.setFont("helvetica","normal");
-      doc.setFontSize(10);
+          doc.text(eur(r.price), col.price, y, { align:"right" });
+          doc.text(String(r.uds), col.uds, y, { align:"right" });
+          doc.text(eur(r.sub), col.sub, y, { align:"right" });
 
-      for(const r of rows){
-        if(y > H - 110){ doc.addPage(); y = 52; }
+          y += 14;
+          // chips de tallas
+          const chips = r.tallas.join("  ·  ");
+          doc.setFontSize(9);
+          doc.setTextColor(80);
+          doc.text(chips, col.desc, y, { maxWidth: W-170 });
+          doc.setTextColor(0);
+          doc.setFontSize(10);
 
-        const imgX = 40, imgY = y - 6, boxW = 70, boxH = 70;
-        doc.setDrawColor(220);
-        doc.rect(imgX, imgY, boxW, boxH);
-
-        const dataUrl = await loadImageAsDataURL(`images/${r.ref}.jpg`);
-        if(dataUrl){
-          try{ doc.addImage(dataUrl, "JPEG", imgX, imgY, boxW, boxH); }catch(e){}
+          y += 18;
+          doc.setDrawColor(220);
+          doc.line(40, y, W-40, y);
+          y += 14;
         }
 
         doc.setFont("helvetica","bold");
-        doc.text(String(r.ref), 125, y);
-
-        doc.setFont("helvetica","normal");
-        doc.text(String(r.desc||""), 190, y, { maxWidth: (W - 40) - 190 - 240 });
-
-        doc.text(eur(r.price), W-210, y, { align:"right" });
-        doc.text(String(r.uds), W-150, y, { align:"right" });
-        doc.text(eur(r.sub), W-40, y, { align:"right" });
-
-        y += 14;
-        doc.setFontSize(9);
-        doc.setTextColor(80);
-        doc.text(r.tallas.join(" · "), 125, y, { maxWidth: W - 165 });
-        doc.setTextColor(0);
-        doc.setFontSize(10);
-
-        y += 22;
-        doc.setDrawColor(230);
-        doc.line(40, y, W-40, y);
-        y += 14;
+        doc.setFontSize(12);
+        doc.text(`TOTAL UDS: ${totalUnits()}`, 40, H-54);
+        doc.text(`TOTAL: ${eur(totalEur())}`, W-40, H-54, { align:"right" });
       }
 
-      doc.setFont("helvetica","bold");
-      doc.setFontSize(12);
-      doc.text(`FECHA: ${ORDER_DATE}`, 40, H-54);
-      doc.text(`TOTAL: ${eur(totalEur())}`, W-40, H-54, { align:"right" });
-
-      doc.save(`pedido_aw26-27_${ORDER_DATE.replaceAll("/","-")}.pdf`);
+      doc.save("pedido_aw26-27.pdf");
+    } catch(err){
+      console.error(err);
+      alert("El PDF ha fallao por un error. El pedido y el email siguen bien. (Probá Ctrl+F5 y otra ve).");
     }
+  }
 
-    // ===== Acciones =====
-    function addLine(){
-      const l = defaultLine();
-      state.lines.push(l);
-      state.panelOpen[l.id] = true;
-      render();
-    }
-
-    function clearAll(){
-      state.lines = [defaultLine()];
-      state.panelOpen = {};
-      state.panelOpen[state.lines[0].id] = true;
-      render();
-    }
-
-    function copyEmail(){
-      const t = $("#emailBox");
-      t.focus(); t.select(); t.setSelectionRange(0, 999999);
-      try{ document.execCommand("copy"); }catch(e){}
-    }
-
-    function openMailto(){
-      const subject = $("#mailtoBtn").dataset.subject || "Pedido";
-      const body = $("#emailBox").value || "";
-      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    }
-
-    // ===== Clicks (delegación limpia, SIN details) =====
-    function onLinesClick(e){
-      const btn = e.target.closest("[data-act]");
-      if(!btn) return;
-
-      const lineEl = btn.closest(".line");
-      const lineId = lineEl?.dataset?.lineid;
-      const line = state.lines.find(l=>l.id===lineId);
-      if(!line) return;
-
-      const act = btn.dataset.act;
-
-      if(act==="zoom"){ openImageModal(line); return; }
-      if(act==="del"){
-        state.lines = state.lines.filter(l=>l.id!==lineId);
-        delete state.panelOpen[lineId];
-        if(!state.lines.length){
-          const l = defaultLine();
-          state.lines.push(l);
-          state.panelOpen[l.id] = true;
-        }
-        render();
-        return;
-      }
-      if(act==="toggleSizes"){
-        state.panelOpen[lineId] = !(state.panelOpen[lineId] ?? true);
-        render();
-        return;
-      }
-
-      if(act==="plus" || act==="minus"){
-        const size = btn.dataset.size;
-        const cur = n2(line.qty?.[size]);
-        line.qty[size] = act==="plus" ? cur+1 : Math.max(0, cur-1);
-
-        // Actualiza sin “glitches”: re-render completo (ya no bloquea)
-        render();
-        return;
-      }
-    }
-
-    function onLinesInput(e){
-      const el = e.target;
-      const lineEl = el.closest(".line");
-      const lineId = lineEl?.dataset?.lineid;
-      const line = state.lines.find(l=>l.id===lineId);
-      if(!line) return;
-
-      const act = el.dataset.act;
-
-      if(act==="qty"){
-        const size = el.dataset.size;
-        line.qty[size] = n2(el.value);
-        render();
-        return;
-      }
-      if(act==="desc"){
-        line.desc = el.value;
-        render();
-        return;
-      }
-      if(act==="price"){
-        line.price = Number(el.value||0);
-        render();
-        return;
-      }
-      // ref se gestiona con autocomplete/change
-    }
-
-    document.addEventListener("DOMContentLoaded", ()=>{
-      $("#orderDateLabel").textContent = `Fecha del pedido: ${ORDER_DATE}`;
-      $("#orderDatePill").textContent = ORDER_DATE;
-      $("#orderDatePill2").textContent = ORDER_DATE;
-
+  // =======================
+  // INIT
+  // =======================
+  document.addEventListener("DOMContentLoaded", ()=>{
+    try{
       $("#addLineBtn").addEventListener("click", addLine);
       $("#addLineBtn2").addEventListener("click", addLine);
+
+      $("#lines").addEventListener("click", handleClick);
+      $("#lines").addEventListener("input", handleInput);
 
       $("#copyEmailBtn").addEventListener("click", copyEmail);
       $("#mailtoBtn").addEventListener("click", openMailto);
@@ -942,15 +858,14 @@
 
       $("#clearBtn").addEventListener("click", clearAll);
 
-      $("#lines").addEventListener("click", onLinesClick);
-      $("#lines").addEventListener("input", onLinesInput);
-
-      const first = defaultLine();
-      state.lines = [first];
-      state.panelOpen[first.id] = true;
+      // Primera línea
+      state.lines = [defaultLine()];
       render();
-    });
-  })();
+    } catch(e){
+      console.error(e);
+      showSafe("Se ha detectao un fallo al iniciar. Dime si quieres y lo ajusto, pero la base está montá.");
+    }
+  });
   </script>
 </body>
 </html>
