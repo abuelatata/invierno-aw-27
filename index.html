@@ -7,686 +7,863 @@
 
   <style>
     :root{
-      --bg:#f6f7f7;
+      --bg:#f6f8f7;
       --card:#ffffff;
-      --text:#1f2a2e;
-      --muted:#6d7a80;
-      --line:#e6eaec;
-      --brand:#8fb9b1;
-      --brand-2:#77a79e;
-      --danger:#c84646;
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --radius: 18px;
+      --ink:#102a2a;
+      --muted:#5c6b6b;
+      --brand:#8fcfc5;      /* verde agua */
+      --brand2:#6bbeb1;
+      --line:rgba(16,42,42,.12);
+      --shadow:0 8px 30px rgba(16,42,42,.08);
+      --radius:16px;
+      --radius2:12px;
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--text);
-      background:var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:linear-gradient(180deg, #ffffff 0%, var(--bg) 32%, var(--bg) 100%);
+      -webkit-font-smoothing:antialiased;
+      padding-bottom:96px; /* espacio para barra total */
     }
+
     header{
-      position:sticky; top:0; z-index:10;
-      background:rgba(246,247,247,.88);
-      backdrop-filter: blur(8px);
+      position:sticky; top:0; z-index:50;
+      background:rgba(255,255,255,.86);
+      backdrop-filter: blur(10px);
       border-bottom:1px solid var(--line);
     }
-    .wrap{max-width:1200px; margin:0 auto; padding:16px;}
+
     .topbar{
-      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 14px 12px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
       flex-wrap:wrap;
     }
+
     .brand{
-      display:flex; align-items:center; gap:12px; min-width:260px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      min-width:220px;
     }
-    .logo{
-      width:44px; height:44px; border-radius:14px;
-      background:linear-gradient(135deg, var(--brand), #cfe6e1);
-      box-shadow: 0 6px 16px rgba(0,0,0,.08);
+    .badge{
+      width:38px;height:38px;border-radius:12px;
+      background:linear-gradient(135deg, var(--brand) 0%, var(--brand2) 100%);
+      box-shadow: 0 10px 22px rgba(107,190,177,.25);
     }
-    .brand h1{font-size:16px; margin:0; line-height:1.1}
-    .brand p{margin:2px 0 0; color:var(--muted); font-size:12px}
+    .brand h1{
+      font-size:15px;
+      line-height:1.15;
+      margin:0;
+      letter-spacing:.2px;
+    }
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-weight:500;
+      margin-top:2px;
+    }
 
-    .searchRow{
-      display:flex; gap:10px; align-items:center; flex:1;
-      min-width:280px;
+    .search{
+      flex:1;
+      min-width:240px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
     }
-    .input{
-      width:100%;
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:14px;
-      padding:12px 12px;
-      font-size:14px;
-      outline:none;
-    }
-    .btn{
-      border:0;
-      background:var(--brand);
-      color:#fff;
+    .search input{
+      width:min(520px, 100%);
       padding:12px 14px;
-      border-radius:14px;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow: 0 10px 20px rgba(143,185,177,.25);
-      transition: transform .06s ease, background .2s ease;
-      white-space:nowrap;
-    }
-    .btn:hover{background:var(--brand-2)}
-    .btn:active{transform: translateY(1px)}
-    .btn.secondary{
-      background:#fff;
-      color:var(--text);
+      border-radius:999px;
       border:1px solid var(--line);
-      box-shadow:none;
-      font-weight:800;
+      outline:none;
+      background:#fff;
+      font-size:14px;
     }
-    .btn.danger{
-      background:var(--danger);
-      box-shadow: 0 10px 20px rgba(200,70,70,.18);
+    .search input:focus{
+      border-color:rgba(143,207,197,.65);
+      box-shadow:0 0 0 4px rgba(143,207,197,.18);
     }
 
-    main .grid{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:16px;
-      padding:16px;
-      max-width:1200px;
+    main{
+      max-width:1100px;
       margin:0 auto;
+      padding:14px;
     }
-    @media (max-width: 980px){
-      main .grid{grid-template-columns:1fr; padding:12px;}
-      header .wrap{padding:12px;}
+
+    .meta{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin:10px 2px 14px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .pill{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      box-shadow:0 4px 14px rgba(16,42,42,.06);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
     }
 
     .card{
+      grid-column: span 12;
       background:var(--card);
       border:1px solid var(--line);
       border-radius:var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .cardHeader{
-      padding:14px 16px;
-      border-bottom:1px solid var(--line);
-      display:flex; gap:10px; align-items:center; justify-content:space-between;
-    }
-    .cardHeader h2{margin:0; font-size:14px}
-    .cardHeader small{color:var(--muted)}
-    .cardBody{padding:14px 16px;}
 
-    .catalog{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:12px;
+    @media (min-width: 820px){
+      .card{ grid-column: span 6; }
     }
-    @media (max-width: 560px){
-      .catalog{grid-template-columns:1fr;}
+    @media (min-width: 1080px){
+      .card{ grid-column: span 4; }
     }
 
-    .item{
-      border:1px solid var(--line);
-      border-radius:16px;
-      overflow:hidden;
-      background:#fff;
+    .cardTop{
       display:flex;
-      flex-direction:column;
+      gap:12px;
+      padding:12px;
+      border-bottom:1px solid var(--line);
     }
-    .img{
-      aspect-ratio: 4/3;
-      background:#f0f3f3;
-      display:flex; align-items:center; justify-content:center;
+
+    .thumb{
+      width:88px; height:88px;
+      border-radius:14px;
+      background:linear-gradient(135deg, rgba(143,207,197,.25), rgba(107,190,177,.18));
+      border:1px solid rgba(16,42,42,.10);
+      overflow:hidden;
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       position:relative;
     }
-    .img img{
-      width:100%; height:100%;
+    .thumb img{
+      width:100%;
+      height:100%;
       object-fit:cover;
       display:block;
     }
-    .badge{
-      position:absolute; left:10px; top:10px;
-      background:rgba(255,255,255,.92);
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:6px 10px;
-      font-size:12px;
-      font-weight:900;
-    }
-    .info{padding:12px;}
-    .title{margin:0; font-size:14px; font-weight:900; line-height:1.2;}
-    .meta{margin:6px 0 10px; color:var(--muted); font-size:12px;}
-    .price{font-weight:1000;}
-    .row{
-      display:flex; gap:10px; align-items:center; justify-content:space-between;
+    .thumb .ph{
+      font-weight:800;
+      color:rgba(16,42,42,.55);
+      letter-spacing:.5px;
+      font-size:13px;
+      text-align:center;
+      padding:10px;
     }
 
-    .orderLine{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      margin-bottom:10px;
-      background:#fff;
+    .info{
+      min-width:0;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      padding-top:2px;
     }
-    .orderLineTop{
-      display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
-      flex-wrap:wrap;
+
+    .row1{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
     }
-    .refName{font-weight:1000;}
-    .sub{color:var(--muted); font-size:12px; margin-top:4px}
-    .lineTotal{
-      font-weight:1000;
+    .ref{
+      font-weight:800;
       font-size:14px;
+      letter-spacing:.3px;
+    }
+    .name{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.25;
+      margin-top:2px;
+      max-height:2.5em;
+      overflow:hidden;
+    }
+    .price{
+      font-weight:900;
+      color:var(--ink);
+      font-size:14px;
+      background:rgba(143,207,197,.22);
+      border:1px solid rgba(143,207,197,.35);
+      padding:6px 10px;
+      border-radius:999px;
       white-space:nowrap;
     }
 
     .sizes{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding:12px;
+      display:flex;
+      flex-direction:column;
       gap:10px;
     }
-    @media (max-width: 520px){
-      .sizes{grid-template-columns:1fr;}
-    }
-    .sizeRow{
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:10px;
+
+    .sizesHeader{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      background: #fbfcfc;
-    }
-    .sizeLabel{
-      font-weight:1000;
-      letter-spacing:.2px;
-      min-width:70px;
-    }
-    .select{
-      width:120px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 12px;
-      background:#fff;
-      font-size:14px;
-      outline:none;
-      cursor:pointer;
-    }
-    .hint{
-      margin-top:8px;
+      gap:10px;
       color:var(--muted);
       font-size:12px;
     }
 
-    .totals{
-      border-top:1px solid var(--line);
-      margin-top:12px;
-      padding-top:12px;
+    .sizesGrid{
       display:grid;
-      gap:8px;
+      grid-template-columns: 1fr;
+      gap:10px;
     }
-    .totRow{
-      display:flex; align-items:center; justify-content:space-between;
-      font-size:14px;
-    }
-    .totRow strong{font-size:16px}
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
+
+    .sizeLine{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 10px;
       border:1px solid var(--line);
+      border-radius:14px;
       background:#fff;
+    }
+
+    .sizeTag{
+      font-weight:800;
+      font-size:13px;
+      letter-spacing:.2px;
+      min-width:54px;
+    }
+
+    .stepper{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .btn{
+      width:44px; height:44px;
+      border-radius:14px;
+      border:1px solid rgba(16,42,42,.14);
+      background:linear-gradient(180deg, #fff 0%, #f7fbfa 100%);
+      box-shadow: 0 6px 16px rgba(16,42,42,.08);
+      font-size:20px;
+      font-weight:900;
+      color:var(--ink);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{ transform: scale(.98); }
+    .qty{
+      width:54px;
+      height:44px;
+      border-radius:14px;
+      border:1px solid rgba(16,42,42,.14);
+      text-align:center;
+      font-weight:900;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+    }
+
+    .lineTotal{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px 12px;
+      border-top:1px dashed rgba(16,42,42,.14);
       color:var(--muted);
-      font-size:12px;
+      font-size:13px;
+    }
+    .lineTotal strong{ color:var(--ink); }
+
+    /* Barra fija abajo */
+    .bottomBar{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-top:1px solid var(--line);
+      z-index:60;
+    }
+    .bottomInner{
+      max-width:1100px;
+      margin:0 auto;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .totals{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .totals .big{
+      color:var(--ink);
+      font-weight:1000;
+      font-size:16px;
+      letter-spacing:.2px;
+      background:rgba(143,207,197,.22);
+      border:1px solid rgba(143,207,197,.35);
+      padding:8px 12px;
+      border-radius:999px;
       white-space:nowrap;
     }
 
-    .smallNote{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.35;
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
-    .footerBtns{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top:12px;
+    .primary{
+      border:none;
+      background:linear-gradient(135deg, var(--brand) 0%, var(--brand2) 100%);
+      color:#fff;
+      font-weight:900;
+      border-radius:14px;
+      padding:12px 14px;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(107,190,177,.25);
+      -webkit-tap-highlight-color: transparent;
     }
-    .toast{
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 18px;
-      background: rgba(31,42,46,.92);
-      color: white;
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      opacity: 0;
-      pointer-events:none;
-      transition: opacity .18s ease;
+    .secondary{
+      border:1px solid rgba(16,42,42,.14);
+      background:#fff;
+      color:var(--ink);
+      font-weight:900;
+      border-radius:14px;
+      padding:12px 14px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
     }
-    .toast.show{opacity:1;}
+
+    /* Modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background:rgba(16,42,42,.42);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      z-index:80;
+    }
+    .modal{
+      width:min(900px, 100%);
+      max-height:78vh;
+      background:#fff;
+      border-radius:18px 18px 0 0;
+      border:1px solid var(--line);
+      box-shadow: 0 18px 60px rgba(0,0,0,.22);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.9);
+    }
+    .modalHead strong{ font-size:14px; }
+    .modalBody{ padding:12px 14px; }
+    textarea{
+      width:100%;
+      height:48vh;
+      border-radius:14px;
+      border:1px solid var(--line);
+      padding:12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size:12.5px;
+      outline:none;
+    }
+    .modalFoot{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      padding:12px 14px;
+      border-top:1px solid var(--line);
+      background:#fff;
+    }
+
+    .noteErr{
+      margin:14px 0 0;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(180,0,0,.25);
+      background:rgba(255,0,0,.06);
+      color:#7a1111;
+      font-size:13px;
+      display:none;
+    }
   </style>
 </head>
 
 <body>
-<header>
-  <div class="wrap">
+  <header>
     <div class="topbar">
       <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
+        <div class="badge" aria-hidden="true"></div>
         <div>
           <h1>Abuela Tata · Invierno AW 26/27</h1>
-          <p>Pedidos B2B · Tallaje cómodo para móvil</p>
+          <small>Pedidos · Selector de tallas (móvil pro)</small>
         </div>
       </div>
 
-      <div class="searchRow">
-        <input id="search" class="input" placeholder="Busca por referencia (ej: 1225406) o nombre…" autocomplete="off" />
-        <button id="clearSearch" class="btn secondary" type="button">Limpiar</button>
+      <div class="search">
+        <input id="q" type="search" placeholder="Buscar por referencia o nombre…" autocomplete="off" />
       </div>
+    </div>
+  </header>
 
-      <div class="pill" id="orderPill">Pedido: 0 uds · 0,00 €</div>
+  <main>
+    <div class="meta">
+      <div class="pill">📦 Productos: <strong id="count">0</strong></div>
+      <div class="pill">🧾 Líneas con cantidades: <strong id="lines">0</strong></div>
+    </div>
+
+    <div id="err" class="noteErr"></div>
+
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <div class="bottomBar">
+    <div class="bottomInner">
+      <div class="totals">
+        <span>Unidades: <strong id="u">0</strong></span>
+        <span class="big">Total: <span id="t">0,00</span> €</span>
+      </div>
+      <div class="actions">
+        <button class="secondary" id="btnClear" type="button">Vaciar</button>
+        <button class="primary" id="btnResume" type="button">Resumen pedido</button>
+      </div>
     </div>
   </div>
-</header>
 
-<main>
-  <div class="grid">
-    <section class="card">
-      <div class="cardHeader">
-        <div>
-          <h2>Catálogo</h2>
-          <small id="catalogCount">Cargando…</small>
-        </div>
-        <button id="resetAll" class="btn secondary" type="button">Vaciar pedido</button>
+  <!-- Modal resumen -->
+  <div class="modalBack" id="mb">
+    <div class="modal">
+      <div class="modalHead">
+        <strong>Resumen del pedido</strong>
+        <button class="secondary" id="btnClose" type="button">Cerrar</button>
       </div>
-      <div class="cardBody">
-        <div class="catalog" id="catalog"></div>
-        <div class="smallNote">
-          Las fotos se cargan solas desde <strong>assets/img/REFERENCIA.jpg</strong>. Si falta alguna, sale “Sin imagen”.
-        </div>
+      <div class="modalBody">
+        <textarea id="resume" readonly></textarea>
       </div>
-    </section>
-
-    <aside class="card">
-      <div class="cardHeader">
-        <div>
-          <h2>Tu pedido</h2>
-          <small>Se guarda automáticamente en este dispositivo</small>
-        </div>
+      <div class="modalFoot">
+        <button class="secondary" id="btnCopy" type="button">Copiar</button>
+        <button class="primary" id="btnClose2" type="button">Listo</button>
       </div>
-      <div class="cardBody">
-        <div id="order"></div>
-
-        <div class="totals">
-          <div class="totRow"><span>Unidades</span><strong id="totUnits">0</strong></div>
-          <div class="totRow"><span>Total</span><strong id="totAmount">0,00 €</strong></div>
-        </div>
-
-        <div class="footerBtns">
-          <button id="copyOrder" class="btn secondary" type="button">Copiar pedido</button>
-          <a id="mailto" class="btn" href="#" role="button">Enviar por email</a>
-        </div>
-
-        <div class="smallNote">
-          El email abre tu correo con el pedido ya montado.
-        </div>
-      </div>
-    </aside>
+    </div>
   </div>
-</main>
 
-<div class="toast" id="toast">Copiado ✅</div>
+  <script>
+    // ----- Reglas de tallas (tus familias) -----
+    const SIZES_BEBE = ["3m","6m","9m","18m","2a","3a","4a"];
+    const SIZES_NINO = ["12m","18m","2a","3a","4a","5a","6a","8a","10a","12a"];
+    const SIZES_UNICA = ["ÚNICA"];
 
-<script>
-  /***********************
-   * FAMILIAS DE TALLAS (CONFIRMADAS)
-   ***********************/
-  const SIZE_FAMILIES = {
-    A: ["3M","6M","9M","18M","2A","3A","4A"],
-    B: ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"],
-    U: ["T.U."]
-  };
-
-  function familyFromRef(ref){
-    const s = String(ref).trim();
-    if (s.startsWith("12") || s.startsWith("13") || s.startsWith("31") || s.startsWith("30")) return "A";
-    if (s.startsWith("25") || s.startsWith("22") || s.startsWith("43")) return "B";
-    if (s.startsWith("08")) return "U";
-    return "B";
-  }
-
-  /***********************
-   * CATÁLOGO: se carga desde data/tarifa.json
-   ***********************/
-  let PRODUCTS = [];
-
-  function imgFromRef(ref){
-    return `assets/img/${String(ref).trim()}.jpg`;
-  }
-
-  async function loadTarifa(){
-    const res = await fetch("data/tarifa.json", { cache: "no-store" });
-    if(!res.ok) throw new Error("No se pudo cargar data/tarifa.json");
-    const arr = await res.json();
-    if(!Array.isArray(arr)) throw new Error("tarifa.json no es un array");
-    PRODUCTS = arr.map(p => ({
-      ref: String(p.ref ?? "").trim(),
-      name: String(p.name ?? "").trim(),
-      price: Number(p.price ?? 0),
-      family: familyFromRef(p.ref),
-      img: imgFromRef(p.ref)
-    })).filter(p => p.ref && p.name);
-  }
-
-  /***********************
-   * ESTADO DE PEDIDO
-   ***********************/
-  const LS_KEY = "AT_AW2726_ORDER_V3";
-  const order = loadOrder();
-
-  function loadOrder(){
-    try{
-      const raw = localStorage.getItem(LS_KEY);
-      if(!raw) return {};
-      const obj = JSON.parse(raw);
-      return obj && typeof obj === "object" ? obj : {};
-    }catch(e){ return {}; }
-  }
-  function saveOrder(){
-    localStorage.setItem(LS_KEY, JSON.stringify(order));
-  }
-
-  /***********************
-   * UTILIDADES
-   ***********************/
-  const eur = (n) => (Number(n)||0).toLocaleString("es-ES",{style:"currency",currency:"EUR"});
-  const byId = (id)=>document.getElementById(id);
-
-  function toast(msg){
-    const t = byId("toast");
-    t.textContent = msg || "Hecho ✅";
-    t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"), 1200);
-  }
-
-  function clampInt(v){
-    const n = parseInt(v,10);
-    if (Number.isNaN(n) || n < 0) return 0;
-    if (n > 50) return 50;
-    return n;
-  }
-
-  function getProduct(ref){
-    return PRODUCTS.find(p => p.ref === ref);
-  }
-
-  function ensureLine(ref){
-    const p = getProduct(ref);
-    if(!p) return null;
-    if(!order[ref]){
-      const sizes = SIZE_FAMILIES[p.family] || [];
-      const qty = {};
-      sizes.forEach(sz => qty[sz]=0);
-      order[ref] = { ref, name:p.name, price:p.price, family:p.family, qty };
+    function familyFromRef(ref){
+      const s = String(ref || "").trim();
+      if (s.length < 2) return "";
+      return s.slice(0,2);
     }
-    return order[ref];
-  }
 
-  function lineUnits(line){
-    return Object.values(line.qty || {}).reduce((a,b)=>a + (Number(b)||0), 0);
-  }
-  function lineAmount(line){
-    return lineUnits(line) * (Number(line.price)||0);
-  }
-  function orderUnits(){
-    return Object.values(order).reduce((sum,line)=> sum + lineUnits(line), 0);
-  }
-  function orderAmount(){
-    return Object.values(order).reduce((sum,line)=> sum + lineAmount(line), 0);
-  }
-
-  function cleanEmptyLines(){
-    for(const ref of Object.keys(order)){
-      if(lineUnits(order[ref]) === 0) delete order[ref];
+    function sizesForFamily(fam){
+      if (["12","13","31","30"].includes(fam)) return SIZES_BEBE;
+      if (["25","22","43"].includes(fam)) return SIZES_NINO;
+      if (["08"].includes(fam)) return SIZES_UNICA;
+      // Por defecto (para no dejar vacío): niño
+      return SIZES_NINO;
     }
-  }
 
-  function escapeHtml(s){
-    return String(s??"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  }
-  function escapeJs(s){
-    return String(s??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
-  }
+    // ----- Estado del pedido -----
+    // order[ref][size] = qty
+    const order = Object.create(null);
 
-  /***********************
-   * RENDER CATÁLOGO
-   ***********************/
-  const catalogEl = byId("catalog");
-  const catalogCountEl = byId("catalogCount");
-  const searchEl = byId("search");
+    function getQty(ref, size){
+      return (order[ref] && order[ref][size]) ? order[ref][size] : 0;
+    }
+    function setQty(ref, size, qty){
+      if (!order[ref]) order[ref] = Object.create(null);
+      order[ref][size] = Math.max(0, Number(qty) || 0);
+      if (order[ref][size] === 0) delete order[ref][size];
+      // si se queda vacío el objeto, lo limpiamos
+      if (Object.keys(order[ref]).length === 0) delete order[ref];
+      refreshTotals();
+    }
 
-  function renderCatalog(filterText=""){
-    const q = filterText.trim().toLowerCase();
-    const list = PRODUCTS.filter(p=>{
-      if(!q) return true;
-      return p.ref.toLowerCase().includes(q) || p.name.toLowerCase().includes(q);
+    function formatEUR(n){
+      const v = Number(n) || 0;
+      return v.toLocaleString("es-ES", {minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+
+    // ----- Carga de tarifa.json -----
+    const grid = document.getElementById("grid");
+    const q = document.getElementById("q");
+    const countEl = document.getElementById("count");
+    const linesEl = document.getElementById("lines");
+    const errEl = document.getElementById("err");
+
+    let productos = [];
+
+    async function loadTarifa(){
+      try{
+        errEl.style.display = "none";
+        // cache-busting para GitHub Pages
+        const url = "./data/tarifa.json?v=" + Date.now();
+        const res = await fetch(url, {cache:"no-store"});
+        if(!res.ok) throw new Error("No puedo leer tarifa.json (HTTP " + res.status + ").");
+        const data = await res.json();
+
+        if(!Array.isArray(data)) throw new Error("tarifa.json debe ser un array [ {ref,name,price}, ... ].");
+
+        // Normalizamos campos
+        productos = data
+          .filter(x => x && (x.ref || x.name))
+          .map(x => ({
+            ref: String(x.ref ?? "").trim(),
+            name: String(x.name ?? "").trim(),
+            price: Number(x.price ?? 0)
+          }))
+          .filter(x => x.ref.length > 0);
+
+        countEl.textContent = productos.length;
+        render();
+      }catch(e){
+        errEl.textContent = "⚠️ " + (e && e.message ? e.message : "Error cargando tarifa.json");
+        errEl.style.display = "block";
+      }
+    }
+
+    // ----- Render -----
+    function render(){
+      const term = (q.value || "").trim().toLowerCase();
+      const list = term
+        ? productos.filter(p =>
+            p.ref.toLowerCase().includes(term) ||
+            p.name.toLowerCase().includes(term)
+          )
+        : productos;
+
+      grid.innerHTML = "";
+      for(const p of list){
+        grid.appendChild(cardFor(p));
+      }
+      refreshTotals();
+    }
+
+    function cardFor(p){
+      const fam = familyFromRef(p.ref);
+      const sizes = sizesForFamily(fam);
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      // top
+      const top = document.createElement("div");
+      top.className = "cardTop";
+
+      const thumb = document.createElement("div");
+      thumb.className = "thumb";
+
+      const img = document.createElement("img");
+      // Intento 1: images/<ref>.jpg
+      img.src = `images/${p.ref}.jpg`;
+      img.alt = p.ref;
+
+      let triedSecond = false;
+      img.onerror = () => {
+        if (!triedSecond){
+          triedSecond = true;
+          // Intento 2: <ref>.jpg en raíz (como tu 1299426.jpg)
+          img.src = `${p.ref}.jpg`;
+          return;
+        }
+        // Placeholder
+        thumb.innerHTML = `<div class="ph">${p.ref}</div>`;
+      };
+
+      thumb.appendChild(img);
+
+      const info = document.createElement("div");
+      info.className = "info";
+
+      const row1 = document.createElement("div");
+      row1.className = "row1";
+
+      const left = document.createElement("div");
+      left.style.minWidth = "0";
+
+      const ref = document.createElement("div");
+      ref.className = "ref";
+      ref.textContent = p.ref;
+
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = p.name || "—";
+
+      left.appendChild(ref);
+      left.appendChild(name);
+
+      const price = document.createElement("div");
+      price.className = "price";
+      price.textContent = (Number(p.price)||0).toFixed(2).replace(".", ",") + " €";
+
+      row1.appendChild(left);
+      row1.appendChild(price);
+
+      info.appendChild(row1);
+
+      top.appendChild(thumb);
+      top.appendChild(info);
+
+      // sizes area
+      const sizesBox = document.createElement("div");
+      sizesBox.className = "sizes";
+
+      const sh = document.createElement("div");
+      sh.className = "sizesHeader";
+      sh.innerHTML = `<span>Familia: <strong>${fam || "—"}</strong></span><span>Tallas: <strong>${sizes.length}</strong></span>`;
+
+      const sg = document.createElement("div");
+      sg.className = "sizesGrid";
+
+      sizes.forEach(size => {
+        const line = document.createElement("div");
+        line.className = "sizeLine";
+
+        const tag = document.createElement("div");
+        tag.className = "sizeTag";
+        tag.textContent = size;
+
+        const stepper = document.createElement("div");
+        stepper.className = "stepper";
+
+        const minus = document.createElement("button");
+        minus.type = "button";
+        minus.className = "btn";
+        minus.textContent = "−";
+
+        const input = document.createElement("input");
+        input.className = "qty";
+        input.type = "number";
+        input.inputMode = "numeric";
+        input.min = "0";
+        input.step = "1";
+        input.value = String(getQty(p.ref, size));
+
+        const plus = document.createElement("button");
+        plus.type = "button";
+        plus.className = "btn";
+        plus.textContent = "+";
+
+        minus.addEventListener("click", () => {
+          const v = Math.max(0, (Number(input.value)||0) - 1);
+          input.value = String(v);
+          setQty(p.ref, size, v);
+          refreshLineTotal(card, p);
+        });
+
+        plus.addEventListener("click", () => {
+          const v = (Number(input.value)||0) + 1;
+          input.value = String(v);
+          setQty(p.ref, size, v);
+          refreshLineTotal(card, p);
+        });
+
+        input.addEventListener("change", () => {
+          const v = Math.max(0, Number(input.value)||0);
+          input.value = String(v);
+          setQty(p.ref, size, v);
+          refreshLineTotal(card, p);
+        });
+
+        stepper.appendChild(minus);
+        stepper.appendChild(input);
+        stepper.appendChild(plus);
+
+        line.appendChild(tag);
+        line.appendChild(stepper);
+
+        sg.appendChild(line);
+      });
+
+      const lt = document.createElement("div");
+      lt.className = "lineTotal";
+      lt.innerHTML = `<span>Subtotal línea</span><strong data-subtotal>0,00 € · 0 uds</strong>`;
+
+      sizesBox.appendChild(sh);
+      sizesBox.appendChild(sg);
+      sizesBox.appendChild(lt);
+
+      card.appendChild(top);
+      card.appendChild(sizesBox);
+
+      // Calcula subtotal inicial
+      refreshLineTotal(card, p);
+
+      return card;
+    }
+
+    function refreshLineTotal(card, p){
+      const ref = p.ref;
+      const fam = familyFromRef(ref);
+      const sizes = sizesForFamily(fam);
+
+      let units = 0;
+      for(const s of sizes) units += getQty(ref, s);
+
+      const subtotal = units * (Number(p.price)||0);
+
+      const el = card.querySelector("[data-subtotal]");
+      if (el){
+        el.textContent = `${formatEUR(subtotal)} € · ${units} uds`;
+      }
+    }
+
+    function refreshTotals(){
+      let units = 0;
+      let total = 0;
+      let linesWithQty = 0;
+
+      // Creamos un mapa de precios por ref para total rápido
+      const priceByRef = new Map(productos.map(p => [p.ref, Number(p.price)||0]));
+
+      for(const ref of Object.keys(order)){
+        let refUnits = 0;
+        for(const s of Object.keys(order[ref])){
+          const q = Number(order[ref][s])||0;
+          refUnits += q;
+          units += q;
+        }
+        if (refUnits > 0) linesWithQty += 1;
+        total += refUnits * (priceByRef.get(ref) || 0);
+      }
+
+      document.getElementById("u").textContent = units;
+      document.getElementById("t").textContent = formatEUR(total);
+      linesEl.textContent = linesWithQty;
+    }
+
+    // ----- Resumen pedido -----
+    const mb = document.getElementById("mb");
+    const resume = document.getElementById("resume");
+
+    function buildResume(){
+      const priceByRef = new Map(productos.map(p => [p.ref, p]));
+      const refs = Object.keys(order).sort();
+
+      let out = [];
+      out.push("ABUELA TATA · INVIERNO AW 26/27");
+      out.push("RESUMEN DE PEDIDO");
+      out.push("—");
+
+      let totalUnits = 0;
+      let totalEUR = 0;
+
+      for(const ref of refs){
+        const prod = priceByRef.get(ref);
+        const name = prod ? prod.name : "";
+        const price = prod ? (Number(prod.price)||0) : 0;
+
+        const fam = familyFromRef(ref);
+        const sizes = sizesForFamily(fam);
+
+        let lineUnits = 0;
+        let parts = [];
+
+        for(const s of sizes){
+          const q = getQty(ref, s);
+          if (q > 0){
+            parts.push(`${s}:${q}`);
+            lineUnits += q;
+          }
+        }
+
+        if (lineUnits === 0) continue;
+
+        const lineEUR = lineUnits * price;
+        totalUnits += lineUnits;
+        totalEUR += lineEUR;
+
+        out.push(`${ref} — ${name}`);
+        out.push(`  ${parts.join("  ")}`);
+        out.push(`  Precio: ${formatEUR(price)} €  · Subtotal: ${formatEUR(lineEUR)} €  · Uds: ${lineUnits}`);
+        out.push("");
+      }
+
+      out.push("—");
+      out.push(`TOTAL UNIDADES: ${totalUnits}`);
+      out.push(`TOTAL €: ${formatEUR(totalEUR)} €`);
+
+      return out.join("\n");
+    }
+
+    document.getElementById("btnResume").addEventListener("click", () => {
+      resume.value = buildResume();
+      mb.style.display = "flex";
     });
 
-    catalogCountEl.textContent = `${list.length} artículo${list.length===1?"":"s"}`;
+    document.getElementById("btnClose").addEventListener("click", () => mb.style.display = "none");
+    document.getElementById("btnClose2").addEventListener("click", () => mb.style.display = "none");
 
-    catalogEl.innerHTML = list.map(p=>{
-      const imgHtml = `
-        <img src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}"
-             onerror="this.remove(); this.parentElement.insertAdjacentHTML('beforeend','<div style=&quot;color:#9aa6ab;font-weight:900;font-size:12px&quot;>Sin imagen</div>');">
-      `;
-
-      return `
-        <div class="item">
-          <div class="img">
-            ${imgHtml}
-            <div class="badge">${escapeHtml(p.ref)}</div>
-          </div>
-          <div class="info">
-            <p class="title">${escapeHtml(p.name)}</p>
-            <p class="meta">Tallas: ${SIZE_FAMILIES[p.family].join(", ")}</p>
-            <div class="row">
-              <div class="price">${eur(p.price)}</div>
-              <button class="btn" type="button" onclick="addToOrder('${escapeJs(p.ref)}')">Añadir</button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join("");
-  }
-
-  window.addToOrder = function(ref){
-    const line = ensureLine(ref);
-    if(!line){
-      toast("Referencia no encontrada");
-      return;
-    }
-    const firstSize = Object.keys(line.qty)[0];
-    line.qty[firstSize] = clampInt((line.qty[firstSize]||0) + 1);
-    saveOrder();
-    renderOrder();
-    updatePill();
-    toast("Añadido ✅");
-  }
-
-  /***********************
-   * RENDER PEDIDO
-   ***********************/
-  const orderEl = byId("order");
-  const totUnitsEl = byId("totUnits");
-  const totAmountEl = byId("totAmount");
-  const orderPillEl = byId("orderPill");
-  const mailtoEl = byId("mailto");
-
-  function options0to20(selected){
-    let html = "";
-    for(let i=0;i<=20;i++){
-      html += `<option value="${i}" ${i===selected?"selected":""}>${i}</option>`;
-    }
-    return html;
-  }
-
-  window.setQty = function(ref, size, value){
-    const line = ensureLine(ref);
-    if(!line) return;
-    line.qty[size] = clampInt(value);
-    saveOrder();
-    renderOrder();
-    updatePill();
-  }
-
-  window.removeLine = function(ref){
-    delete order[ref];
-    saveOrder();
-    renderOrder();
-    updatePill();
-    toast("Quitado");
-  }
-
-  function renderOrder(){
-    cleanEmptyLines();
-    saveOrder();
-
-    const lines = Object.values(order);
-
-    if(lines.length === 0){
-      orderEl.innerHTML = `
-        <div style="border:1px dashed var(--line);border-radius:16px;padding:14px;color:var(--muted);background:#fff">
-          No hay nada aún. Añade artículos desde el catálogo.
-        </div>
-      `;
-      totUnitsEl.textContent = "0";
-      totAmountEl.textContent = eur(0);
-      buildMailto();
-      return;
-    }
-
-    orderEl.innerHTML = lines.map(line=>{
-      const sizes = Object.keys(line.qty || {});
-      const sizeRows = sizes.map(sz=>{
-        const current = clampInt(line.qty[sz] || 0);
-        return `
-          <div class="sizeRow">
-            <div class="sizeLabel">${escapeHtml(sz)}</div>
-            <select class="select" onchange="setQty('${escapeJs(line.ref)}','${escapeJs(sz)}', this.value)">
-              ${options0to20(current)}
-            </select>
-          </div>
-        `;
-      }).join("");
-
-      return `
-        <div class="orderLine">
-          <div class="orderLineTop">
-            <div>
-              <div class="refName">${escapeHtml(line.ref)} · ${escapeHtml(line.name)}</div>
-              <div class="sub">Precio: ${eur(line.price)} · Unidades: <strong>${lineUnits(line)}</strong></div>
-            </div>
-            <div style="display:flex;gap:8px;align-items:center">
-              <div class="lineTotal">${eur(lineAmount(line))}</div>
-              <button class="btn danger" type="button" onclick="removeLine('${escapeJs(line.ref)}')">Quitar</button>
-            </div>
-          </div>
-          <div class="sizes">${sizeRows}</div>
-          <div class="hint">Selector grande pa móvil: cero fallos.</div>
-        </div>
-      `;
-    }).join("");
-
-    totUnitsEl.textContent = String(orderUnits());
-    totAmountEl.textContent = eur(orderAmount());
-    buildMailto();
-  }
-
-  function updatePill(){
-    orderPillEl.textContent = `Pedido: ${orderUnits()} uds · ${eur(orderAmount())}`;
-  }
-
-  function buildOrderText(){
-    const lines = Object.values(order);
-    if(lines.length === 0){
-      return `Hola,\n\nAdjunto pedido vacío.\n\nAll the best\nAntonio`;
-    }
-
-    let text = `Hola,\n\nEste es el pedido:\n\n`;
-    for(const line of lines){
-      text += `${line.ref} · ${line.name} · ${eur(line.price)}\n`;
-      const parts = [];
-      for(const [sz, q] of Object.entries(line.qty)){
-        const n = clampInt(q);
-        if(n>0) parts.push(`${sz}: ${n}`);
+    document.getElementById("btnCopy").addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(resume.value);
+        // mini feedback
+        const old = document.getElementById("btnCopy").textContent;
+        document.getElementById("btnCopy").textContent = "Copiado ✅";
+        setTimeout(()=>document.getElementById("btnCopy").textContent = old, 900);
+      }catch(e){
+        // si el navegador no deja, al menos seleccionamos
+        resume.focus();
+        resume.select();
       }
-      text += `Tallas: ${parts.length ? parts.join(" · ") : "—"}\n`;
-      text += `Subtotal línea: ${eur(lineAmount(line))}\n\n`;
-    }
-    text += `TOTAL UDS: ${orderUnits()}\nTOTAL: ${eur(orderAmount())}\n\nAll the best\nAntonio`;
-    return text;
-  }
+    });
 
-  function buildMailto(){
-    const subject = `Pedido Abuela Tata · Invierno AW 26/27`;
-    const body = buildOrderText();
-    mailtoEl.setAttribute("href", `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
-  }
+    // Vaciar
+    document.getElementById("btnClear").addEventListener("click", () => {
+      // limpia estado
+      for (const k of Object.keys(order)) delete order[k];
+      // re-render para resetear inputs y subtotales
+      render();
+    });
 
-  byId("copyOrder").addEventListener("click", async ()=>{
-    const text = buildOrderText();
-    try{
-      await navigator.clipboard.writeText(text);
-      toast("Copiado ✅");
-    }catch(e){
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      ta.remove();
-      toast("Copiado ✅");
-    }
-  });
+    // Search
+    q.addEventListener("input", () => render());
 
-  searchEl.addEventListener("input", (e)=>renderCatalog(e.target.value));
-  byId("clearSearch").addEventListener("click", ()=>{
-    searchEl.value = "";
-    renderCatalog("");
-    searchEl.focus();
-  });
-  byId("resetAll").addEventListener("click", ()=>{
-    for(const k of Object.keys(order)) delete order[k];
-    saveOrder();
-    renderOrder();
-    updatePill();
-    toast("Pedido vacío");
-  });
-
-  /***********************
-   * INIT
-   ***********************/
-  (async ()=>{
-    try{
-      await loadTarifa();
-      renderCatalog("");
-      renderOrder();
-      updatePill();
-      buildMailto();
-    }catch(err){
-      catalogCountEl.textContent = "ERROR cargando tarifa";
-      catalogEl.innerHTML = `
-        <div style="padding:12px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--danger);font-weight:900">
-          No se ha podido cargar <code>data/tarifa.json</code>.<br><br>
-          Asegúrate de que existe ese archivo en el repo y está publicado en GitHub Pages.
-        </div>
-      `;
-      console.error(err);
-    }
-  })();
-</script>
+    // Arranque
+    loadTarifa();
+  </script>
 </body>
 </html>
