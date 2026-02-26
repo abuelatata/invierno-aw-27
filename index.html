@@ -139,7 +139,6 @@
       align-items:center; justify-content:flex-end;
     }
 
-    /* Lines */
     .line{
       border:1px solid rgba(0,0,0,.10);
       border-radius: 16px;
@@ -216,6 +215,7 @@
     @media (max-width: 960px){
       .sizesGrid{grid-template-columns: repeat(3, minmax(0, 1fr));}
     }
+
     .qtyBox{
       border:1px solid rgba(0,0,0,.12);
       border-radius: 14px;
@@ -229,31 +229,14 @@
       color:rgba(20,20,20,.58);
       font-weight:800;
     }
-    .stepper{
-      display:grid;
-      grid-template-columns: 36px 1fr 36px;
-      gap:6px;
-      align-items:center;
-    }
-    .stepper button{
-      height:36px;
-      border-radius:12px;
-      border:1px solid rgba(65,182,175,.40);
-      background: rgba(98,199,193,.14);
-      color: var(--aquaInk);
-      font-weight:900;
-      cursor:pointer;
-      font-size:18px;
-      line-height:1;
-    }
-    .stepper input{
-      height:36px;
-      text-align:center;
-      font-weight:900;
+    .qtySelect{
+      width:100%;
+      height:40px;
       border-radius:12px;
       border:1px solid rgba(0,0,0,.14);
-      padding:0 6px;
-      width:100%;
+      padding:8px 10px;
+      font-weight:900;
+      background:white;
     }
 
     .totals{
@@ -284,7 +267,6 @@
       margin-top:6px;
     }
 
-    /* Autocomplete dropdown */
     .acBox{
       position:absolute;
       z-index:50;
@@ -400,7 +382,7 @@
         <textarea id="emailBox" spellcheck="false"></textarea>
 
         <div class="hint">
-          El botón “Abrir email” usa mailto (depende de tu cliente de correo). “Copiar email” siempre funciona.
+          “Abrir email” usa mailto. “Copiar email” siempre funciona.
         </div>
       </div>
     </aside>
@@ -415,15 +397,14 @@
  *  CONFIG
  *  ========================== */
 const SIZES_MAP = {
-  // refs 12,13,31,30 -> 3m,6m,9m,18m,2a,3a,4a
   baby: ["3M","6M","9M","18M","2A","3A","4A"],
-  // refs 25,22,43 -> 12m,18m,2a,3a,4a,5a,6a,8a,10a,12a
   kid: ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"],
-  // ref 08 -> talla única
   one: ["TU"]
 };
 
-// Demo PRICE_MAP (debes pegar aquí tu tarifa real o cargarla)
+// Cantidades del desplegable (0..20). Si quieres 0..50 cambia 20 por 50.
+const QTY_MAX = 20;
+
 window.PRICE_MAP = window.PRICE_MAP || {
   "1204402": { desc:"Modelo 1204402", price: 99.00 },
   "2509403": { desc:"Modelo 2509403", price: 79.00 },
@@ -470,7 +451,6 @@ function sizesFromRef(ref){
   if(prefix==="08") return SIZES_MAP.one;
   if(prefix==="12" || prefix==="13" || prefix==="31" || prefix==="30") return SIZES_MAP.baby;
   if(prefix==="25" || prefix==="22" || prefix==="43") return SIZES_MAP.kid;
-  // default: si no coincide, usa kid como base (puedes cambiarlo)
   return SIZES_MAP.kid;
 }
 
@@ -489,6 +469,15 @@ function totalEur(){
     (l.sizes||[]).forEach(s=> t += p * n2(l.qty?.[s]) );
   });
   return t;
+}
+
+function qtyOptionsHtml(selected){
+  let html = "";
+  for(let i=0;i<=QTY_MAX;i++){
+    const sel = (i===n2(selected)) ? "selected" : "";
+    html += `<option value="${i}" ${sel}>${i}</option>`;
+  }
+  return html;
 }
 
 /** ==========================
@@ -526,11 +515,9 @@ function render(){
             ${sizes.map(s=>`
               <div class="qtyBox">
                 <div class="sz">${s}</div>
-                <div class="stepper">
-                  <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
-                  <input type="number" min="0" step="1" value="${n2(line.qty?.[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
-                  <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
-                </div>
+                <select class="qtySelect" data-act="qtySelect" data-i="${idx}" data-s="${s}">
+                  ${qtyOptionsHtml(line.qty?.[s])}
+                </select>
               </div>
             `).join("")}
           </div>
@@ -539,14 +526,10 @@ function render(){
     `;
   }).join("");
 
-  // Totales
   $("#totUnits").textContent = String(totalUnits());
   $("#totEur").textContent = eur(totalEur());
-
-  // Construye email
   buildOutputs();
 
-  // Setup autocomplete por línea
   state.lines.forEach((line, idx)=>{
     const input = root.querySelector(`[data-act="ref"][data-i="${idx}"]`);
     const box = $("#ac_"+line.id);
@@ -759,31 +742,25 @@ function resetAll(){
   render();
 }
 
-// click (Chrome estable)
+// Cambios del select de cantidad
+function handleChange(e){
+  const el = e.target;
+  if(el.dataset.act==="qtySelect"){
+    const i = Number(el.dataset.i);
+    const s = el.dataset.s;
+    state.lines[i].qty[s] = n2(el.value);
+    render();
+    return;
+  }
+}
+
 function handleClick(e){
   const btn = e.target.closest("[data-act]");
   if(!btn) return;
 
-  // ✅ Evita comportamientos raros en móvil (focus / selección)
-  e.preventDefault();
-  e.stopPropagation();
-
   const act = btn.dataset.act;
   const i = Number(btn.dataset.i);
-  const s = btn.dataset.s;
 
-  if(act==="plus"){
-    const line = state.lines[i];
-    line.qty[s] = n2(line.qty[s]) + 1;
-    render();
-    return;
-  }
-  if(act==="minus"){
-    const line = state.lines[i];
-    line.qty[s] = Math.max(0, n2(line.qty[s]) - 1);
-    render();
-    return;
-  }
   if(act==="toggle"){
     const line = state.lines[i];
     state.expanded[line.id] = !state.expanded[line.id];
@@ -802,25 +779,14 @@ function handleClick(e){
   }
 }
 
-// ✅ IMPORTANTE: aquí NO re-renderizamos mientras escribes cantidades
 function handleInput(e){
   const el = e.target;
-
-  // cantidades: actualiza state pero sin render (si renderizas aquí, se pierde el foco)
-  if(el.dataset.act==="qty"){
-    const i = Number(el.dataset.i);
-    const s = el.dataset.s;
-    state.lines[i].qty[s] = n2(el.value);
-    return;
-  }
 
   if(el.dataset.act==="ref"){
     const i = Number(el.dataset.i);
     state.lines[i].ref = el.value.toUpperCase();
-    // no render aquí: el autocomplete ya muestra opciones sin re-render
     return;
   }
-
   if(el.classList.contains("descInput")){
     const i = Number(el.dataset.i);
     state.lines[i].desc = el.value;
@@ -830,18 +796,6 @@ function handleInput(e){
   if(el.classList.contains("priceInput")){
     const i = Number(el.dataset.i);
     state.lines[i].price = Number(el.value||0);
-    render();
-    return;
-  }
-}
-
-// ✅ cuando sales del input (o cambias), entonces sí renderizamos para recalcular totales/email
-function handleChange(e){
-  const el = e.target;
-  if(el.dataset.act==="qty"){
-    const i = Number(el.dataset.i);
-    const s = el.dataset.s;
-    state.lines[i].qty[s] = n2(el.value);
     render();
     return;
   }
@@ -868,7 +822,6 @@ function handleChange(e){
   $("#pdfBtn").addEventListener("click", makePDF);
   $("#pdfBtn2").addEventListener("click", makePDF);
 
-  // primer render
   state.lines = [defaultLine()];
   state.expanded[state.lines[0].id] = true;
   render();
