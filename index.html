@@ -1,832 +1,160 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Abuela Tata · Invierno AW 26/27 · Pedidos</title>
+/* ========= Autocomplete de referencias =========
+   Requisitos:
+   - Un input de referencia (por defecto: #refInput)
+   - Un objeto tarifa ya cargado (price list):
+       Ejemplo esperado:
+         const PRICE_MAP = {
+           "1299426": { desc:"JESUSITO CON CAPOTA", price:53.80 },
+           ...
+         };
+   - Función que tú ya tengas para "aplicar" una referencia a la línea,
+     o rellenar descripción/precio al cambiar la ref.
+================================================= */
 
-  <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+(function setupRefAutocomplete(){
+  const refInput = document.querySelector('#refInput');  // <-- AJUSTA SI TU ID ES OTRO
+  if(!refInput) return;
 
-  <style>
-    :root{
-      --bg:#fbfaf8;
-      --card:#ffffff;
-      --ink:#141414;
-      --muted:rgba(20,20,20,.62);
-      --line:rgba(0,0,0,.10);
-      --shadow:0 18px 40px rgba(0,0,0,.10);
-      --aqua:#62c7c1;
-      --aqua2:#41b6af;
-      --aquaInk:#073b3a;
-      --bad:#b00020;
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background: radial-gradient(1200px 800px at 20% -10%, rgba(98,199,193,.20), transparent 50%),
-                  radial-gradient(900px 600px at 110% 10%, rgba(65,182,175,.18), transparent 50%),
-                  var(--bg);
-      color:var(--ink);
-    }
-    header{
-      padding:22px 18px 10px;
-      max-width:1100px;
-      margin:0 auto;
-    }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-    }
-    .brand .logo{
-      width:44px; height:44px;
-      border-radius:14px;
-      background: linear-gradient(135deg, rgba(98,199,193,.95), rgba(65,182,175,.95));
-      box-shadow: 0 10px 22px rgba(0,0,0,.10);
-      display:grid; place-items:center;
-      color:white; font-weight:800;
-    }
-    .brand h1{margin:0;font-size:18px;letter-spacing:.2px}
-    .brand p{margin:2px 0 0; color:var(--muted); font-size:13px}
-    main{
-      max-width:1100px; margin:0 auto; padding:10px 18px 40px;
-      display:grid; gap:14px;
-      grid-template-columns: 1.25fr .75fr;
-    }
-    @media (max-width: 960px){
-      main{grid-template-columns:1fr}
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card .hd{
-      padding:14px 16px;
-      border-bottom:1px solid var(--line);
-      display:flex; gap:10px; justify-content:space-between; align-items:center;
-    }
-    .card .hd h2{
-      margin:0; font-size:14px; letter-spacing:.2px;
-    }
-    .pill{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      background: rgba(98,199,193,.16);
-      color: var(--aquaInk);
-      border:1px solid rgba(98,199,193,.30);
-      white-space:nowrap;
-    }
-    .content{padding:14px 16px}
-    .row{display:flex; gap:10px; flex-wrap:wrap}
-    .field{
-      display:flex; flex-direction:column; gap:6px;
-      min-width:180px;
-      flex: 1;
-    }
-    label{font-size:12px;color:var(--muted)}
-    input, select, textarea{
-      border:1px solid rgba(0,0,0,.14);
-      border-radius:12px;
-      padding:11px 12px;
-      font-size:14px;
-      outline:none;
-      background:white;
-    }
-    input:focus, select:focus, textarea:focus{
-      border-color: rgba(65,182,175,.80);
-      box-shadow: 0 0 0 3px rgba(65,182,175,.18);
-    }
-    textarea{
-      width:100%;
-      min-height:170px;
-      resize: vertical;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New";
-      font-size:12px;
-      line-height:1.35;
-    }
-    .btn{
-      appearance:none;
-      border:0;
-      padding:10px 12px;
-      border-radius:14px;
-      font-weight:700;
-      cursor:pointer;
-      background: linear-gradient(135deg, var(--aqua), var(--aqua2));
-      color: var(--aquaInk);
-      box-shadow: 0 10px 22px rgba(65,182,175,.22);
-      transition: transform .06s ease;
-      white-space:nowrap;
-    }
-    .btn:active{transform: scale(.98)}
-    .btn.ghost{
-      background: transparent;
-      color: var(--aquaInk);
-      border:1px solid rgba(65,182,175,.45);
-      box-shadow:none;
-    }
-    .btn.bad{
-      background: rgba(176,0,32,.10);
-      border:1px solid rgba(176,0,32,.22);
-      color: var(--bad);
-      box-shadow:none;
-    }
-    .toolbar{
-      display:flex; gap:10px; flex-wrap:wrap;
-      align-items:center; justify-content:flex-end;
-    }
+  const wrap = document.getElementById('refSuggestWrap');
+  const box  = document.getElementById('refSuggest');
 
-    .line{
-      border:1px solid rgba(0,0,0,.10);
-      border-radius: 16px;
-      overflow:hidden;
-      margin-bottom:12px;
+  // Detecta el mapa de precios que ya uses en tu app
+  // Cambia esto si tu variable se llama distinto:
+  const map = window.PRICE_MAP || window.TARIFA || window.PRICES || null;
+  if(!map) return;
+
+  // Convierte map a lista (ref, desc, price)
+  const all = Object.entries(map).map(([ref, v]) => ({
+    ref: String(ref),
+    desc: String(v.desc ?? v.descripcion ?? v.description ?? ''),
+    price: Number(v.price ?? v.precio ?? v.p ?? 0)
+  }))
+  .filter(x => x.ref && x.desc);
+
+  let currentItems = [];
+  let activeIndex = -1;
+  let lastValue = '';
+
+  function eur(n){
+    // Formato ES (53,80 €)
+    try {
+      return new Intl.NumberFormat('es-ES', { style:'currency', currency:'EUR' }).format(n);
+    } catch(e){
+      return (Math.round(n*100)/100).toFixed(2).replace('.', ',') + ' €';
     }
-    .lineTop{
-      display:flex; gap:10px;
-      padding:12px 12px;
-      align-items:center;
-      background: rgba(98,199,193,.08);
-      border-bottom:1px solid rgba(0,0,0,.08);
-    }
-    .lineTop .left{
-      flex:1;
-      min-width: 240px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .refWrap{
-      position:relative;
-      min-width:220px;
-      flex:1;
-    }
-    .refInput{
-      width:100%;
-      padding-right:42px;
-      font-weight:800;
-      letter-spacing:.3px;
-      text-transform:uppercase;
-    }
-    .refHint{
-      position:absolute;
-      right:10px;
-      top:50%;
-      transform:translateY(-50%);
-      font-size:12px;
-      color:rgba(20,20,20,.42);
-      font-weight:700;
-      user-select:none;
-    }
-    .descInput{min-width:240px; flex:2}
-    .priceInput{max-width:140px}
-    .lineTop .right{
-      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
-    }
-    .miniBtn{
-      border-radius:12px;
-      padding:9px 10px;
-      font-weight:800;
-      border:1px solid rgba(65,182,175,.45);
-      background:white;
-      color: var(--aquaInk);
-      cursor:pointer;
-    }
-    .miniBtn.bad{
-      border-color: rgba(176,0,32,.25);
-      color: var(--bad);
-    }
-
-    .lineBody{
-      padding:12px 12px 12px;
-      display:none;
-    }
-    .lineBody.open{display:block}
-
-    .sizesGrid{
-      display:grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap:10px;
-    }
-    @media (max-width: 960px){
-      .sizesGrid{grid-template-columns: repeat(3, minmax(0, 1fr));}
-    }
-
-    .qtyBox{
-      border:1px solid rgba(0,0,0,.12);
-      border-radius: 14px;
-      padding:10px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .qtyBox .sz{
-      font-size:12px;
-      color:rgba(20,20,20,.58);
-      font-weight:800;
-    }
-    .qtySelect{
-      width:100%;
-      height:40px;
-      border-radius:12px;
-      border:1px solid rgba(0,0,0,.14);
-      padding:8px 10px;
-      font-weight:900;
-      background:white;
-    }
-
-    .totals{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      margin-top:10px;
-      padding-top:10px;
-      border-top:1px dashed rgba(0,0,0,.20);
-    }
-    .totals .trow{
-      display:flex; justify-content:space-between; gap:10px;
-      font-size:13px;
-      color:rgba(20,20,20,.82);
-    }
-    .totals .trow strong{font-size:15px}
-    footer{
-      max-width:1100px;
-      margin:0 auto;
-      padding: 0 18px 30px;
-      color: rgba(20,20,20,.55);
-      font-size:12px;
-    }
-    .hint{
-      color: rgba(20,20,20,.55);
-      font-size:12px;
-      line-height:1.35;
-      margin-top:6px;
-    }
-
-    .acBox{
-      position:absolute;
-      z-index:50;
-      left:0; right:0;
-      top: calc(100% + 6px);
-      background:white;
-      border:1px solid rgba(0,0,0,.12);
-      border-radius: 14px;
-      box-shadow: 0 18px 40px rgba(0,0,0,.12);
-      overflow:hidden;
-      display:none;
-      max-height: 260px;
-      overflow-y:auto;
-    }
-    .acItem{
-      padding:10px 12px;
-      cursor:pointer;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      border-bottom:1px solid rgba(0,0,0,.06);
-      font-size:13px;
-    }
-    .acItem:hover{background: rgba(98,199,193,.10)}
-    .acLeft{font-weight:900}
-    .acRight{color:rgba(20,20,20,.55); font-weight:700}
-
-    .badge{
-      font-size:11px;
-      padding:5px 9px;
-      border-radius:999px;
-      background: rgba(0,0,0,.05);
-      border:1px solid rgba(0,0,0,.08);
-      color: rgba(20,20,20,.72);
-      font-weight:800;
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    <div class="brand">
-      <div class="logo">AT</div>
-      <div>
-        <h1>Abuela Tata · Invierno AW 26/27</h1>
-        <p>App de pedidos (móvil + escritorio) · PDF + Email</p>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section class="card">
-      <div class="hd">
-        <h2>Líneas de pedido</h2>
-        <span class="pill" id="linesCountPill">0 líneas</span>
-      </div>
-
-      <div class="content">
-        <div class="row" style="margin-bottom:10px">
-          <div class="field">
-            <label>Cliente</label>
-            <input id="customer" placeholder="Nombre de la tienda / cliente" />
-          </div>
-          <div class="field" style="max-width:210px">
-            <label>Temporada</label>
-            <select id="season">
-              <option value="AW 26/27">AW 26/27</option>
-              <option value="SS 26">SS 26</option>
-            </select>
-          </div>
-          <div class="field" style="max-width:240px">
-            <label>Fecha</label>
-            <input id="orderDate" />
-          </div>
-        </div>
-
-        <div class="toolbar" style="justify-content:flex-start; margin-bottom:12px">
-          <button class="btn" id="addLineBtn" type="button">+ Añadir línea</button>
-          <button class="btn ghost" id="resetBtn" type="button">Reset</button>
-        </div>
-
-        <div id="lines"></div>
-
-        <div class="toolbar" style="justify-content:flex-start">
-          <button class="btn" id="addLineBtn2" type="button">+ Añadir otra línea</button>
-        </div>
-
-        <div class="totals">
-          <div class="trow"><span>Total unidades</span><strong id="totUnits">0</strong></div>
-          <div class="trow"><span>Total €</span><strong id="totEur">0,00 €</strong></div>
-        </div>
-
-        <div class="hint">
-          Tip: escribe la referencia y selecciona del desplegable. Las tallas aparecen automáticamente según el tipo de referencia.
-        </div>
-      </div>
-    </section>
-
-    <aside class="card">
-      <div class="hd">
-        <h2>Salida: Email + PDF</h2>
-        <span class="badge">Sin firma</span>
-      </div>
-      <div class="content">
-        <div class="row" style="margin-bottom:10px">
-          <button class="btn" id="copyEmailBtn" type="button">Copiar email</button>
-          <button class="btn ghost" id="mailtoBtn" type="button">Abrir email</button>
-          <button class="btn" id="pdfBtn" type="button">Generar PDF</button>
-          <button class="btn ghost" id="pdfBtn2" type="button">PDF (copia)</button>
-        </div>
-
-        <label>Email (copia/pega)</label>
-        <textarea id="emailBox" spellcheck="false"></textarea>
-
-        <div class="hint">
-          “Abrir email” usa mailto. “Copiar email” siempre funciona.
-        </div>
-      </div>
-    </aside>
-  </main>
-
-  <footer>
-    © Abuela Tata · App interna de pedidos. Botones en verde agua.
-  </footer>
-
-<script>
-/** ==========================
- *  CONFIG
- *  ========================== */
-const SIZES_MAP = {
-  baby: ["3M","6M","9M","18M","2A","3A","4A"],
-  kid: ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"],
-  one: ["TU"]
-};
-
-// Cantidades del desplegable (0..20). Si quieres 0..50 cambia 20 por 50.
-const QTY_MAX = 20;
-
-window.PRICE_MAP = window.PRICE_MAP || {
-  "1204402": { desc:"Modelo 1204402", price: 99.00 },
-  "2509403": { desc:"Modelo 2509403", price: 79.00 },
-};
-
-const ORDER_DATE = new Date().toISOString().slice(0,10);
-
-/** ==========================
- *  STATE
- *  ========================== */
-const $ = (s)=>document.querySelector(s);
-const state = {
-  lines: [],
-  expanded: {}
-};
-
-function n2(v){
-  const x = Number(v||0);
-  if(!isFinite(x) || x<0) return 0;
-  return Math.round(x);
-}
-
-function eur(v){
-  const n = Number(v||0);
-  return n.toLocaleString("es-ES",{style:"currency",currency:"EUR"});
-}
-
-function defaultLine(){
-  const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random();
-  return {
-    id,
-    ref:"",
-    desc:"",
-    price:0,
-    sizes: [],
-    qty: {}
-  };
-}
-
-function sizesFromRef(ref){
-  const r = String(ref||"").trim();
-  if(!r) return [];
-  const prefix = r.slice(0,2);
-  if(prefix==="08") return SIZES_MAP.one;
-  if(prefix==="12" || prefix==="13" || prefix==="31" || prefix==="30") return SIZES_MAP.baby;
-  if(prefix==="25" || prefix==="22" || prefix==="43") return SIZES_MAP.kid;
-  return SIZES_MAP.kid;
-}
-
-function totalUnits(){
-  let t=0;
-  state.lines.forEach(l=>{
-    (l.sizes||[]).forEach(s=> t += n2(l.qty?.[s]) );
-  });
-  return t;
-}
-
-function totalEur(){
-  let t=0;
-  state.lines.forEach(l=>{
-    const p = Number(l.price||0);
-    (l.sizes||[]).forEach(s=> t += p * n2(l.qty?.[s]) );
-  });
-  return t;
-}
-
-function qtyOptionsHtml(selected){
-  let html = "";
-  for(let i=0;i<=QTY_MAX;i++){
-    const sel = (i===n2(selected)) ? "selected" : "";
-    html += `<option value="${i}" ${sel}>${i}</option>`;
   }
-  return html;
-}
-
-/** ==========================
- *  RENDER
- *  ========================== */
-function render(){
-  const root = $("#lines");
-  $("#linesCountPill").textContent = `${state.lines.length} líneas`;
-
-  root.innerHTML = state.lines.map((line, idx)=>{
-    const open = !!state.expanded[line.id];
-    const sizes = line.sizes || [];
-    return `
-      <div class="line" data-line="${line.id}">
-        <div class="lineTop">
-          <div class="left">
-            <div class="refWrap">
-              <input class="refInput" placeholder="REF" value="${escapeHtml(line.ref)}" data-i="${idx}" data-act="ref" autocomplete="off">
-              <div class="refHint">${sizes.length? `${sizes.length} tallas` : ""}</div>
-              <div class="acBox" id="ac_${line.id}"></div>
-            </div>
-
-            <input class="descInput" placeholder="Descripción" value="${escapeHtml(line.desc)}" data-i="${idx}">
-            <input class="priceInput" placeholder="Precio" value="${Number(line.price||0)}" data-i="${idx}">
-          </div>
-
-          <div class="right">
-            <button class="miniBtn" data-act="toggle" data-i="${idx}" type="button">${open? "Ocultar tallas" : "Mostrar tallas"}</button>
-            <button class="miniBtn bad" data-act="del" data-i="${idx}" type="button">Borrar</button>
-          </div>
-        </div>
-
-        <div class="lineBody ${open? "open":""}">
-          <div class="sizesGrid">
-            ${sizes.map(s=>`
-              <div class="qtyBox">
-                <div class="sz">${s}</div>
-                <select class="qtySelect" data-act="qtySelect" data-i="${idx}" data-s="${s}">
-                  ${qtyOptionsHtml(line.qty?.[s])}
-                </select>
-              </div>
-            `).join("")}
-          </div>
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  $("#totUnits").textContent = String(totalUnits());
-  $("#totEur").textContent = eur(totalEur());
-  buildOutputs();
-
-  state.lines.forEach((line, idx)=>{
-    const input = root.querySelector(`[data-act="ref"][data-i="${idx}"]`);
-    const box = $("#ac_"+line.id);
-    setupAutocomplete(input, box, idx);
-  });
-}
-
-function escapeHtml(str){
-  return String(str||"")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-/** ==========================
- *  OUTPUTS
- *  ========================== */
-function buildOutputs(){
-  const cust = $("#customer").value.trim();
-  const season = $("#season").value;
-  const date = $("#orderDate").value;
-
-  const subject = `Pedido ${cust? cust+" · ":""}${season} · ${date}`;
-
-  let body = "";
-  body += `CLIENTE: ${cust || "-"}\n`;
-  body += `TEMPORADA: ${season}\n`;
-  body += `FECHA: ${date}\n\n`;
-
-  if(!state.lines.length){
-    body += "SIN LÍNEAS\n";
-  }else{
-    state.lines.forEach((l, i)=>{
-      body += `LÍNEA ${i+1}\n`;
-      body += `REF: ${l.ref || "-"}\n`;
-      body += `DESC: ${l.desc || "-"}\n`;
-      body += `PRECIO: ${eur(l.price||0)}\n`;
-      body += `TALLAS:\n`;
-      (l.sizes||[]).forEach(s=>{
-        body += `  - ${s}: ${n2(l.qty?.[s])}\n`;
-      });
-      body += `----------------------------------------\n`;
-    });
-    body += `TOTAL UNIDADES: ${totalUnits()}\n`;
-    body += `TOTAL: ${eur(totalEur())}\n`;
-  }
-
-  $("#emailBox").value = body;
-  $("#mailtoBtn").dataset.subject = subject;
-}
-
-function copyEmail(){
-  const t = $("#emailBox");
-  t.focus();
-  t.select();
-  t.setSelectionRange(0, 999999);
-  try{ document.execCommand("copy"); }catch(e){}
-}
-
-function openMailto(){
-  const subject = $("#mailtoBtn").dataset.subject || "Pedido";
-  const body = $("#emailBox").value || "";
-  const href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = href;
-}
-
-/** ==========================
- *  PDF
- *  ========================== */
-async function makePDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({unit:"pt", format:"a4"});
-  const margin = 40;
-  let y = margin;
-
-  const cust = $("#customer").value.trim();
-  const season = $("#season").value;
-  const date = $("#orderDate").value;
-
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(16);
-  doc.text(`Pedido · ${season}`, margin, y); y += 20;
-
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(11);
-  doc.text(`Cliente: ${cust || "-"}`, margin, y); y += 16;
-  doc.text(`Fecha: ${date}`, margin, y); y += 22;
-
-  doc.setDrawColor(0);
-  doc.setLineWidth(0.5);
-  doc.line(margin, y, 555, y); y += 18;
-
-  if(!state.lines.length){
-    doc.text("Sin líneas.", margin, y); y += 16;
-  }else{
-    state.lines.forEach((l,i)=>{
-      doc.setFont("helvetica","bold");
-      doc.text(`Línea ${i+1}`, margin, y); y += 14;
-
-      doc.setFont("helvetica","normal");
-      doc.text(`Ref: ${l.ref || "-"}`, margin, y); y += 13;
-      doc.text(`Desc: ${l.desc || "-"}`, margin, y); y += 13;
-      doc.text(`Precio: ${eur(l.price||0)}`, margin, y); y += 13;
-
-      doc.text(`Tallas:`, margin, y); y += 13;
-      (l.sizes||[]).forEach(s=>{
-        doc.text(`• ${s}: ${n2(l.qty?.[s])}`, margin+12, y); y += 13;
-        if(y > 780){ doc.addPage(); y = margin; }
-      });
-
-      y += 8;
-      doc.setDrawColor(180);
-      doc.line(margin, y, 555, y); y += 16;
-      if(y > 780){ doc.addPage(); y = margin; }
-    });
-
-    doc.setFont("helvetica","bold");
-    doc.text(`TOTAL UNIDADES: ${totalUnits()}`, margin, y); y += 14;
-    doc.text(`TOTAL: ${eur(totalEur())}`, margin, y); y += 14;
-  }
-
-  doc.save(`pedido_${(cust||"cliente").replaceAll(" ","_")}_${season.replaceAll(" ","")}_${date}.pdf`);
-}
-
-/** ==========================
- *  AUTOCOMPLETE
- *  ========================== */
-function setupAutocomplete(input, box, lineIndex){
-  const all = Object.entries(window.PRICE_MAP).map(([ref, obj])=>({
-    ref,
-    desc: obj.desc || "",
-    price: Number(obj.price||0)
-  }));
-
-  let open = false;
 
   function close(){
-    box.style.display = "none";
-    open = false;
-  }
-  function show(items){
-    if(!items.length){ close(); return; }
-    box.innerHTML = items.slice(0,20).map(it=>`
-      <div class="acItem" data-ref="${escapeHtml(it.ref)}">
-        <div class="acLeft">${escapeHtml(it.ref)}</div>
-        <div class="acRight">${escapeHtml(it.desc)} · ${eur(it.price)}</div>
-      </div>
-    `).join("");
-    box.style.display = "block";
-    open = true;
+    wrap.style.display = 'none';
+    box.innerHTML = '';
+    currentItems = [];
+    activeIndex = -1;
   }
 
-  input.addEventListener("focus", ()=>{
-    const q = input.value.trim().toUpperCase();
-    const items = all.filter(it => it.ref.toUpperCase().includes(q)).slice(0,20);
-    show(items);
-  });
+  function open(){
+    wrap.style.display = 'block';
+  }
 
-  input.addEventListener("input", ()=>{
-    const q = input.value.trim().toUpperCase();
-    const items = all.filter(it => it.ref.toUpperCase().includes(q)).slice(0,20);
-    show(items);
-  });
+  function setActive(i){
+    activeIndex = i;
+    [...box.querySelectorAll('.suggest-item')].forEach((el, idx)=>{
+      el.classList.toggle('active', idx === activeIndex);
+    });
+  }
 
-  document.addEventListener("click",(e)=>{
-    if(!open) return;
-    if(e.target===input) return;
-    if(box.contains(e.target)) return;
+  function applyItem(item){
+    refInput.value = item.ref;
     close();
-  });
 
-  box.addEventListener("click",(e)=>{
-    const item = e.target.closest(".acItem");
-    if(!item) return;
-    const ref = item.dataset.ref;
+    // Dispara lo mismo que cuando el usuario mete la ref manualmente
+    refInput.dispatchEvent(new Event('input', { bubbles:true }));
+    refInput.dispatchEvent(new Event('change', { bubbles:true }));
 
-    const data = window.PRICE_MAP[ref] || {};
-    const line = state.lines[lineIndex];
-
-    line.ref = ref;
-    line.desc = data.desc || line.desc;
-    line.price = Number(data.price||0);
-
-    line.sizes = sizesFromRef(ref);
-    line.qty = line.qty || {};
-    line.sizes.forEach(s=>{ if(line.qty[s]==null) line.qty[s]=0; });
-
-    state.expanded[line.id] = true;
-    render();
-    close();
-  });
-}
-
-/** ==========================
- *  EVENTS
- *  ========================== */
-function addLine(){
-  const l = defaultLine();
-  state.lines.push(l);
-  state.expanded[l.id] = true;
-  render();
-}
-
-function resetAll(){
-  state.lines = [defaultLine()];
-  state.expanded = {};
-  state.expanded[state.lines[0].id] = true;
-  render();
-}
-
-// Cambios del select de cantidad
-function handleChange(e){
-  const el = e.target;
-  if(el.dataset.act==="qtySelect"){
-    const i = Number(el.dataset.i);
-    const s = el.dataset.s;
-    state.lines[i].qty[s] = n2(el.value);
-    render();
-    return;
+    // Si tú tienes una función explícita, úsala aquí (opcional):
+    // window.onRefSelected?.(item.ref);
   }
-}
 
-function handleClick(e){
-  const btn = e.target.closest("[data-act]");
-  if(!btn) return;
+  function render(list){
+    box.innerHTML = '';
+    currentItems = list;
 
-  const act = btn.dataset.act;
-  const i = Number(btn.dataset.i);
+    if(!list.length){ close(); return; }
 
-  if(act==="toggle"){
-    const line = state.lines[i];
-    state.expanded[line.id] = !state.expanded[line.id];
-    render();
-    return;
+    list.forEach((item, idx)=>{
+      const row = document.createElement('div');
+      row.className = 'suggest-item';
+      row.innerHTML = `
+        <div class="left">
+          <div class="ref">${item.ref}</div>
+          <div class="desc">${item.desc}</div>
+        </div>
+        <div class="price">${eur(item.price)}</div>
+      `;
+      row.addEventListener('mousedown', (e)=>{
+        // mousedown para que no se cierre antes por blur
+        e.preventDefault();
+        applyItem(item);
+      });
+      box.appendChild(row);
+    });
+
+    open();
+    setActive(0);
   }
-  if(act==="del"){
-    state.lines.splice(i,1);
-    if(!state.lines.length){
-      const l = defaultLine();
-      state.lines.push(l);
-      state.expanded[l.id] = true;
+
+  function search(value){
+    const v = String(value || '').trim();
+    if(v.length < 2){ close(); return; }   // con 2 ya aparece
+    if(v === lastValue) return;
+    lastValue = v;
+
+    // Filtra por prefijo (startsWith) y luego por "contiene"
+    const starts = all.filter(x => x.ref.startsWith(v));
+    let res = starts;
+
+    if(!res.length){
+      res = all.filter(x => x.ref.includes(v));
     }
-    render();
-    return;
+
+    // Limita a 12 resultados pa’ móvil
+    res = res.slice(0, 12);
+    render(res);
   }
-}
 
-function handleInput(e){
-  const el = e.target;
+  refInput.addEventListener('input', (e)=>{
+    search(e.target.value);
+  });
 
-  if(el.dataset.act==="ref"){
-    const i = Number(el.dataset.i);
-    state.lines[i].ref = el.value.toUpperCase();
-    return;
-  }
-  if(el.classList.contains("descInput")){
-    const i = Number(el.dataset.i);
-    state.lines[i].desc = el.value;
-    render();
-    return;
-  }
-  if(el.classList.contains("priceInput")){
-    const i = Number(el.dataset.i);
-    state.lines[i].price = Number(el.value||0);
-    render();
-    return;
-  }
-}
+  refInput.addEventListener('keydown', (e)=>{
+    if(wrap.style.display === 'none') return;
 
-/** ==========================
- *  INIT
- *  ========================== */
-(function init(){
-  $("#orderDate").value = ORDER_DATE;
+    if(e.key === 'ArrowDown'){
+      e.preventDefault();
+      const next = Math.min(activeIndex + 1, currentItems.length - 1);
+      setActive(next);
+    } else if(e.key === 'ArrowUp'){
+      e.preventDefault();
+      const prev = Math.max(activeIndex - 1, 0);
+      setActive(prev);
+    } else if(e.key === 'Enter'){
+      if(activeIndex >= 0 && currentItems[activeIndex]){
+        e.preventDefault();
+        applyItem(currentItems[activeIndex]);
+      }
+    } else if(e.key === 'Escape'){
+      close();
+    }
+  });
 
-  $("#addLineBtn").addEventListener("click", addLine);
-  $("#addLineBtn2").addEventListener("click", addLine);
+  // Cierra al hacer click fuera
+  document.addEventListener('click', (e)=>{
+    if(e.target === refInput) return;
+    if(wrap.contains(e.target)) return;
+    close();
+  });
 
-  $("#resetBtn").addEventListener("click", resetAll);
-
-  $("#lines").addEventListener("click", handleClick);
-  $("#lines").addEventListener("input", handleInput);
-  $("#lines").addEventListener("change", handleChange);
-
-  $("#copyEmailBtn").addEventListener("click", copyEmail);
-  $("#mailtoBtn").addEventListener("click", openMailto);
-
-  $("#pdfBtn").addEventListener("click", makePDF);
-  $("#pdfBtn2").addEventListener("click", makePDF);
-
-  state.lines = [defaultLine()];
-  state.expanded[state.lines[0].id] = true;
-  render();
+  // Si pierde foco, cierra (pero con un mini delay pa’ permitir click)
+  refInput.addEventListener('blur', ()=>{
+    setTimeout(close, 120);
+  });
 })();
-</script>
-
-</body>
-</html>
