@@ -1,1 +1,692 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Abuela Tata · Invierno AW 26/27 · Pedidos</title>
 
+  <style>
+    :root{
+      --bg:#f6f7f7;
+      --card:#ffffff;
+      --text:#1f2a2e;
+      --muted:#6d7a80;
+      --line:#e6eaec;
+      --brand:#8fb9b1;
+      --brand-2:#77a79e;
+      --danger:#c84646;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:var(--bg);
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      background:rgba(246,247,247,.88);
+      backdrop-filter: blur(8px);
+      border-bottom:1px solid var(--line);
+    }
+    .wrap{max-width:1200px; margin:0 auto; padding:16px;}
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; min-width:260px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      background:linear-gradient(135deg, var(--brand), #cfe6e1);
+      box-shadow: 0 6px 16px rgba(0,0,0,.08);
+    }
+    .brand h1{font-size:16px; margin:0; line-height:1.1}
+    .brand p{margin:2px 0 0; color:var(--muted); font-size:12px}
+
+    .searchRow{
+      display:flex; gap:10px; align-items:center; flex:1;
+      min-width:280px;
+    }
+    .input{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:12px 12px;
+      font-size:14px;
+      outline:none;
+    }
+    .btn{
+      border:0;
+      background:var(--brand);
+      color:#fff;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow: 0 10px 20px rgba(143,185,177,.25);
+      transition: transform .06s ease, background .2s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{background:var(--brand-2)}
+    .btn:active{transform: translateY(1px)}
+    .btn.secondary{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+      box-shadow:none;
+      font-weight:800;
+    }
+    .btn.danger{
+      background:var(--danger);
+      box-shadow: 0 10px 20px rgba(200,70,70,.18);
+    }
+
+    main .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:16px;
+      padding:16px;
+      max-width:1200px;
+      margin:0 auto;
+    }
+    @media (max-width: 980px){
+      main .grid{grid-template-columns:1fr; padding:12px;}
+      header .wrap{padding:12px;}
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+    }
+    .cardHeader h2{margin:0; font-size:14px}
+    .cardHeader small{color:var(--muted)}
+    .cardBody{padding:14px 16px;}
+
+    .catalog{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (max-width: 560px){
+      .catalog{grid-template-columns:1fr;}
+    }
+
+    .item{
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      display:flex;
+      flex-direction:column;
+    }
+    .img{
+      aspect-ratio: 4/3;
+      background:#f0f3f3;
+      display:flex; align-items:center; justify-content:center;
+      position:relative;
+    }
+    .img img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .badge{
+      position:absolute; left:10px; top:10px;
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:900;
+    }
+    .info{padding:12px;}
+    .title{margin:0; font-size:14px; font-weight:900; line-height:1.2;}
+    .meta{margin:6px 0 10px; color:var(--muted); font-size:12px;}
+    .price{font-weight:1000;}
+    .row{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+    }
+
+    .orderLine{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:10px;
+      background:#fff;
+    }
+    .orderLineTop{
+      display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .refName{font-weight:1000;}
+    .sub{color:var(--muted); font-size:12px; margin-top:4px}
+    .lineTotal{
+      font-weight:1000;
+      font-size:14px;
+      white-space:nowrap;
+    }
+
+    .sizes{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:10px;
+    }
+    @media (max-width: 520px){
+      .sizes{grid-template-columns:1fr;}
+    }
+    .sizeRow{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background: #fbfcfc;
+    }
+    .sizeLabel{
+      font-weight:1000;
+      letter-spacing:.2px;
+      min-width:70px;
+    }
+    .select{
+      width:120px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+      font-size:14px;
+      outline:none;
+      cursor:pointer;
+    }
+    .hint{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .totals{
+      border-top:1px solid var(--line);
+      margin-top:12px;
+      padding-top:12px;
+      display:grid;
+      gap:8px;
+    }
+    .totRow{
+      display:flex; align-items:center; justify-content:space-between;
+      font-size:14px;
+    }
+    .totRow strong{font-size:16px}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .smallNote{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .footerBtns{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      background: rgba(31,42,46,.92);
+      color: white;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .18s ease;
+    }
+    .toast.show{opacity:1;}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Abuela Tata · Invierno AW 26/27</h1>
+          <p>Pedidos B2B · Tallaje cómodo para móvil</p>
+        </div>
+      </div>
+
+      <div class="searchRow">
+        <input id="search" class="input" placeholder="Busca por referencia (ej: 1225406) o nombre…" autocomplete="off" />
+        <button id="clearSearch" class="btn secondary" type="button">Limpiar</button>
+      </div>
+
+      <div class="pill" id="orderPill">Pedido: 0 uds · 0,00 €</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <section class="card">
+      <div class="cardHeader">
+        <div>
+          <h2>Catálogo</h2>
+          <small id="catalogCount">Cargando…</small>
+        </div>
+        <button id="resetAll" class="btn secondary" type="button">Vaciar pedido</button>
+      </div>
+      <div class="cardBody">
+        <div class="catalog" id="catalog"></div>
+        <div class="smallNote">
+          Las fotos se cargan solas desde <strong>assets/img/REFERENCIA.jpg</strong>. Si falta alguna, sale “Sin imagen”.
+        </div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <div class="cardHeader">
+        <div>
+          <h2>Tu pedido</h2>
+          <small>Se guarda automáticamente en este dispositivo</small>
+        </div>
+      </div>
+      <div class="cardBody">
+        <div id="order"></div>
+
+        <div class="totals">
+          <div class="totRow"><span>Unidades</span><strong id="totUnits">0</strong></div>
+          <div class="totRow"><span>Total</span><strong id="totAmount">0,00 €</strong></div>
+        </div>
+
+        <div class="footerBtns">
+          <button id="copyOrder" class="btn secondary" type="button">Copiar pedido</button>
+          <a id="mailto" class="btn" href="#" role="button">Enviar por email</a>
+        </div>
+
+        <div class="smallNote">
+          El email abre tu correo con el pedido ya montado.
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div class="toast" id="toast">Copiado ✅</div>
+
+<script>
+  /***********************
+   * FAMILIAS DE TALLAS (CONFIRMADAS)
+   ***********************/
+  const SIZE_FAMILIES = {
+    A: ["3M","6M","9M","18M","2A","3A","4A"],
+    B: ["12M","18M","2A","3A","4A","5A","6A","8A","10A","12A"],
+    U: ["T.U."]
+  };
+
+  function familyFromRef(ref){
+    const s = String(ref).trim();
+    if (s.startsWith("12") || s.startsWith("13") || s.startsWith("31") || s.startsWith("30")) return "A";
+    if (s.startsWith("25") || s.startsWith("22") || s.startsWith("43")) return "B";
+    if (s.startsWith("08")) return "U";
+    return "B";
+  }
+
+  /***********************
+   * CATÁLOGO: se carga desde data/tarifa.json
+   ***********************/
+  let PRODUCTS = [];
+
+  function imgFromRef(ref){
+    return `assets/img/${String(ref).trim()}.jpg`;
+  }
+
+  async function loadTarifa(){
+    const res = await fetch("data/tarifa.json", { cache: "no-store" });
+    if(!res.ok) throw new Error("No se pudo cargar data/tarifa.json");
+    const arr = await res.json();
+    if(!Array.isArray(arr)) throw new Error("tarifa.json no es un array");
+    PRODUCTS = arr.map(p => ({
+      ref: String(p.ref ?? "").trim(),
+      name: String(p.name ?? "").trim(),
+      price: Number(p.price ?? 0),
+      family: familyFromRef(p.ref),
+      img: imgFromRef(p.ref)
+    })).filter(p => p.ref && p.name);
+  }
+
+  /***********************
+   * ESTADO DE PEDIDO
+   ***********************/
+  const LS_KEY = "AT_AW2726_ORDER_V3";
+  const order = loadOrder();
+
+  function loadOrder(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return {};
+      const obj = JSON.parse(raw);
+      return obj && typeof obj === "object" ? obj : {};
+    }catch(e){ return {}; }
+  }
+  function saveOrder(){
+    localStorage.setItem(LS_KEY, JSON.stringify(order));
+  }
+
+  /***********************
+   * UTILIDADES
+   ***********************/
+  const eur = (n) => (Number(n)||0).toLocaleString("es-ES",{style:"currency",currency:"EUR"});
+  const byId = (id)=>document.getElementById(id);
+
+  function toast(msg){
+    const t = byId("toast");
+    t.textContent = msg || "Hecho ✅";
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 1200);
+  }
+
+  function clampInt(v){
+    const n = parseInt(v,10);
+    if (Number.isNaN(n) || n < 0) return 0;
+    if (n > 50) return 50;
+    return n;
+  }
+
+  function getProduct(ref){
+    return PRODUCTS.find(p => p.ref === ref);
+  }
+
+  function ensureLine(ref){
+    const p = getProduct(ref);
+    if(!p) return null;
+    if(!order[ref]){
+      const sizes = SIZE_FAMILIES[p.family] || [];
+      const qty = {};
+      sizes.forEach(sz => qty[sz]=0);
+      order[ref] = { ref, name:p.name, price:p.price, family:p.family, qty };
+    }
+    return order[ref];
+  }
+
+  function lineUnits(line){
+    return Object.values(line.qty || {}).reduce((a,b)=>a + (Number(b)||0), 0);
+  }
+  function lineAmount(line){
+    return lineUnits(line) * (Number(line.price)||0);
+  }
+  function orderUnits(){
+    return Object.values(order).reduce((sum,line)=> sum + lineUnits(line), 0);
+  }
+  function orderAmount(){
+    return Object.values(order).reduce((sum,line)=> sum + lineAmount(line), 0);
+  }
+
+  function cleanEmptyLines(){
+    for(const ref of Object.keys(order)){
+      if(lineUnits(order[ref]) === 0) delete order[ref];
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s??"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function escapeJs(s){
+    return String(s??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  }
+
+  /***********************
+   * RENDER CATÁLOGO
+   ***********************/
+  const catalogEl = byId("catalog");
+  const catalogCountEl = byId("catalogCount");
+  const searchEl = byId("search");
+
+  function renderCatalog(filterText=""){
+    const q = filterText.trim().toLowerCase();
+    const list = PRODUCTS.filter(p=>{
+      if(!q) return true;
+      return p.ref.toLowerCase().includes(q) || p.name.toLowerCase().includes(q);
+    });
+
+    catalogCountEl.textContent = `${list.length} artículo${list.length===1?"":"s"}`;
+
+    catalogEl.innerHTML = list.map(p=>{
+      const imgHtml = `
+        <img src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}"
+             onerror="this.remove(); this.parentElement.insertAdjacentHTML('beforeend','<div style=&quot;color:#9aa6ab;font-weight:900;font-size:12px&quot;>Sin imagen</div>');">
+      `;
+
+      return `
+        <div class="item">
+          <div class="img">
+            ${imgHtml}
+            <div class="badge">${escapeHtml(p.ref)}</div>
+          </div>
+          <div class="info">
+            <p class="title">${escapeHtml(p.name)}</p>
+            <p class="meta">Tallas: ${SIZE_FAMILIES[p.family].join(", ")}</p>
+            <div class="row">
+              <div class="price">${eur(p.price)}</div>
+              <button class="btn" type="button" onclick="addToOrder('${escapeJs(p.ref)}')">Añadir</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  window.addToOrder = function(ref){
+    const line = ensureLine(ref);
+    if(!line){
+      toast("Referencia no encontrada");
+      return;
+    }
+    const firstSize = Object.keys(line.qty)[0];
+    line.qty[firstSize] = clampInt((line.qty[firstSize]||0) + 1);
+    saveOrder();
+    renderOrder();
+    updatePill();
+    toast("Añadido ✅");
+  }
+
+  /***********************
+   * RENDER PEDIDO
+   ***********************/
+  const orderEl = byId("order");
+  const totUnitsEl = byId("totUnits");
+  const totAmountEl = byId("totAmount");
+  const orderPillEl = byId("orderPill");
+  const mailtoEl = byId("mailto");
+
+  function options0to20(selected){
+    let html = "";
+    for(let i=0;i<=20;i++){
+      html += `<option value="${i}" ${i===selected?"selected":""}>${i}</option>`;
+    }
+    return html;
+  }
+
+  window.setQty = function(ref, size, value){
+    const line = ensureLine(ref);
+    if(!line) return;
+    line.qty[size] = clampInt(value);
+    saveOrder();
+    renderOrder();
+    updatePill();
+  }
+
+  window.removeLine = function(ref){
+    delete order[ref];
+    saveOrder();
+    renderOrder();
+    updatePill();
+    toast("Quitado");
+  }
+
+  function renderOrder(){
+    cleanEmptyLines();
+    saveOrder();
+
+    const lines = Object.values(order);
+
+    if(lines.length === 0){
+      orderEl.innerHTML = `
+        <div style="border:1px dashed var(--line);border-radius:16px;padding:14px;color:var(--muted);background:#fff">
+          No hay nada aún. Añade artículos desde el catálogo.
+        </div>
+      `;
+      totUnitsEl.textContent = "0";
+      totAmountEl.textContent = eur(0);
+      buildMailto();
+      return;
+    }
+
+    orderEl.innerHTML = lines.map(line=>{
+      const sizes = Object.keys(line.qty || {});
+      const sizeRows = sizes.map(sz=>{
+        const current = clampInt(line.qty[sz] || 0);
+        return `
+          <div class="sizeRow">
+            <div class="sizeLabel">${escapeHtml(sz)}</div>
+            <select class="select" onchange="setQty('${escapeJs(line.ref)}','${escapeJs(sz)}', this.value)">
+              ${options0to20(current)}
+            </select>
+          </div>
+        `;
+      }).join("");
+
+      return `
+        <div class="orderLine">
+          <div class="orderLineTop">
+            <div>
+              <div class="refName">${escapeHtml(line.ref)} · ${escapeHtml(line.name)}</div>
+              <div class="sub">Precio: ${eur(line.price)} · Unidades: <strong>${lineUnits(line)}</strong></div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="lineTotal">${eur(lineAmount(line))}</div>
+              <button class="btn danger" type="button" onclick="removeLine('${escapeJs(line.ref)}')">Quitar</button>
+            </div>
+          </div>
+          <div class="sizes">${sizeRows}</div>
+          <div class="hint">Selector grande pa móvil: cero fallos.</div>
+        </div>
+      `;
+    }).join("");
+
+    totUnitsEl.textContent = String(orderUnits());
+    totAmountEl.textContent = eur(orderAmount());
+    buildMailto();
+  }
+
+  function updatePill(){
+    orderPillEl.textContent = `Pedido: ${orderUnits()} uds · ${eur(orderAmount())}`;
+  }
+
+  function buildOrderText(){
+    const lines = Object.values(order);
+    if(lines.length === 0){
+      return `Hola,\n\nAdjunto pedido vacío.\n\nAll the best\nAntonio`;
+    }
+
+    let text = `Hola,\n\nEste es el pedido:\n\n`;
+    for(const line of lines){
+      text += `${line.ref} · ${line.name} · ${eur(line.price)}\n`;
+      const parts = [];
+      for(const [sz, q] of Object.entries(line.qty)){
+        const n = clampInt(q);
+        if(n>0) parts.push(`${sz}: ${n}`);
+      }
+      text += `Tallas: ${parts.length ? parts.join(" · ") : "—"}\n`;
+      text += `Subtotal línea: ${eur(lineAmount(line))}\n\n`;
+    }
+    text += `TOTAL UDS: ${orderUnits()}\nTOTAL: ${eur(orderAmount())}\n\nAll the best\nAntonio`;
+    return text;
+  }
+
+  function buildMailto(){
+    const subject = `Pedido Abuela Tata · Invierno AW 26/27`;
+    const body = buildOrderText();
+    mailtoEl.setAttribute("href", `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+  }
+
+  byId("copyOrder").addEventListener("click", async ()=>{
+    const text = buildOrderText();
+    try{
+      await navigator.clipboard.writeText(text);
+      toast("Copiado ✅");
+    }catch(e){
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      toast("Copiado ✅");
+    }
+  });
+
+  searchEl.addEventListener("input", (e)=>renderCatalog(e.target.value));
+  byId("clearSearch").addEventListener("click", ()=>{
+    searchEl.value = "";
+    renderCatalog("");
+    searchEl.focus();
+  });
+  byId("resetAll").addEventListener("click", ()=>{
+    for(const k of Object.keys(order)) delete order[k];
+    saveOrder();
+    renderOrder();
+    updatePill();
+    toast("Pedido vacío");
+  });
+
+  /***********************
+   * INIT
+   ***********************/
+  (async ()=>{
+    try{
+      await loadTarifa();
+      renderCatalog("");
+      renderOrder();
+      updatePill();
+      buildMailto();
+    }catch(err){
+      catalogCountEl.textContent = "ERROR cargando tarifa";
+      catalogEl.innerHTML = `
+        <div style="padding:12px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--danger);font-weight:900">
+          No se ha podido cargar <code>data/tarifa.json</code>.<br><br>
+          Asegúrate de que existe ese archivo en el repo y está publicado en GitHub Pages.
+        </div>
+      `;
+      console.error(err);
+    }
+  })();
+</script>
+</body>
+</html>
