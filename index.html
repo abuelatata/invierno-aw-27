@@ -379,37 +379,6 @@
     .modal__cap{ margin-top:10px; }
     .modal__ref{ font-weight: 900; font-size: 1rem; }
     .modal__desc{ color: rgba(0,0,0,.65); margin-top:2px; }
- /* 🔧 FIX iPhone/Windows: el stepper ocupa todo el ancho y no se esconde el + */
-.sz{ align-items: stretch !important; }
-
-.step{
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-  display: grid !important;
-  grid-template-columns: 52px 1fr 52px !important;
-  gap: 12px !important;
-  justify-items: stretch !important;
-}
-
-.step button{
-  width: 52px !important;
-  height: 52px !important;
-  border-radius: 16px !important;
-  font-size: 1.35rem !important;
-}
-
-.step input{
-  width: 100% !important;
-  height: 52px !important;
-  min-width: 0 !important;
-  font-size: 1.1rem !important;
-}
-
-/* En móvil muy estrecho: 1 columna pa que nunca se apriete */
-@media (max-width: 380px){
-  .sizes{ grid-template-columns: 1fr !important; }
-}
   </style>
 </head>
 
