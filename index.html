@@ -164,7 +164,7 @@
       margin-bottom:12px;
       background:rgba(255,255,255,.92);
     }
-    .lineTop{display:flex;gap:12px;align-items:flex-start}
+    .lineTop{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start}
     @media (max-width: 520px){ .lineTop{gap:10px} }
 
     .pimgBtn{
@@ -291,8 +291,15 @@
       font-size: 1.05rem;
     }
     .step input{
-      width:44px;border:0;border-left:1px solid rgba(0,0,0,.10);border-right:1px solid rgba(0,0,0,.10);
-      border-radius:0;padding:0;text-align:center;font-weight:900;min-height:34px;
+      width:56px;
+      border:0;
+      border-left:1px solid rgba(0,0,0,.10);
+      border-right:1px solid rgba(0,0,0,.10);
+      border-radius:0;
+      padding:0;
+      text-align:center;
+      font-weight:900;
+      min-height:34px;
     }
 
     /* Resumen: tabla scrolleable en móvil */
@@ -496,9 +503,52 @@
     };
 
     // =======================
+    // TALLAS POR REFERENCIA (NUEVO)
+    // =======================
+    function getSizesByRef(ref){
+      const r = String(ref || "").trim();
+      const prefix = r.slice(0,2);
+
+      // 12 / 13 / 31 / 30 -> 3m,6m,9m,18m,2a,3a,4a
+      if(["12","13","31","30"].includes(prefix)){
+        return ["3M","6M","9M","18M","2Y","3Y","4Y"];
+      }
+
+      // 25 / 22 / 43 -> 12m,18m,2a,3a,4a,5a,6a,8a,10a,12a
+      if(["25","22","43"].includes(prefix)){
+        return ["12M","18M","2Y","3Y","4Y","5Y","6Y","8Y","10Y","12Y"];
+      }
+
+      // 08 -> talla única
+      if(prefix === "08"){
+        return ["TU"];
+      }
+
+      // fallback mientras no haya ref o no coincida
+      return ["3M","6M","9M","18M","2Y","3Y","4Y"];
+    }
+
+    function ensureQtyForSizes(line){
+      const sizes = getSizesByRef(line.ref);
+      if(!line.qty || typeof line.qty !== "object") line.qty = {};
+      sizes.forEach(s=>{ if(line.qty[s] == null) line.qty[s] = 0; });
+      return sizes;
+    }
+
+    function pruneQtyToSizes(line){
+      const sizes = getSizesByRef(line.ref);
+      if(!line.qty || typeof line.qty !== "object") line.qty = {};
+      const keep = new Set(sizes);
+      Object.keys(line.qty).forEach(k=>{
+        if(!keep.has(k)) delete line.qty[k];
+      });
+      sizes.forEach(s=>{ if(line.qty[s] == null) line.qty[s] = 0; });
+      return sizes;
+    }
+
+    // =======================
     // APP
     // =======================
-    const SIZES = ["3M","6M","9M","12M","18M","2Y","3Y","4Y","5Y","6Y","8Y","10Y","12Y"];
     const state = { lines: [], expanded: {} };
     const $ = (sel)=>document.querySelector(sel);
 
@@ -526,10 +576,8 @@
     function n2(v){ return Math.max(0, Math.floor(Number(v||0))); }
 
     function defaultLine(){
-      const qty = {};
-      SIZES.forEach(s=>qty[s]=0);
       const id = (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()));
-      return { ref:"", desc:"", price:0, qty, id };
+      return { ref:"", desc:"", price:0, qty:{}, id };
     }
 
     function getInfoByRef(ref){
@@ -539,7 +587,8 @@
     }
 
     function lineUnits(line){
-      return SIZES.reduce((a,s)=>a + n2(line.qty[s]), 0);
+      const sizes = ensureQtyForSizes(line);
+      return sizes.reduce((a,s)=>a + n2(line.qty[s]), 0);
     }
     function lineSubtotal(line){
       return lineUnits(line) * Number(line.price||0);
@@ -590,6 +639,10 @@
 
       state.lines.forEach((line, idx)=>{
         const isOpen = !!state.expanded[line.id];
+
+        // asegura qty de las tallas de esa ref
+        const sizes = ensureQtyForSizes(line);
+
         const card = document.createElement("div");
         card.className = "line";
         card.innerHTML = `
@@ -636,12 +689,12 @@
                   <span class="chev">${isOpen ? "▲" : "▼"}</span>
                 </summary>
                 <div class="sizes">
-                  ${SIZES.map(s=>`
+                  ${sizes.map(s=>`
                     <div class="sz">
                       <span class="t">${s}</span>
                       <span class="step">
                         <button data-act="minus" data-i="${idx}" data-s="${s}" type="button" aria-label="Disminuir">−</button>
-                        <input value="${n2(line.qty[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
+                        <input type="number" min="0" step="1" value="${n2(line.qty[s])}" inputmode="numeric" data-act="qty" data-i="${idx}" data-s="${s}">
                         <button data-act="plus" data-i="${idx}" data-s="${s}" type="button" aria-label="Aumentar">+</button>
                       </span>
                     </div>
@@ -673,7 +726,8 @@
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
         .map(l=>{
-          const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>({s, q:n2(l.qty[s])}));
+          const sizes = ensureQtyForSizes(l);
+          const tallas = sizes.filter(s=>n2(l.qty[s])>0).map(s=>({s, q:n2(l.qty[s])}));
           return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
         });
 
@@ -727,7 +781,8 @@
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
         .map(l=>{
-          const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>`${s}: ${n2(l.qty[s])}`).join(" · ");
+          const sizes = ensureQtyForSizes(l);
+          const tallas = sizes.filter(s=>n2(l.qty[s])>0).map(s=>`${s}: ${n2(l.qty[s])}`).join(" · ");
           return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
         });
 
@@ -795,6 +850,10 @@
         L.ref = it.ref;
         L.desc = it.desc;
         L.price = it.price;
+
+        // ajusta tallas a la nueva ref
+        pruneQtyToSizes(L);
+
         render();
       }
 
@@ -827,11 +886,16 @@
 
       input.addEventListener("change", ()=>{
         const v = String(input.value||"").trim();
-        if(!v) return;
-        const it = getInfoByRef(v);
         const L = state.lines[lineIndex];
+
         L.ref = v;
+
+        const it = getInfoByRef(v);
         if(it.desc){ L.desc = it.desc; L.price = it.price; }
+
+        // ajusta tallas a la nueva ref
+        pruneQtyToSizes(L);
+
         render();
       });
 
@@ -871,7 +935,8 @@
       const rows = state.lines
         .filter(l=>String(l.ref||"").trim() && lineUnits(l)>0)
         .map(l=>{
-          const tallas = SIZES.filter(s=>n2(l.qty[s])>0).map(s=>`${s}: ${n2(l.qty[s])}`);
+          const sizes = ensureQtyForSizes(l);
+          const tallas = sizes.filter(s=>n2(l.qty[s])>0).map(s=>`${s}: ${n2(l.qty[s])}`);
           return { ref:l.ref, desc:l.desc, price:l.price, uds:lineUnits(l), sub:lineSubtotal(l), tallas };
         });
 
@@ -1010,12 +1075,16 @@
       }
       if(act==="plus"){
         const L = state.lines[i];
+        if(!L.qty) L.qty = {};
+        if(L.qty[s] == null) L.qty[s] = 0;
         L.qty[s] = n2(L.qty[s]) + 1;
         render();
         return;
       }
       if(act==="minus"){
         const L = state.lines[i];
+        if(!L.qty) L.qty = {};
+        if(L.qty[s] == null) L.qty[s] = 0;
         L.qty[s] = Math.max(0, n2(L.qty[s]) - 1);
         render();
         return;
@@ -1024,6 +1093,7 @@
 
     function handleInput(e){
       const el = e.target;
+
       if(el.dataset.act==="qty"){
         const i = Number(el.dataset.i);
         const s = el.dataset.s;
