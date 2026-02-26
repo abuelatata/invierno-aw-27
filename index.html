@@ -1,160 +1,57 @@
-/* ========= Autocomplete de referencias =========
-   Requisitos:
-   - Un input de referencia (por defecto: #refInput)
-   - Un objeto tarifa ya cargado (price list):
-       Ejemplo esperado:
-         const PRICE_MAP = {
-           "1299426": { desc:"JESUSITO CON CAPOTA", price:53.80 },
-           ...
-         };
-   - Función que tú ya tengas para "aplicar" una referencia a la línea,
-     o rellenar descripción/precio al cambiar la ref.
-================================================= */
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Abuela Tata · Invierno AW 26/27 · Pedidos</title>
 
-(function setupRefAutocomplete(){
-  const refInput = document.querySelector('#refInput');  // <-- AJUSTA SI TU ID ES OTRO
-  if(!refInput) return;
-
-  const wrap = document.getElementById('refSuggestWrap');
-  const box  = document.getElementById('refSuggest');
-
-  // Detecta el mapa de precios que ya uses en tu app
-  // Cambia esto si tu variable se llama distinto:
-  const map = window.PRICE_MAP || window.TARIFA || window.PRICES || null;
-  if(!map) return;
-
-  // Convierte map a lista (ref, desc, price)
-  const all = Object.entries(map).map(([ref, v]) => ({
-    ref: String(ref),
-    desc: String(v.desc ?? v.descripcion ?? v.description ?? ''),
-    price: Number(v.price ?? v.precio ?? v.p ?? 0)
-  }))
-  .filter(x => x.ref && x.desc);
-
-  let currentItems = [];
-  let activeIndex = -1;
-  let lastValue = '';
-
-  function eur(n){
-    // Formato ES (53,80 €)
-    try {
-      return new Intl.NumberFormat('es-ES', { style:'currency', currency:'EUR' }).format(n);
-    } catch(e){
-      return (Math.round(n*100)/100).toFixed(2).replace('.', ',') + ' €';
-    }
-  }
-
-  function close(){
-    wrap.style.display = 'none';
-    box.innerHTML = '';
-    currentItems = [];
-    activeIndex = -1;
-  }
-
-  function open(){
-    wrap.style.display = 'block';
-  }
-
-  function setActive(i){
-    activeIndex = i;
-    [...box.querySelectorAll('.suggest-item')].forEach((el, idx)=>{
-      el.classList.toggle('active', idx === activeIndex);
-    });
-  }
-
-  function applyItem(item){
-    refInput.value = item.ref;
-    close();
-
-    // Dispara lo mismo que cuando el usuario mete la ref manualmente
-    refInput.dispatchEvent(new Event('input', { bubbles:true }));
-    refInput.dispatchEvent(new Event('change', { bubbles:true }));
-
-    // Si tú tienes una función explícita, úsala aquí (opcional):
-    // window.onRefSelected?.(item.ref);
-  }
-
-  function render(list){
-    box.innerHTML = '';
-    currentItems = list;
-
-    if(!list.length){ close(); return; }
-
-    list.forEach((item, idx)=>{
-      const row = document.createElement('div');
-      row.className = 'suggest-item';
-      row.innerHTML = `
-        <div class="left">
-          <div class="ref">${item.ref}</div>
-          <div class="desc">${item.desc}</div>
-        </div>
-        <div class="price">${eur(item.price)}</div>
-      `;
-      row.addEventListener('mousedown', (e)=>{
-        // mousedown para que no se cierre antes por blur
-        e.preventDefault();
-        applyItem(item);
-      });
-      box.appendChild(row);
-    });
-
-    open();
-    setActive(0);
-  }
-
-  function search(value){
-    const v = String(value || '').trim();
-    if(v.length < 2){ close(); return; }   // con 2 ya aparece
-    if(v === lastValue) return;
-    lastValue = v;
-
-    // Filtra por prefijo (startsWith) y luego por "contiene"
-    const starts = all.filter(x => x.ref.startsWith(v));
-    let res = starts;
-
-    if(!res.length){
-      res = all.filter(x => x.ref.includes(v));
+  <style>
+    :root{
+      --bg:#fbfaf8;
+      --card:#ffffff;
+      --ink:#141414;
+      --muted:rgba(20,20,20,.62);
+      --line:rgba(0,0,0,.10);
+      --shadow:0 18px 40px rgba(0,0,0,.08);
+      --radius:18px;
+      --radius2:14px;
+      --pad:14px;
+      --accent:#111;
+      --good:#0b7a2a;
     }
 
-    // Limita a 12 resultados pa’ móvil
-    res = res.slice(0, 12);
-    render(res);
-  }
-
-  refInput.addEventListener('input', (e)=>{
-    search(e.target.value);
-  });
-
-  refInput.addEventListener('keydown', (e)=>{
-    if(wrap.style.display === 'none') return;
-
-    if(e.key === 'ArrowDown'){
-      e.preventDefault();
-      const next = Math.min(activeIndex + 1, currentItems.length - 1);
-      setActive(next);
-    } else if(e.key === 'ArrowUp'){
-      e.preventDefault();
-      const prev = Math.max(activeIndex - 1, 0);
-      setActive(prev);
-    } else if(e.key === 'Enter'){
-      if(activeIndex >= 0 && currentItems[activeIndex]){
-        e.preventDefault();
-        applyItem(currentItems[activeIndex]);
-      }
-    } else if(e.key === 'Escape'){
-      close();
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color: var(--ink);
     }
-  });
 
-  // Cierra al hacer click fuera
-  document.addEventListener('click', (e)=>{
-    if(e.target === refInput) return;
-    if(wrap.contains(e.target)) return;
-    close();
-  });
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 14px 110px;
+    }
 
-  // Si pierde foco, cierra (pero con un mini delay pa’ permitir click)
-  refInput.addEventListener('blur', ()=>{
-    setTimeout(close, 120);
-  });
-})();
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 10px 6px 14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .brand img{
+      width:44px;
+      height:44px;
+      object-fit:contain;
+      border-radius:12px;
+      background:#fff
