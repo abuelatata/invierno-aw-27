@@ -390,6 +390,19 @@
       </div>
     </div>
 
+    <div class="section" id="offlineBox" style="display:none">
+  <div class="sectionTitle">
+    <strong>Modo escritorio (offline)</strong>
+    <span class="hint">Si abriste el archivo desde el PC, carga la tarifa aquí</span>
+  </div>
+
+  <div class="formGrid" style="grid-template-columns:1fr;">
+    <div class="field">
+      <label>Cargar tarifa.json desde tu ordenador</label>
+      <input id="tarifaFile" type="file" accept=".json,application/json" />
+    </div>
+  </div>
+</div>
     <div class="meta">
       <div class="pill">📦 Productos: <strong id="count">0</strong></div>
       <div class="pill">🧾 Líneas con cantidades: <strong id="lines">0</strong></div>
@@ -982,6 +995,51 @@
     q.addEventListener("input", () => render());
 
     // ----- Arranque -----
+    // ----- Modo OFFLINE: si estás en file:// no se puede hacer fetch a ./data/tarifa.json -----
+const offlineBox = document.getElementById("offlineBox");
+const tarifaFile = document.getElementById("tarifaFile");
+
+function setProductosFromJSON(data){
+  if(!Array.isArray(data)) throw new Error("El JSON debe ser un array: [ {ref,name,price}, ... ]");
+
+  productos = data
+    .filter(x => x && (x.ref || x.name))
+    .map(x => ({
+      ref: String(x.ref ?? "").trim(),
+      name: String(x.name ?? "").trim(),
+      price: Number(x.price ?? 0)
+    }))
+    .filter(x => x.ref.length > 0);
+
+  countEl.textContent = productos.length;
+  render();
+}
+
+function isFileProtocol(){
+  return window.location.protocol === "file:";
+}
+
+if (isFileProtocol()){
+  // Enseñamos el bloque offline
+  offlineBox.style.display = "block";
+
+  // Ocultamos el error feo si salta
+  errEl.style.display = "none";
+
+  tarifaFile.addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+
+    try{
+      const text = await file.text();
+      const json = JSON.parse(text);
+      setProductosFromJSON(json);
+    }catch(err){
+      alert("No he podido cargar la tarifa.json. Revisa que sea un JSON válido.");
+      console.error(err);
+    }
+  });
+}
     loadTarifa();
   </script>
 </body>
