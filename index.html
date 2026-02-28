@@ -450,10 +450,12 @@
       return s.slice(0,2);
     }
     function sizesForFamily(fam){
-      if (["12","13","31","30"].includes(fam)) return SIZES_BEBE;
-      if (["25","22","43"].includes(fam)) return SIZES_NINO;
-      if (["08"].includes(fam)) return SIZES_UNICA;
-      return SIZES_NINO;
+  if (fam === "11") return SIZES_11;   // 👈 SOLO para pelele
+  if (["12","13","31","30"].includes(fam)) return SIZES_BEBE;
+  if (["25","22","43"].includes(fam)) return SIZES_NINO;
+  if (["08"].includes(fam)) return SIZES_UNICA;
+  return SIZES_NINO;
+}
     }
 
     // ----- Estado del pedido -----
