@@ -519,6 +519,12 @@
         missingData: "Faltan datos del cliente:",
         noQty: "No hay cantidades seleccionadas todavía.",
 
+        // Etiquetas
+        type: "Tipo",
+        family: "Familia",
+        sizes: "Tallas",
+        lineSubtotal: "Subtotal línea",
+
         // Email/PDF
         orderSubjectPrefix: "PEDIDO AW26/27",
         appGenerated: "PEDIDO (generado desde la app)",
@@ -534,10 +540,7 @@
         confirm: "Esperamos confirmación de pedido",
         pdfTitle: "ABUELA TATA · INVIERNO AW 26/27",
         obs: "Obs",
-        noPhoto: "Sin foto",
-        lineSubtotal: "Subtotal línea",
-        family: "Familia",
-        sizes: "Tallas"
+        noPhoto: "Sin foto"
       },
 
       en: {
@@ -577,6 +580,12 @@
         missingData: "Missing client information:",
         noQty: "No quantities selected yet.",
 
+        // Labels
+        type: "Type",
+        family: "Family",
+        sizes: "Sizes",
+        lineSubtotal: "Line subtotal",
+
         // Email/PDF
         orderSubjectPrefix: "ORDER AW26/27",
         appGenerated: "ORDER (generated from the app)",
@@ -592,10 +601,7 @@
         confirm: "Please confirm the order",
         pdfTitle: "ABUELA TATA · WINTER AW 26/27",
         obs: "Notes",
-        noPhoto: "No photo",
-        lineSubtotal: "Line subtotal",
-        family: "Family",
-        sizes: "Sizes"
+        noPhoto: "No photo"
       },
 
       pt: {
@@ -635,6 +641,12 @@
         missingData: "Faltam dados do cliente:",
         noQty: "Ainda não há quantidades selecionadas.",
 
+        // Labels
+        type: "Tipo",
+        family: "Família",
+        sizes: "Tamanhos",
+        lineSubtotal: "Subtotal da linha",
+
         // Email/PDF
         orderSubjectPrefix: "PEDIDO AW26/27",
         appGenerated: "PEDIDO (gerado pela app)",
@@ -650,10 +662,7 @@
         confirm: "Aguardamos confirmação do pedido",
         pdfTitle: "ABUELA TATA · INVERNO AW 26/27",
         obs: "Obs",
-        noPhoto: "Sem foto",
-        lineSubtotal: "Subtotal da linha",
-        family: "Família",
-        sizes: "Tamanhos"
+        noPhoto: "Sem foto"
       }
     };
 
@@ -697,24 +706,18 @@
       document.getElementById("ui_offlineHint").textContent = t("offlineHint");
       document.getElementById("ui_offlineLabel").textContent = t("offlineLabel");
 
-      // pills (solo texto, el número se mantiene por <strong>)
       document.getElementById("ui_pill_products").childNodes[0].textContent = t("pill_products") + " ";
       document.getElementById("ui_pill_lines").childNodes[0].textContent = t("pill_lines") + " ";
 
-      // totals
       document.getElementById("ui_unitsLabel").childNodes[0].textContent = t("unitsLabel") + " ";
-      // totalLabel mantiene el span #t dentro
       document.getElementById("ui_totalLabel").childNodes[0].textContent = t("totalLabel") + " ";
 
-      // buttons
       document.getElementById("btnClear").textContent = t("btnClear");
       document.getElementById("btnPDF").textContent = t("btnPDF");
       document.getElementById("btnEmail").textContent = t("btnEmail");
 
-      // lightbox
       document.getElementById("lbClose").textContent = t("lbClose");
 
-      // refrescamos totales para que cambie el formato numérico si procede
       refreshTotals();
     }
 
@@ -725,23 +728,30 @@
     }
 
     // =============================
-    // ----- Reglas de tallas (tus familias) -----
+    // Reglas de tallas
     // =============================
-    const SIZES_11 = ["3m","6m","9m","12m","18m","2a"];
+    const SIZES_11   = ["3m","6m","9m","12m","18m","2a"];
     const SIZES_BEBE = ["3m","6m","9m","18m","2a","3a","4a"];
     const SIZES_NINO = ["12m","18m","2a","3a","4a","5a","6a","8a","10a","12a"];
     const SIZES_UNICA = ["ÚNICA"];
 
-    function familyFromRef(ref){
+    // TIPO = 2 primeras, FAMILIA = 3 últimas
+    function typeFromRef(ref){
       const s = String(ref || "").trim();
       if (s.length < 2) return "";
       return s.slice(0,2);
     }
-    function sizesForFamily(fam){
-      if (fam === "11") return SIZES_11;   // SOLO para pelele
-      if (["12","13","31","30"].includes(fam)) return SIZES_BEBE;
-      if (["25","22","43"].includes(fam)) return SIZES_NINO;
-      if (["08"].includes(fam)) return SIZES_UNICA;
+    function familyFromRef(ref){
+      const s = String(ref || "").trim();
+      if (s.length < 3) return "";
+      return s.slice(-3);
+    }
+
+    function sizesForType(type){
+      if (type === "11") return SIZES_11;                        // pelele
+      if (["12","13","31","30"].includes(type)) return SIZES_BEBE;
+      if (["25","22","43"].includes(type)) return SIZES_NINO;
+      if (["08"].includes(type)) return SIZES_UNICA;
       return SIZES_NINO;
     }
 
@@ -760,12 +770,10 @@
 
     function formatEUR(n){
       const v = Number(n) || 0;
-      // formato según idioma, pero siempre en €
       return v.toLocaleString(localeForLang(), {minimumFractionDigits:2, maximumFractionDigits:2});
     }
 
     function nowSpain(){
-      // Muestra fecha/hora en España (Europe/Madrid)
       return new Date().toLocaleString("es-ES", {
         timeZone: "Europe/Madrid",
         year:"numeric", month:"2-digit", day:"2-digit",
@@ -829,7 +837,7 @@
       }
     }
 
-    // ----- Lightbox (imagen grande) -----
+    // ----- Lightbox -----
     const lb = document.getElementById("lb");
     const lbImg = document.getElementById("lbImg");
     const lbTitle = document.getElementById("lbTitle");
@@ -857,8 +865,9 @@
     }
 
     function cardFor(p){
-      const fam = familyFromRef(p.ref);
-      const sizes = sizesForFamily(fam);
+      const type = typeFromRef(p.ref);
+      const fam3 = familyFromRef(p.ref);
+      const sizes = sizesForType(type);
 
       const card = document.createElement("div");
       card.className = "card";
@@ -884,7 +893,6 @@
         thumb.innerHTML = `<div class="ph">${p.ref}</div>`;
       };
 
-      // click para agrandar
       thumb.addEventListener("click", () => {
         if(!img || !img.src) return;
         openLightbox(p.ref, p.name, img.src);
@@ -928,7 +936,9 @@
 
       const sh = document.createElement("div");
       sh.className = "sizesHeader";
-      sh.innerHTML = `<span>${t("family")}: <strong>${fam || "—"}</strong></span><span>${t("sizes")}: <strong>${sizes.length}</strong></span>`;
+      sh.innerHTML =
+        `<span>${t("type")}: <strong>${type || "—"}</strong> · ${t("family")}: <strong>${fam3 || "—"}</strong></span>` +
+        `<span>${t("sizes")}: <strong>${sizes.length}</strong></span>`;
 
       const sg = document.createElement("div");
       sg.className = "sizesGrid";
@@ -1010,8 +1020,8 @@
 
     function refreshLineTotal(card, p){
       const ref = p.ref;
-      const fam = familyFromRef(ref);
-      const sizes = sizesForFamily(fam);
+      const type = typeFromRef(ref);
+      const sizes = sizesForType(type);
 
       let units = 0;
       for(const s of sizes) units += getQty(ref, s);
@@ -1056,8 +1066,9 @@
         const prod = priceByRef.get(ref);
         if(!prod) continue;
 
-        const fam = familyFromRef(ref);
-        const sizes = sizesForFamily(fam);
+        const type = typeFromRef(ref);
+        const fam3 = familyFromRef(ref);
+        const sizes = sizesForType(type);
 
         let units = 0;
         const parts = [];
@@ -1079,7 +1090,9 @@
           price,
           units,
           subtotal,
-          sizesText: parts.join("  ")
+          sizesText: parts.join("  "),
+          type,
+          fam3
         });
       }
       return lines;
@@ -1126,6 +1139,7 @@
 
       for(const l of lines){
         bodyParts.push(`${l.ref} — ${l.name}`);
+        bodyParts.push(`  ${t("type")}: ${l.type} · ${t("family")}: ${l.fam3}`);
         bodyParts.push(`  ${l.sizesText}`);
         bodyParts.push(`  ${t("price")}: ${formatEUR(l.price)} € · ${t("subtotal")}: ${formatEUR(l.subtotal)} € · ${t("units")}: ${l.units}`);
         bodyParts.push("");
@@ -1257,8 +1271,10 @@
         doc.text(nameLines.slice(0,2), textX, y+9);
 
         doc.setFontSize(9);
+        doc.text(`${t("type")}: ${l.type} · ${t("family")}: ${l.fam3}`, textX, y+14);
+
         const sizesLines = doc.splitTextToSize(l.sizesText, pageW - margin - textX - 2);
-        doc.text(sizesLines.slice(0,2), textX, y+17);
+        doc.text(sizesLines.slice(0,2), textX, y+19);
 
         doc.setFont("helvetica","bold");
         doc.setFontSize(10);
@@ -1283,7 +1299,7 @@
 
     q.addEventListener("input", () => render());
 
-    // ----- Modo OFFLINE: si estás en file:// no se puede hacer fetch a ./data/tarifa.json -----
+    // ----- Modo OFFLINE -----
     const offlineBox = document.getElementById("offlineBox");
     const tarifaFile = document.getElementById("tarifaFile");
 
@@ -1335,8 +1351,7 @@
         setLanguage(lang);
         setActiveFlag(lang);
         try{ localStorage.setItem("lang", lang); }catch(e){}
-        // re-render para traducir textos dentro de cards (Familia/Tallas/Subtotal línea/Units)
-        render();
+        render(); // para que cambien Tipo/Familia/Tallas/Subtotal en tarjetas
       });
     });
 
