@@ -134,6 +134,11 @@
     "name": "Pelele",
     "price": 20.25
   },
+   {
+    "ref": "1199429",
+    "name": "Pelele",
+    "price": 23.20
+  },
   {
     "ref": "1199434",
     "name": "Pelele",
@@ -323,6 +328,11 @@
     "ref": "3099431",
     "name": "Conjunto De Niño",
     "price": 24.65
+  },
+  {
+    "ref": "3199434",
+    "name": "Conjunto De Braguita Niña",
+    "price": 26.55
   },
   {
     "ref": "4309432",
